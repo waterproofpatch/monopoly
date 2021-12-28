@@ -13,13 +13,17 @@ export class PlayerDetailComponent implements OnInit {
   @Input() players?: Player[]; // from game-board - players
   amount?: number;
   otherPlayer?: Player;
+  errorMsg?: string;
 
   constructor(private logger: LogService) {}
 
   ngOnInit(): void {}
+  ngOnChanges(): void {
+    this.errorMsg = '';
+  }
 
   makePayment(f: NgForm): void {
-    console.log(f.value.amount + ' paid to ' + f.value.otherPlayer);
+    this.errorMsg = '';
     if (!this.player || !this.players) {
       this.logger.log('player or players is NULL!');
       return;
@@ -28,6 +32,7 @@ export class PlayerDetailComponent implements OnInit {
     // the bank has unlimited money
     if (this.player.name != 'Bank' && this.player.money < f.value.amount) {
       this.logger.log('Not enough money!');
+      this.errorMsg = 'Not enough money!';
       return;
     }
 
