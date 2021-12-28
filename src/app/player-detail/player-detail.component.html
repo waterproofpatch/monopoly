@@ -5,7 +5,7 @@
 <form #f="ngForm" (ngSubmit)="makePayment(f)" novalidate>
 	<div>
 		<label for="payTo">Pay to:</label>
-		<select id="payTo">
+		<select id="payTo" [(ngModel)]="otherPlayer" name="otherPlayer">
 			<option *ngFor="let otherPlayer of players">{{otherPlayer.name}}</option>
 		</select>
 		<input type="number" [(ngModel)]="amount" name="amount" placeholder="Amount" ngModel>
