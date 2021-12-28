@@ -9,8 +9,7 @@ import { PLAYERS } from '../players';
   styleUrls: ['./players.component.css'],
 })
 export class PlayersComponent implements OnInit {
-  //players = PLAYERS;
-  @Input() players?: Player[];
+  @Input() players?: Player[]; // from game-board
   selectedPlayer?: Player;
 
   constructor() {}
