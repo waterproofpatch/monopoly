@@ -18,6 +18,7 @@ export class PlayerDetailComponent implements OnInit {
   ngOnInit(): void {}
 
   makePayment(f: NgForm): void {
+    console.log(f.value);
     if (!this.otherPlayer) {
       console.log('Otherplayer is null!');
       return;
