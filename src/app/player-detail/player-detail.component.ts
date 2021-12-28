@@ -15,7 +15,11 @@ export class PlayerDetailComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (this.players) {
+      this.otherPlayer = this.players[0];
+    }
+  }
 
   makePayment(f: NgForm): void {
     console.log(f.value.amount + ' paid to ' + f.value.otherPlayer);
