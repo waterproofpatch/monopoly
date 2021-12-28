@@ -111,6 +111,11 @@
     width: 168px;
   }
 
+  .card.card-large {
+    height: 40px;
+    width: 200px;
+  }
+
   .card-container .card:not(.highlight-card) {
     cursor: pointer;
   }
