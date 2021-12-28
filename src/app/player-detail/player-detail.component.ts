@@ -15,11 +15,7 @@ export class PlayerDetailComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit(): void {
-    if (this.players) {
-      this.otherPlayer = this.players[0];
-    }
-  }
+  ngOnInit(): void {}
 
   makePayment(f: NgForm): void {
     console.log(f.value.amount + ' paid to ' + f.value.otherPlayer);
@@ -28,14 +24,23 @@ export class PlayerDetailComponent implements OnInit {
       return;
     }
 
-    if (this.player.money < f.value.amount) {
+    // the bank has unlimited money
+    if (this.player.name != 'Bank' && this.player.money < f.value.amount) {
       console.error('Not enough money!');
+      return;
+    }
+
+    // just pay the bank
+    if (f.value.otherPlayer == 'Bank') {
+      this.player.money = this.player.money - f.value.amount;
       return;
     }
 
     for (var player of this.players) {
       if (player.name == f.value.otherPlayer) {
-        this.player.money = this.player.money - f.value.amount;
+        if (this.player.name != 'Bank') {
+          this.player.money = this.player.money - f.value.amount;
+        }
         player.money += f.value.amount;
       }
     }
