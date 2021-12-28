@@ -16,8 +16,18 @@ export class GameBoardComponent implements OnInit {
     this.selectedPiece = this.pieces[0];
   }
 
-  addPlayer(): void {
-    // this.players?.push(player);
+  winningPlayer(): Player {
+    let winningPlayer: Player = this.players[0];
+    for (var p of this.players) {
+      // bank and free parking can't win
+      if (p.name == 'Bank' || p.name == 'Free Parking') {
+        continue;
+      }
+      if (p.money > winningPlayer.money) {
+        winningPlayer = p;
+      }
+    }
+    return winningPlayer;
   }
 
   updateSelectedValue(event: string): void {
