@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Player } from '../player';
 import { NgForm } from '@angular/forms';
+import { LogService } from '../log-service.service';
 
 @Component({
   selector: 'app-player-detail',
@@ -13,20 +14,20 @@ export class PlayerDetailComponent implements OnInit {
   amount?: number;
   otherPlayer?: Player;
 
-  constructor() {}
+  constructor(private logger: LogService) {}
 
   ngOnInit(): void {}
 
   makePayment(f: NgForm): void {
     console.log(f.value.amount + ' paid to ' + f.value.otherPlayer);
     if (!this.player || !this.players) {
-      console.error('player or players is NULL!');
+      this.logger.log('player or players is NULL!');
       return;
     }
 
     // the bank has unlimited money
     if (this.player.name != 'Bank' && this.player.money < f.value.amount) {
-      console.error('Not enough money!');
+      this.logger.log('Not enough money!');
       return;
     }
 
