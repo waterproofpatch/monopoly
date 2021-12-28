@@ -3,13 +3,19 @@
   <h2>{{player.name}} - {{player.money | currency}}</h2>
 
 <form #f="ngForm" (ngSubmit)="makePayment(f)" novalidate>
-	<div>
+	<div class="form-group">
 		<label for="payTo">Pay to:</label>
-		<select id="payTo" [(ngModel)]="otherPlayer" name="otherPlayer">
+		<select class="form-control" id="payTo" [(ngModel)]="otherPlayer" name="otherPlayer">
 			<option *ngFor="let otherPlayer of players">{{otherPlayer.name}}</option>
 		</select>
-		<input type="number" [(ngModel)]="amount" name="amount" placeholder="Amount" ngModel>
-		<button>Make Payment</button>
+		</div>
+
+	<div class="form-group">
+		<label for="amount">Amount:</label>
+		<input class="form-control" type="number" [(ngModel)]="amount" name="amount" placeholder="Amount" ngModel>
+		</div>
+	<div class="form-group">
+		<button class="form-control">Make Payment</button>
 	</div>
 </form>
 
