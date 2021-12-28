@@ -8,8 +8,8 @@ import { NgForm } from '@angular/forms';
   styleUrls: ['./player-detail.component.css'],
 })
 export class PlayerDetailComponent implements OnInit {
-  @Input() player?: Player;
-  @Input() players?: Player[];
+  @Input() player?: Player; // from players - selectedPlayer
+  @Input() players?: Player[]; // from game-board - players
   amount?: number;
   otherPlayer?: Player;
 
@@ -18,11 +18,6 @@ export class PlayerDetailComponent implements OnInit {
   ngOnInit(): void {}
 
   makePayment(f: NgForm): void {
-    console.log(f.value);
-    if (!this.otherPlayer) {
-      console.log('Otherplayer is null!');
-      return;
-    }
-    console.log('Paying ' + this.amount + ' to ' + this.otherPlayer.name);
+    console.log(f.value.amount + ' paid to ' + f.value.otherPlayer);
   }
 }
