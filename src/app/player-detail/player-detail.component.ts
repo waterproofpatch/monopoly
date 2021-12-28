@@ -19,5 +19,21 @@ export class PlayerDetailComponent implements OnInit {
 
   makePayment(f: NgForm): void {
     console.log(f.value.amount + ' paid to ' + f.value.otherPlayer);
+    if (!this.player || !this.players) {
+      console.error('player or players is NULL!');
+      return;
+    }
+
+    if (this.player.money < f.value.amount) {
+      console.error('Not enough money!');
+      return;
+    }
+
+    for (var player of this.players) {
+      if (player.name == f.value.otherPlayer) {
+        this.player.money = this.player.money - f.value.amount;
+        player.money += f.value.amount;
+      }
+    }
   }
 }
