@@ -21,6 +21,18 @@ export class PlayerDetailComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  getOtherPlayers(): Player[] {
+    if (!this.player || !this.players) {
+      return [];
+    }
+    let ret: Player[] = [];
+    for (let p of this.players) {
+      if (p.name != this.player.name) {
+        ret.push(p);
+      }
+    }
+    return ret;
+  }
   getTransactionsStrings(): string[] {
     if (!this.transactions || !this.player) {
       return [];
