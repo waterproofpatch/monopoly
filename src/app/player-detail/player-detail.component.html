@@ -6,7 +6,8 @@
 	<div class="form-group">
 		<label for="payTo">Pay to:</label>
 		<select class="form-control" id="payTo" [(ngModel)]="otherPlayer" name="otherPlayer">
-			<option *ngFor="let otherPlayer of getOtherPlayers()">{{otherPlayer.name}}</option>
+			<!-- <option selected>Select...</option> -->
+			<option *ngFor="let otherPlayer of getOtherPlayers()" value="{{otherPlayer.name}}">{{otherPlayer.name}}</option>
 		</select>
 		</div>
 
