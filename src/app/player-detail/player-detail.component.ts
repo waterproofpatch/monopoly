@@ -54,6 +54,11 @@ export class PlayerDetailComponent implements OnInit {
       return;
     }
 
+    if (f.value.otherPlayer == this.player.name) {
+      this.logger.log('Cannot pay yourself!');
+      return;
+    }
+
     for (var player of this.players) {
       if (player.name == f.value.otherPlayer) {
         let t: Transaction = {
