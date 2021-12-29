@@ -6,7 +6,7 @@ import { LogService } from '../log-service.service';
 @Component({
   selector: 'app-game-board',
   templateUrl: './game-board.component.html',
-  styleUrls: ['./game-board.component.css'],
+  styleUrls: ['../app.component.css', './game-board.component.css'],
 })
 export class GameBoardComponent implements OnInit {
   players: Player[] = PLAYERS;

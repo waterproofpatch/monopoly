@@ -1,8 +1,6 @@
-<div>
-	Current Winner: {{ winningPlayer().name }} with {{ winningPlayer().money | currency}}
-</div>
-<div>
-	Number of states: {{ playerStates.length }}
+<div class="content" role="main">
+	<h2>Current Winner: {{ winningPlayer().name }} with {{ winningPlayer().money | currency}}</h2>
+	<h3>Number of states: {{ playerStates.length }}</h3>
 	<button (click)="undoLast()">Undo Last</button>
 </div>
 <div>
