@@ -9,8 +9,9 @@ import { LogService } from '../log-service.service';
   styleUrls: ['./player-detail.component.css'],
 })
 export class PlayerDetailComponent implements OnInit {
-  @Input() player?: Player; // from players - selectedPlayer
-  @Input() players?: Player[]; // from game-board - players
+  @Input() player?: Player; // from players
+  @Input() players?: Player[]; // from players
+  @Input() transactions?: Transaction[]; // from players
   @Output() transaction = new EventEmitter<Transaction>();
   // form values
   amount?: number;
@@ -19,6 +20,21 @@ export class PlayerDetailComponent implements OnInit {
   constructor(private logger: LogService) {}
 
   ngOnInit(): void {}
+
+  getTransactionsStrings(): string[] {
+    if (!this.transactions || !this.player) {
+      return [];
+    }
+    let ret: string[] = [];
+    for (let t of this.transactions) {
+      if (t.fromPlayer === this.player) {
+        ret.push('Paid ' + t.toPlayer.name + ' ' + t.amount);
+      } else if (t.toPlayer === this.player) {
+        ret.push('Received ' + t.amount + ' from ' + t.fromPlayer.name);
+      }
+    }
+    return ret;
+  }
 
   makePayment(f: NgForm): void {
     if (!this.player || !this.players) {

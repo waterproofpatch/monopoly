@@ -9,6 +9,7 @@ import { LogService } from '../log-service.service';
 })
 export class PlayersComponent implements OnInit {
   @Input() players?: Player[]; // from game-board
+  @Input() transactions?: Transaction[]; // from game-board
   @Output() gameState = new EventEmitter<Transaction>();
   selectedPlayer?: Player;
   errorMsg: string = '';

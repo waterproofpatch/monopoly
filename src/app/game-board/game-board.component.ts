@@ -10,11 +10,13 @@ import { LogService } from '../log-service.service';
 })
 export class GameBoardComponent implements OnInit {
   players = PLAYERS;
+  transactions: Transaction[] = [];
 
   constructor(private logger: LogService) {}
 
   updateGameState(t: Transaction): void {
     this.logger.log('Updating gamestate with transaction ' + t);
+    this.transactions.push(t);
   }
 
   winningPlayer(): Player {

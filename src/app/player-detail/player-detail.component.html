@@ -19,4 +19,10 @@
 	</div>
 </form>
 
+<div *ngIf="getTransactionsStrings()">
+	<ul>
+		<li *ngFor="let transactionString of getTransactionsStrings()">{{ transactionString}}</li>
+	</ul>
+</div>
+
 </div>
