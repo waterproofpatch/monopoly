@@ -23,7 +23,13 @@ export class GameBoardComponent implements OnInit {
       this.errorMsg = 'Unable to undo last!';
       return;
     }
-    this.players = oldPlayerState.map((x) => Object.assign({}, x));
+    for (let p of this.players) {
+      for (let oldp of oldPlayerState) {
+        if (p.name == oldp.name) {
+          p.money = oldp.money;
+        }
+      }
+    }
   }
   updateGameState(t: Transaction): void {
     this.logger.log('Updating gamestate with transaction ' + t);
