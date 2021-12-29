@@ -1,6 +1,6 @@
   <div class="card-container">
     <div *ngFor="let player of players" (click)="onSelect(player)" class="card card-large" tabindex="0">
-	<img src="../assets/{{player.img}}.jpg" width="40" height="40">
+	<img src="../assets/{{player.img}}.jpg" width="80" height="80">
       <span>{{player.name}} - {{player.money | currency}}</span>
     </div>
   </div>
