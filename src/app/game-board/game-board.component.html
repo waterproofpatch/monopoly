@@ -1,7 +1,6 @@
 <div class="content" role="main">
 	<h2>Current Winner: <img src="../assets/{{winningPlayer().img}}.jpg" width="50" height="50">{{ winningPlayer().name }} with {{ winningPlayer().money | currency}}</h2>
-	<h3>Number of states: {{ playerStates.length }}</h3>
-	<button (click)="undoLast()">Undo Last</button>
+	<p>Number of states: {{ playerStates.length }} <button (click)="undoLast()">Undo Last</button></p>
 </div>
 <div>
 	<h3 *ngIf="errorMsg">{{errorMsg}}</h3>
