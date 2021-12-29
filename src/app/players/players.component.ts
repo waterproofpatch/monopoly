@@ -1,7 +1,7 @@
 import { NONE_TYPE } from '@angular/compiler';
 import { Component, Input, OnInit } from '@angular/core';
-import { Player } from '../player';
-import { PLAYERS } from '../players';
+import { Player, Transaction } from '../player';
+import { LogService } from '../log-service.service';
 
 @Component({
   selector: 'app-players',
@@ -11,12 +11,48 @@ import { PLAYERS } from '../players';
 export class PlayersComponent implements OnInit {
   @Input() players?: Player[]; // from game-board
   selectedPlayer?: Player;
+  errorMsg: string = '';
 
-  constructor() {}
+  constructor(private logger: LogService) {}
 
   ngOnInit(): void {}
+  ngOnChanges(): void {
+    this.errorMsg = '';
+  }
 
   onSelect(player: Player): void {
+    this.errorMsg = '';
     this.selectedPlayer = player;
+  }
+
+  handleTransaction(event: Transaction): void {
+    this.logger.log(
+      'Transaction from ' +
+        event.fromPlayer.name +
+        ' to ' +
+        event.toPlayer.name +
+        ' in the amount of ' +
+        event.amount
+    );
+
+    this.errorMsg = '';
+
+    // the bank has unlimited money
+    if (
+      event.fromPlayer.name != 'Bank' &&
+      event.fromPlayer.money < event.amount
+    ) {
+      this.errorMsg = 'Not enough money!';
+      return;
+    }
+
+    event.fromPlayer.money -= event.amount;
+
+    // just pay the bank
+    if (event.toPlayer.name == 'Bank') {
+      return;
+    }
+
+    event.toPlayer.money += event.amount;
   }
 }

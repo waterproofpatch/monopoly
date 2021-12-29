@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Player } from '../player';
 import { PLAYERS } from '../players';
+import { LogService } from '../log-service.service';
 
 @Component({
   selector: 'app-game-board',
@@ -8,13 +9,9 @@ import { PLAYERS } from '../players';
   styleUrls: ['./game-board.component.css'],
 })
 export class GameBoardComponent implements OnInit {
-  pieces = ['ship', 'dog', 'car', 'dinosaur'];
-  selectedPiece?: string;
   players = PLAYERS;
 
-  constructor() {
-    this.selectedPiece = this.pieces[0];
-  }
+  constructor(private logger: LogService) {}
 
   winningPlayer(): Player {
     let winningPlayer: Player = this.players[0];
@@ -28,10 +25,6 @@ export class GameBoardComponent implements OnInit {
       }
     }
     return winningPlayer;
-  }
-
-  updateSelectedValue(event: string): void {
-    this.selectedPiece = event;
   }
 
   ngOnInit(): void {}
