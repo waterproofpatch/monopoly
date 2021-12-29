@@ -9,14 +9,27 @@ import { LogService } from '../log-service.service';
   styleUrls: ['./game-board.component.css'],
 })
 export class GameBoardComponent implements OnInit {
-  players = PLAYERS;
+  players: Player[] = PLAYERS;
   transactions: Transaction[] = [];
+  playerStates: Array<Player[]> = new Array<Player[]>();
+  errorMsg: string = '';
 
   constructor(private logger: LogService) {}
 
+  undoLast(): void {
+    this.errorMsg = '';
+    let oldPlayerState = this.playerStates.pop();
+    if (!oldPlayerState) {
+      this.errorMsg = 'Unable to undo last!';
+      return;
+    }
+    this.players = oldPlayerState.map((x) => Object.assign({}, x));
+  }
   updateGameState(t: Transaction): void {
     this.logger.log('Updating gamestate with transaction ' + t);
     this.transactions.push(t);
+    let cloned: Player[] = this.players.map((x) => Object.assign({}, x));
+    this.playerStates.push(cloned);
   }
 
   winningPlayer(): Player {

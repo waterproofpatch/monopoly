@@ -1,4 +1,11 @@
 <div>
 	Current Winner: {{ winningPlayer().name }} with {{ winningPlayer().money | currency}}
 </div>
+<div>
+	Number of states: {{ playerStates.length }}
+	<button (click)="undoLast()">Undo Last</button>
+</div>
+<div>
+	<h3 *ngIf="errorMsg">{{errorMsg}}</h3>
+</div>
 <app-players [players]="players" [transactions]="transactions" (gameState)="updateGameState($event)"></app-players>
