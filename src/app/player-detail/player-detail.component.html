@@ -1,6 +1,7 @@
 <div class="content" role="main" *ngIf="player">
 
   <h2><span>{{player.name}}</span><span *ngIf="player.name != 'Bank'">::{{player.money | currency}}</span></h2>
+  <h3 *ngIf="errorMsg">{{errorMsg}}</h3>
 
 <form #f="ngForm" (ngSubmit)="makePayment(f)" novalidate>
 	<div class="form-group">

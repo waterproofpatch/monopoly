@@ -12,14 +12,23 @@ export class PlayerDetailComponent implements OnInit {
   @Input() player?: Player; // from players
   @Input() players?: Player[]; // from players
   @Input() transactions?: Transaction[]; // from players
+
+  // when we 'makePayment'
   @Output() transaction = new EventEmitter<Transaction>();
+
   // form values
   amount?: number;
   otherPlayer?: Player;
 
+  // error display
+  errorMsg: string = '';
+
   constructor(private logger: LogService) {}
 
   ngOnInit(): void {}
+  ngOnChanges(): void {
+    this.errorMsg = '';
+  }
 
   getOtherPlayers(): Player[] {
     if (!this.player || !this.players) {
@@ -55,7 +64,7 @@ export class PlayerDetailComponent implements OnInit {
     }
 
     if (f.value.otherPlayer == this.player.name) {
-      this.logger.log('Cannot pay yourself!');
+      this.errorMsg = 'Cannot pay yourself!';
       return;
     }
 
