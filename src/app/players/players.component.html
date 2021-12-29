@@ -1,8 +1,7 @@
   <div class="card-container">
     <div *ngFor="let player of players" (click)="onSelect(player)" class="card card-large" tabindex="0">
-        <!-- <svg class="material-icons" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg> -->
 	<img src="../assets/{{player.img}}.jpg" width="40" height="40">
-      <span>{{player.name}} - {{player.money}}</span>
+      <span>{{player.name}} - {{player.money | currency}}</span>
     </div>
   </div>
 
