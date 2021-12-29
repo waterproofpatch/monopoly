@@ -1,4 +1,4 @@
 <div>
 	Current Winner: {{ winningPlayer().name }} with {{ winningPlayer().money | currency}}
 </div>
-<app-players [players]="players"></app-players>
+<app-players [players]="players" (gameState)="updateGameState($event)"></app-players>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Player } from '../player';
+import { Player, Transaction } from '../player';
 import { PLAYERS } from '../players';
 import { LogService } from '../log-service.service';
 
@@ -12,6 +12,10 @@ export class GameBoardComponent implements OnInit {
   players = PLAYERS;
 
   constructor(private logger: LogService) {}
+
+  updateGameState(t: Transaction): void {
+    this.logger.log('Updating gamestate with transaction ' + t);
+  }
 
   winningPlayer(): Player {
     let winningPlayer: Player = this.players[0];

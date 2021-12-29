@@ -1,5 +1,4 @@
-import { NONE_TYPE } from '@angular/compiler';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { Player, Transaction } from '../player';
 import { LogService } from '../log-service.service';
 
@@ -10,6 +9,7 @@ import { LogService } from '../log-service.service';
 })
 export class PlayersComponent implements OnInit {
   @Input() players?: Player[]; // from game-board
+  @Output() gameState = new EventEmitter<Transaction>();
   selectedPlayer?: Player;
   errorMsg: string = '';
 
@@ -45,6 +45,8 @@ export class PlayersComponent implements OnInit {
       this.errorMsg = 'Not enough money!';
       return;
     }
+
+    this.gameState.emit(event);
 
     event.fromPlayer.money -= event.amount;
 

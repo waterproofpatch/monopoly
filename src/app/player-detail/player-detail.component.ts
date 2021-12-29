@@ -12,6 +12,7 @@ export class PlayerDetailComponent implements OnInit {
   @Input() player?: Player; // from players - selectedPlayer
   @Input() players?: Player[]; // from game-board - players
   @Output() transaction = new EventEmitter<Transaction>();
+  // form values
   amount?: number;
   otherPlayer?: Player;
 
