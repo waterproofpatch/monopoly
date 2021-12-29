@@ -5,6 +5,8 @@
     </div>
   </div>
 
+<div *ngIf="errorMsg" class="content" role="main">
 <h3 *ngIf="errorMsg">{{errorMsg}}</h3>
+</div>
 
 <app-player-detail [player]="selectedPlayer" [players]="players" [transactions]="transactions" (transaction)="handleTransaction($event)"></app-player-detail>
