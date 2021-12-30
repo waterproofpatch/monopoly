@@ -26,10 +26,6 @@ export class GameBoardComponent implements OnInit {
       for (let oldp of oldPlayerState) {
         if (p.name == oldp.name) {
           p.money = oldp.money;
-          p.transactions.splice(0, p.transactions.length);
-          for (let t of oldp.transactions) {
-            // p.transactions.push(t);
-          }
         }
       }
     }
