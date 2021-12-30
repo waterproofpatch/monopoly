@@ -22,10 +22,11 @@ export class GameBoardComponent implements OnInit {
       this.errorMsg = 'Unable to undo last!';
       return;
     }
-    for (let p of this.players) {
-      for (let oldp of oldPlayerState) {
-        if (p.name == oldp.name) {
-          p.money = oldp.money;
+
+    for (let currentPlayer of this.players) {
+      for (let oldPlayer of oldPlayerState) {
+        if (currentPlayer.name == oldPlayer.name) {
+          currentPlayer.money = oldPlayer.money;
         }
       }
     }

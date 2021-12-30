@@ -25,34 +25,34 @@ export class PlayersComponent implements OnInit {
     this.selectedPlayer = player;
   }
 
-  handleTransaction(event: Transaction): void {
+  handleTransaction(transaction: Transaction): void {
     this.logger.log(
       'Transaction from ' +
-        event.fromPlayer.name +
+        transaction.fromPlayer.name +
         ' to ' +
-        event.toPlayer.name +
+        transaction.toPlayer.name +
         ' in the amount of ' +
-        event.amount
+        transaction.amount
     );
 
     this.errorMsg = '';
 
     // the bank has unlimited money
     if (
-      event.fromPlayer.name != 'Bank' &&
-      event.fromPlayer.money < event.amount
+      transaction.fromPlayer.name != 'Bank' &&
+      transaction.fromPlayer.money < transaction.amount
     ) {
       this.errorMsg = 'Not enough money!';
       return;
     }
 
-    this.gameState.emit(event);
+    this.gameState.emit(transaction);
 
-    event.fromPlayer.money -= event.amount;
-    event.toPlayer.money += event.amount;
+    transaction.fromPlayer.money -= transaction.amount;
+    transaction.toPlayer.money += transaction.amount;
 
     // store the transaction in each player
-    event.fromPlayer.transactions.push(event);
-    event.toPlayer.transactions.push(event);
+    transaction.fromPlayer.transactions.push(transaction);
+    transaction.toPlayer.transactions.push(transaction);
   }
 }
