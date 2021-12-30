@@ -9,6 +9,7 @@ import { LogService } from '../log-service.service';
 })
 export class PlayersComponent implements OnInit {
   @Input() players?: Player[]; // from game-board
+  @Input() transactions?: Transaction[]; // from game-board
   @Output() gameState = new EventEmitter<Transaction>();
   selectedPlayer?: Player;
   errorMsg: string = '';
@@ -50,9 +51,5 @@ export class PlayersComponent implements OnInit {
 
     transaction.fromPlayer.money -= transaction.amount;
     transaction.toPlayer.money += transaction.amount;
-
-    // store the transaction in each player
-    transaction.fromPlayer.transactions.push(transaction);
-    transaction.toPlayer.transactions.push(transaction);
   }
 }

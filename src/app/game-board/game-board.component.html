@@ -5,4 +5,4 @@
 <div>
 	<h3 *ngIf="errorMsg">{{errorMsg}}</h3>
 </div>
-<app-players [players]="players" (gameState)="updateGameState($event)"></app-players>
+<app-players [players]="players" [transactions]="transactions" (gameState)="updateGameState($event)"></app-players>

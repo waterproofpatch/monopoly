@@ -9,4 +9,4 @@
 <h3 *ngIf="errorMsg">{{errorMsg}}</h3>
 </div>
 
-<app-player-detail [player]="selectedPlayer" [players]="players" (transaction)="handleTransaction($event)"></app-player-detail>
+<app-player-detail [player]="selectedPlayer" [players]="players" [transactions]="transactions" (transaction)="handleTransaction($event)"></app-player-detail>

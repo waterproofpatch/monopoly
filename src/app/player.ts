@@ -2,7 +2,6 @@ export interface Player {
   img: string;
   name: string;
   money: number;
-  transactions: Transaction[];
 }
 
 export interface Transaction {
