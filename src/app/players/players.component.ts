@@ -9,7 +9,6 @@ import { LogService } from '../log-service.service';
 })
 export class PlayersComponent implements OnInit {
   @Input() players?: Player[]; // from game-board
-  @Input() transactions?: Transaction[]; // from game-board
   @Output() gameState = new EventEmitter<Transaction>();
   selectedPlayer?: Player;
   errorMsg: string = '';
@@ -50,12 +49,10 @@ export class PlayersComponent implements OnInit {
     this.gameState.emit(event);
 
     event.fromPlayer.money -= event.amount;
-
-    // just pay the bank
-    if (event.toPlayer.name == 'Bank') {
-      return;
-    }
-
     event.toPlayer.money += event.amount;
+
+    // store the transaction in each player
+    event.fromPlayer.transactions.push(event);
+    event.toPlayer.transactions.push(event);
   }
 }

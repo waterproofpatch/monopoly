@@ -10,7 +10,6 @@ import { LogService } from '../log-service.service';
 })
 export class GameBoardComponent implements OnInit {
   players: Player[] = PLAYERS;
-  transactions: Transaction[] = [];
   playerStates: Array<Player[]> = new Array<Player[]>();
   errorMsg: string = '';
 
@@ -27,13 +26,16 @@ export class GameBoardComponent implements OnInit {
       for (let oldp of oldPlayerState) {
         if (p.name == oldp.name) {
           p.money = oldp.money;
+          p.transactions.splice(0, p.transactions.length);
+          for (let t of oldp.transactions) {
+            // p.transactions.push(t);
+          }
         }
       }
     }
   }
   updateGameState(t: Transaction): void {
     this.logger.log('Updating gamestate with transaction ' + t);
-    this.transactions.push(t);
     let cloned: Player[] = this.players.map((x) => Object.assign({}, x));
     this.playerStates.push(cloned);
   }

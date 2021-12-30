@@ -11,7 +11,6 @@ import { LogService } from '../log-service.service';
 export class PlayerDetailComponent implements OnInit {
   @Input() player?: Player; // from players
   @Input() players?: Player[]; // from players
-  @Input() transactions?: Transaction[]; // from players
 
   // when we 'makePayment'
   @Output() transaction = new EventEmitter<Transaction>();
@@ -42,12 +41,13 @@ export class PlayerDetailComponent implements OnInit {
     }
     return ret;
   }
+
   getTransactionsStrings(): string[] {
-    if (!this.transactions || !this.player) {
+    if (!this.player) {
       return [];
     }
     let ret: string[] = [];
-    for (let t of this.transactions) {
+    for (let t of this.player.transactions) {
       if (t.fromPlayer === this.player) {
         ret.push('Paid ' + t.toPlayer.name + ' ' + t.amount);
       } else if (t.toPlayer === this.player) {
