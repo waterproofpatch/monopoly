@@ -3,18 +3,17 @@
   <h2><span>{{player.name}}</span><span *ngIf="player.name != 'Bank'">::{{player.money | currency}}</span></h2>
   <h3 *ngIf="errorMsg">{{errorMsg}}</h3>
 
-<form #f="ngForm" (ngSubmit)="makePayment(f)" novalidate>
+<form [formGroup]="transactionForm" (ngSubmit)="makePayment()" novalidate>
 	<div class="form-group">
 		<label for="payTo">Pay to:</label>
-		<select class="form-control" id="payTo" [(ngModel)]="otherPlayer" name="otherPlayer">
-			<!-- <option selected>Select...</option> -->
+		<select class="form-control" id="payTo" formControlName="otherPlayer">
 			<option *ngFor="let otherPlayer of getOtherPlayers()" value="{{otherPlayer.name}}">{{otherPlayer.name}}</option>
 		</select>
-		</div>
+	</div>
 
 	<div class="form-group">
 		<label for="amount">Amount:</label>
-		<input class="form-control" type="number" [(ngModel)]="amount" name="amount" placeholder="Amount" ngModel>
+		<input class="form-control" type="number" formControlName="amount" placeholder="Amount">
 		</div>
 	<div class="form-group">
 		<button class="btn btn-default">Make Payment</button>

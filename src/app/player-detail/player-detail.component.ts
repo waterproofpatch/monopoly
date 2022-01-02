@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Player, Transaction } from '../player';
-import { NgForm } from '@angular/forms';
 import { LogService } from '../log-service.service';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-player-detail',
@@ -16,9 +16,10 @@ export class PlayerDetailComponent implements OnInit {
   // when we 'makePayment'
   @Output() transaction = new EventEmitter<Transaction>();
 
-  // form values
-  amount?: number;
-  otherPlayer?: Player;
+  transactionForm = new FormGroup({
+    otherPlayer: new FormControl(''),
+    amount: new FormControl(''),
+  });
 
   // error display
   errorMsg: string = '';
@@ -60,23 +61,23 @@ export class PlayerDetailComponent implements OnInit {
     return ret;
   }
 
-  makePayment(f: NgForm): void {
+  makePayment(): void {
     if (!this.player || !this.players) {
       this.logger.log('player or players is null');
       return;
     }
 
-    if (f.value.otherPlayer == this.player.name) {
+    if (this.transactionForm.controls.otherPlayer.value == this.player.name) {
       this.errorMsg = 'Cannot pay yourself!';
       return;
     }
 
     for (var player of this.players) {
-      if (player.name == f.value.otherPlayer) {
+      if (player.name == this.transactionForm.controls.otherPlayer.value) {
         let t: Transaction = {
           fromPlayer: this.player,
           toPlayer: player,
-          amount: f.value.amount,
+          amount: this.transactionForm.controls.amount.value,
         };
         this.transaction.emit(t);
       }
