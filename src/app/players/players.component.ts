@@ -90,6 +90,20 @@ export class PlayersComponent implements OnInit {
     transaction.toPlayer.money += transaction.amount;
   }
 
+  humanPlayers(): Player[] {
+    if (!this.players) {
+      this.openDialog('Players is not set!');
+      return [];
+    }
+    let retPlayers: Player[] = [];
+
+    for (let otherPlayer of this.players) {
+      if (otherPlayer.human) {
+        retPlayers.push(otherPlayer);
+      }
+    }
+    return retPlayers;
+  }
   playersNot(player: Player): Player[] {
     if (!this.players) {
       this.openDialog('Players is not set!');
