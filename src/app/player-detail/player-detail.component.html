@@ -4,7 +4,7 @@
 <span><img src="../assets/{{player.img}}.jpg" width="100" height="80"></span>
 <span *ngIf="player.name != 'Bank'">{{player.money | currency}}</span>
 </h2>
-<h3 *ngIf="errorMsg">{{errorMsg}}</h3>
+<h3 *ngIf="errorMsg" (click)="errorMsg=''">{{errorMsg}}</h3>
 
 <form [formGroup]="transactionForm" (ngSubmit)="makePayment()" novalidate>
 	<div class="form-group">

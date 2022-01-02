@@ -62,8 +62,10 @@ export class PlayerDetailComponent implements OnInit {
   }
 
   makePayment(): void {
+    this.errorMsg = '';
     if (!this.player || !this.players) {
       this.logger.log('player or players is null');
+      this.errorMsg = 'No player or players selected!';
       return;
     }
 
@@ -80,7 +82,9 @@ export class PlayerDetailComponent implements OnInit {
           amount: this.transactionForm.controls.amount.value,
         };
         this.transaction.emit(t);
+        return;
       }
     }
+    this.errorMsg = 'Failed to find other player to pay!';
   }
 }
