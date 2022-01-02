@@ -1,12 +1,21 @@
+<div class="player-row" *ngFor="let player of players">
   <div class="card-container">
-    <div *ngFor="let player of players" (click)="onSelect(player)" class="card card-large" tabindex="0">
+    <div class="card card-large" tabindex="0">
 	<img src="../assets/{{player.img}}.jpg" width="100" height="80">
       <span *ngIf="player.name != 'Bank'">{{player.money | currency}}</span>
     </div>
   </div>
-
-<div *ngIf="errorMsg" class="content" role="main">
-<h3 *ngIf="errorMsg">{{errorMsg}}</h3>
+	  <form [formGroup]="transactionForm" (ngSubmit)="makePayment(player)">
+		<mat-form-field appearance="fill">
+		<mat-label>Amount</mat-label>
+		<input matInput formControlName="amount" type="number">
+		</mat-form-field>
+		<mat-form-field appearance="fill">
+		<mat-label>To</mat-label>
+		<mat-select formControlName="otherPlayer">
+		<mat-option *ngFor="let player of players" value="{{player.name}}">{{player.name}}</mat-option>
+		</mat-select>
+		</mat-form-field>
+		<button mat-button color="primary">Pay</button>
+	  </form>
 </div>
-
-<app-player-detail [player]="selectedPlayer" [players]="players" [transactions]="transactions" (transaction)="handleTransaction($event)"></app-player-detail>
