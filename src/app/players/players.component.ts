@@ -51,7 +51,7 @@ export class PlayersComponent implements OnInit {
   undoTransaction(transaction: Transaction): void {
     // really, just make a new transaction that is the reverse of this transaction
     let newTransaction: Transaction = {
-      timestamp: new Date().toLocaleDateString(),
+      timestamp: new Date().toISOString(),
       toPlayer: transaction.fromPlayer,
       fromPlayer: transaction.toPlayer,
       amount: transaction.amount,
@@ -163,7 +163,7 @@ export class PlayersComponent implements OnInit {
     }
 
     let t: Transaction = {
-      timestamp: new Date().toLocaleDateString(),
+      timestamp: new Date().toISOString(),
       fromPlayer: player,
       toPlayer: otherPlayer,
       amount: this.transactionForm.controls.amount.value,
