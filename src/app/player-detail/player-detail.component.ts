@@ -1,23 +1,7 @@
-import {
-  Inject,
-  Input,
-  Component,
-  OnInit,
-  Output,
-  EventEmitter,
-} from '@angular/core';
+import { Input, Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Player, Transaction } from '../types';
 import { LogService } from '../log-service.service';
-import {
-  MatDialog,
-  MatDialogRef,
-  MAT_DIALOG_DATA,
-} from '@angular/material/dialog';
-
-export interface DialogData {
-  errorMsg: string;
-}
 
 @Component({
   selector: 'app-player-detail',
@@ -34,20 +18,10 @@ export class PlayerDetailComponent implements OnInit {
     amount: new FormControl(''),
   });
 
-  constructor(private logger: LogService, private dialog: MatDialog) {}
+  constructor(private logger: LogService) {}
 
   ngOnInit(): void {}
 
-  displayErrorDialog(errorMsg: string): void {
-    const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
-      width: '250px',
-      data: { errorMsg: errorMsg },
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log('The dialog was closed');
-    });
-  }
   findPlayerByName(name: string): Player | null {
     if (!this.players) {
       return null;
@@ -63,12 +37,12 @@ export class PlayerDetailComponent implements OnInit {
   makePayment(): void {
     this.logger.log('Handling transaction');
     if (!this.players || !this.player) {
-      this.displayErrorDialog('No players available!');
+      this.logger.displayErrorDialog('No players available!');
       return;
     }
 
     if (this.transactionForm.controls.otherPlayer.value == this.player.name) {
-      this.displayErrorDialog('Cannot pay yourself!');
+      this.logger.displayErrorDialog('Cannot pay yourself!');
       return;
     }
 
@@ -76,7 +50,7 @@ export class PlayerDetailComponent implements OnInit {
       this.transactionForm.controls.otherPlayer.value
     );
     if (!otherPlayer) {
-      this.displayErrorDialog(
+      this.logger.displayErrorDialog(
         "No player by name of '" +
           this.transactionForm.controls.otherPlayer.value +
           "'"
@@ -96,7 +70,7 @@ export class PlayerDetailComponent implements OnInit {
 
   otherPlayers(): Player[] {
     if (!this.players || !this.player) {
-      this.displayErrorDialog('Players is not set!');
+      this.logger.displayErrorDialog('Players is not set!');
       return [];
     }
 
@@ -125,7 +99,7 @@ export class PlayerDetailComponent implements OnInit {
       transaction.fromPlayer.name != 'Bank' &&
       transaction.fromPlayer.money < transaction.amount
     ) {
-      this.displayErrorDialog(
+      this.logger.displayErrorDialog(
         'Not enough money. Must raise $' +
           (transaction.amount - transaction.fromPlayer.money) +
           '.'
@@ -137,19 +111,5 @@ export class PlayerDetailComponent implements OnInit {
 
     transaction.fromPlayer.money -= transaction.amount;
     transaction.toPlayer.money += transaction.amount;
-  }
-}
-@Component({
-  selector: 'dialog-overview-example-dialog',
-  templateUrl: './error-dialog.html',
-})
-export class DialogOverviewExampleDialog {
-  constructor(
-    public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData
-  ) {}
-
-  onOkClick(): void {
-    this.dialogRef.close();
   }
 }

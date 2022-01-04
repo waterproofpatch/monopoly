@@ -13,7 +13,6 @@ export class GameBoardComponent implements OnInit {
   transactions: Transaction[] = [];
   playerStates: Array<Player[]> = new Array<Player[]>();
   transactionStates: Array<Transaction[]> = new Array<Transaction[]>();
-  errorMsg: string = '';
 
   constructor(private logger: LogService) {}
 
