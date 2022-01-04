@@ -36,7 +36,7 @@ export class PlayersComponent implements OnInit {
 
   constructor(private logger: LogService, private dialog: MatDialog) {}
 
-  openDialog(errorMsg: string): void {
+  displayErrorDialog(errorMsg: string): void {
     const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
       width: '250px',
       data: { errorMsg: errorMsg },
@@ -93,7 +93,7 @@ export class PlayersComponent implements OnInit {
       transaction.fromPlayer.name != 'Bank' &&
       transaction.fromPlayer.money < transaction.amount
     ) {
-      this.openDialog(
+      this.displayErrorDialog(
         'Not enough money. Must raise $' +
           (transaction.amount - transaction.fromPlayer.money) +
           '.'
@@ -109,7 +109,7 @@ export class PlayersComponent implements OnInit {
 
   humanPlayers(): Player[] {
     if (!this.players) {
-      this.openDialog('Players is not set!');
+      this.displayErrorDialog('Players is not set!');
       return [];
     }
     let retPlayers: Player[] = [];
@@ -123,7 +123,7 @@ export class PlayersComponent implements OnInit {
   }
   playersNot(player: Player): Player[] {
     if (!this.players) {
-      this.openDialog('Players is not set!');
+      this.displayErrorDialog('Players is not set!');
       return [];
     }
 
@@ -140,12 +140,12 @@ export class PlayersComponent implements OnInit {
   makePayment(player: Player): void {
     this.logger.log('Handling transaction');
     if (!this.players) {
-      this.openDialog('No players available!');
+      this.displayErrorDialog('No players available!');
       return;
     }
 
     if (this.transactionForm.controls.otherPlayer.value == player.name) {
-      this.openDialog('Cannot pay yourself!');
+      this.displayErrorDialog('Cannot pay yourself!');
       return;
     }
 
@@ -153,7 +153,7 @@ export class PlayersComponent implements OnInit {
       this.transactionForm.controls.otherPlayer.value
     );
     if (!otherPlayer) {
-      this.openDialog(
+      this.displayErrorDialog(
         "No player by name of '" +
           this.transactionForm.controls.otherPlayer.value +
           "'"
@@ -172,7 +172,7 @@ export class PlayersComponent implements OnInit {
 }
 @Component({
   selector: 'dialog-overview-example-dialog',
-  templateUrl: './dialog.html',
+  templateUrl: './error-dialog.html',
 })
 export class DialogOverviewExampleDialog {
   constructor(
