@@ -14,8 +14,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
 import { PlayerDetailComponent } from './player-detail/player-detail.component';
+import { TransactionComponent } from './transaction/transaction.component';
 @NgModule({
-  declarations: [AppComponent, PlayersComponent, GameBoardComponent, PlayerDetailComponent],
+  declarations: [AppComponent, PlayersComponent, GameBoardComponent, PlayerDetailComponent, TransactionComponent],
   imports: [
     MatCardModule,
     MatDialogModule,

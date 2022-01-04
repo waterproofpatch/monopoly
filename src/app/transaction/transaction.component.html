@@ -1,0 +1,10 @@
+<div *ngIf="transaction" class="transaction-row">
+	<mat-card>
+		<mat-card-title><img src="../assets/{{transaction.fromPlayer.img}}.jpg" width=30px height=30px> paid <img src="../assets/{{transaction.toPlayer.img}}.jpg" width=30px height=30px></mat-card-title>
+		<mat-card-subtitle>{{transaction.timestamp}}</mat-card-subtitle>
+		<mat-card-content>{{transaction.amount | currency}}</mat-card-content>
+		<mat-card-actions align="end">
+		<button (click)="undoTransaction()" mat-button>Undo</button>
+		</mat-card-actions>
+	</mat-card>
+</div>
