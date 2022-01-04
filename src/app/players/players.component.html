@@ -24,13 +24,22 @@
 	</div>
 	<div class="side">
 		<div class="row">
-			<mat-card>transaction 1</mat-card>
-		</div>
-		<div class="row">
-			<mat-card>transaction 222</mat-card>
+			<mat-card>
+				<mat-card-title>A paid B</mat-card-title>
+				<mat-card-subtitle>$100</mat-card-subtitle>
+				<mat-card-actions align="end">
+				<button mat-button>Undo</button>
+				</mat-card-actions>
+			</mat-card>
 		</div>
 		<div class="row" *ngFor="let transaction of transactions">
-			<mat-card>{{transaction.fromPlayer.name}} paid {{transaction.toPlayer.name}} {{transaction.amount | currency}}</mat-card>
+			<mat-card>
+				<mat-card-title>{{transaction.fromPlayer.name}} paid {{transaction.toPlayer.name}}</mat-card-title>
+				<mat-card-subtitle>{{transaction.amount | currency}}</mat-card-subtitle>
+				<mat-card-actions align="end">
+				<button (click)="undoTransaction(transaction)" mat-button>Undo</button>
+				</mat-card-actions>
+			</mat-card>
 		</div>
 	</div>
 </div>

@@ -48,6 +48,23 @@ export class PlayersComponent implements OnInit {
   }
   ngOnInit(): void {}
 
+  undoTransaction(transaction: Transaction): void {
+    // really, just make a new transaction that is the reverse of this transaction
+    let newTransaction: Transaction = {
+      toPlayer: transaction.fromPlayer,
+      fromPlayer: transaction.toPlayer,
+      amount: transaction.amount,
+    };
+    this.gameState.emit(newTransaction);
+    newTransaction.fromPlayer.money -= newTransaction.amount;
+    newTransaction.toPlayer.money += newTransaction.amount;
+    if (this.transactions) {
+      const index = this.transactions.indexOf(transaction, 0);
+      if (index > -1) {
+        this.transactions.splice(index, 1);
+      }
+    }
+  }
   findPlayerByName(name: string): Player | null {
     if (!this.players) {
       return null;
