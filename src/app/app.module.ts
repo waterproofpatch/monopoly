@@ -11,10 +11,12 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
 @NgModule({
   declarations: [AppComponent, PlayersComponent, GameBoardComponent],
   imports: [
+    MatCardModule,
     MatDialogModule,
     MatCheckboxModule,
     MatButtonModule,

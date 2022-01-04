@@ -26,21 +26,15 @@
     flex-direction: column;
   }
 
-  .transaction-row {
+  .row {
     display: flex;
     flex-wrap: wrap;
     justify-content: left;
     align-items: center;
     flex-direction: row;
+    margin: 5px;
   }
 
-  .player-row {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: left;
-    align-items: center;
-    flex-direction: row;
-  }
   .card-container {
     display: flex;
     flex-wrap: wrap;

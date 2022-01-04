@@ -1,6 +1,6 @@
 <div class="player-container">
 	<div class="side">
-		<div class="player-row" *ngFor="let player of players">
+		<div class="row" *ngFor="let player of players">
 			<div class="card-container">
 				<div class="card card-large" tabindex="0">
 					<img src="../assets/{{player.img}}.jpg" width="100" height="80">
@@ -23,8 +23,14 @@
 		</div>
 	</div>
 	<div class="side">
-		<div class="transaction-row" *ngFor="let transaction of transactions">
-			{{transaction.fromPlayer.name}} paid {{transaction.toPlayer.name}} {{transaction.amount | currency}}
+		<div class="row">
+			<mat-card>transaction 1</mat-card>
+		</div>
+		<div class="row">
+			<mat-card>transaction 222</mat-card>
+		</div>
+		<div class="row" *ngFor="let transaction of transactions">
+			<mat-card>{{transaction.fromPlayer.name}} paid {{transaction.toPlayer.name}} {{transaction.amount | currency}}</mat-card>
 		</div>
 	</div>
 </div>
