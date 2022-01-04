@@ -1,7 +1,7 @@
 import { Input, Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Player, Transaction } from '../types';
-import { LogService } from '../log-service.service';
+import { DialogService } from '../dialog.service';
 
 @Component({
   selector: 'app-player-detail',
@@ -18,7 +18,7 @@ export class PlayerDetailComponent implements OnInit {
     amount: new FormControl(''),
   });
 
-  constructor(private logger: LogService) {}
+  constructor(private logger: DialogService) {}
 
   ngOnInit(): void {}
 

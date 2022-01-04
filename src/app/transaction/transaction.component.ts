@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Transaction } from '../types';
-import { LogService } from '../log-service.service';
+import { DialogService } from '../dialog.service';
 
 @Component({
   selector: 'app-transaction',
@@ -11,7 +11,7 @@ export class TransactionComponent implements OnInit {
   @Input() transaction?: Transaction; // from game-board
   @Input() transactions?: Transaction[]; // from game-board
 
-  constructor(private logger: LogService) {}
+  constructor(private logger: DialogService) {}
 
   ngOnInit(): void {}
 

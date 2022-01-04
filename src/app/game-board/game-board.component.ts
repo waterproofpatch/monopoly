@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Player, Transaction } from '../types';
 import { PLAYERS } from '../players';
-import { LogService } from '../log-service.service';
+import { DialogService } from '../dialog.service';
 
 @Component({
   selector: 'app-game-board',
@@ -14,7 +14,7 @@ export class GameBoardComponent implements OnInit {
   playerStates: Array<Player[]> = new Array<Player[]>();
   transactionStates: Array<Transaction[]> = new Array<Transaction[]>();
 
-  constructor(private logger: LogService) {}
+  constructor(private logger: DialogService) {}
 
   updateGameState(t: Transaction): void {
     this.logger.log('Updating gamestate with transaction ' + t);

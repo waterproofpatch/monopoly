@@ -16,7 +16,7 @@ export interface PieceSelectDialogData {
 @Injectable({
   providedIn: 'root',
 })
-export class LogService {
+export class DialogService {
   constructor(private dialog: MatDialog) {}
   log(msg: any) {
     console.log(new Date() + ': ' + JSON.stringify(msg));
