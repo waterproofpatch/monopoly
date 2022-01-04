@@ -23,16 +23,6 @@
 		</div>
 	</div>
 	<div class="side">
-		<div class="row">
-			<mat-card>
-				<mat-card-title>A paid B</mat-card-title>
-				<mat-card-subtitle>$100</mat-card-subtitle>
-				<mat-card-content>$100</mat-card-content>
-				<mat-card-actions align="end">
-				<button mat-button>Undo</button>
-				</mat-card-actions>
-			</mat-card>
-		</div>
 		<div class="row" *ngFor="let transaction of transactions">
 			<mat-card>
 				<mat-card-title><img src="../assets/{{transaction.fromPlayer.img}}.jpg" width=30px height=30px> paid <img src="../assets/{{transaction.toPlayer.img}}.jpg" width=30px height=30px></mat-card-title>
