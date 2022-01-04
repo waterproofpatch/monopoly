@@ -13,8 +13,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
+import { PlayerDetailComponent } from './player-detail/player-detail.component';
 @NgModule({
-  declarations: [AppComponent, PlayersComponent, GameBoardComponent],
+  declarations: [AppComponent, PlayersComponent, GameBoardComponent, PlayerDetailComponent],
   imports: [
     MatCardModule,
     MatDialogModule,
