@@ -55,7 +55,7 @@ export class PlayersComponent implements OnInit {
       fromPlayer: transaction.toPlayer,
       amount: transaction.amount,
     };
-    this.gameState.emit(newTransaction);
+    // this.gameState.emit(newTransaction);
     newTransaction.fromPlayer.money -= newTransaction.amount;
     newTransaction.toPlayer.money += newTransaction.amount;
     if (this.transactions) {

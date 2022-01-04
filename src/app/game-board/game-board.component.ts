@@ -17,24 +17,6 @@ export class GameBoardComponent implements OnInit {
 
   constructor(private logger: LogService) {}
 
-  undoLast(): void {
-    this.errorMsg = '';
-    let oldPlayerState = this.playerStates.pop();
-    if (!oldPlayerState) {
-      this.errorMsg = 'Unable to undo last (players)';
-      return;
-    }
-
-    for (let currentPlayer of this.players) {
-      for (let oldPlayer of oldPlayerState) {
-        if (currentPlayer.name == oldPlayer.name) {
-          currentPlayer.money = oldPlayer.money;
-        }
-      }
-    }
-
-    this.transactions.pop();
-  }
   updateGameState(t: Transaction): void {
     this.logger.log('Updating gamestate with transaction ' + t);
     let clonedPlayers: Player[] = this.players.map((x) => Object.assign({}, x));
