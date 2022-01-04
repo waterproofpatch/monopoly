@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { Player, Transaction } from '../player';
+import { Player, Transaction } from '../types';
 
 @Component({
   selector: 'app-players',

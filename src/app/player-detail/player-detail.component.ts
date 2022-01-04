@@ -7,7 +7,7 @@ import {
   EventEmitter,
 } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Player, Transaction } from '../player';
+import { Player, Transaction } from '../types';
 import { LogService } from '../log-service.service';
 import {
   MatDialog,

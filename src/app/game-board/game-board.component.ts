@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Player, Transaction } from '../player';
+import { Player, Transaction } from '../types';
 import { PLAYERS } from '../players';
 import { LogService } from '../log-service.service';
 

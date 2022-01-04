@@ -1,4 +1,4 @@
-import { Player } from './player';
+import { Player } from './types';
 
 export const STARTING_MONEY: number = 1500;
 export const PLAYERS: Player[] = [

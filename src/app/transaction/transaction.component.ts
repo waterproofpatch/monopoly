@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Transaction } from '../player';
+import { Transaction } from '../types';
 
 @Component({
   selector: 'app-transaction',
