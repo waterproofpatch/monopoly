@@ -22,6 +22,14 @@ export class PlayerDetailComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  openPieceSelectDialog(): void {
+    if (!this.player) {
+      this.logger.displayErrorDialog('Player is not set!');
+      return;
+    }
+    this.logger.displayPieceSelectDialog(this.player);
+  }
+
   findPlayerByName(name: string): Player | null {
     if (!this.players) {
       return null;
