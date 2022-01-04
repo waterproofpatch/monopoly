@@ -9,4 +9,5 @@ export interface Transaction {
   fromPlayer: Player;
   toPlayer: Player;
   amount: number;
+  timestamp: string;
 }
