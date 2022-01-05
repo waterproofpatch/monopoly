@@ -5,12 +5,12 @@ import {
   MatDialogRef,
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
-
 export interface ErrorDialogData {
   errorMsg: string;
 }
 export interface PieceSelectDialogData {
   player: Player;
+  players: Player[];
 }
 
 @Injectable({
@@ -22,10 +22,10 @@ export class DialogService {
     console.log(new Date() + ': ' + JSON.stringify(msg));
   }
 
-  displayPieceSelectDialog(player: Player) {
+  displayPieceSelectDialog(player: Player, players: Player[]) {
     const dialogRef = this.dialog.open(PieceSelectDialog, {
       width: '250px',
-      data: { player: player },
+      data: { player: player, players: players },
     });
   }
   displayErrorDialog(errorMsg: string): void {
