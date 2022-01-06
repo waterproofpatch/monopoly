@@ -1,7 +1,9 @@
 <h1 mat-dialog-title>Select Piece</h1>
 <div mat-dialog-content>
-  <mat-label>Some Label</mat-label>
-  <p>Currently: {{data.player.name}}</p>
+  <button mat-button [matMenuTriggerFor]="menu">{{data.player.name}}</button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item *ngFor="let player of data.players" (click)="selectPlayer(player, data.player)">{{player.name}}</button>
+  </mat-menu>
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="onOkClick()" cdkFocusInitial>Ok</button>

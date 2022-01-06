@@ -68,6 +68,14 @@ export class PieceSelectDialog {
     @Inject(MAT_DIALOG_DATA) public data: PieceSelectDialogData
   ) {}
 
+  selectPlayer(newPlayer: Player, oldPlayer: Player) {
+    console.log(
+      'player selected: ' + newPlayer.name + ' from ' + oldPlayer.name
+    );
+    [newPlayer.name, oldPlayer.name] = [oldPlayer.name, newPlayer.name];
+    [newPlayer.img, oldPlayer.img] = [oldPlayer.img, newPlayer.img];
+  }
+
   onOkClick(): void {
     this.dialogRef.close();
   }
