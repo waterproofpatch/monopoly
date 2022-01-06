@@ -1,4 +1,9 @@
-import { Inject, Component, Injectable } from '@angular/core';
+import {
+  Inject,
+  Component,
+  Injectable,
+  ViewEncapsulation,
+} from '@angular/core';
 import { Player } from './types';
 import {
   MatDialog,
@@ -18,16 +23,20 @@ export interface PieceSelectDialogData {
 })
 export class DialogService {
   constructor(private dialog: MatDialog) {}
+
+  dialogRef?: MatDialogRef<PieceSelectDialog>;
+
   log(msg: any) {
     console.log(new Date() + ': ' + JSON.stringify(msg));
   }
 
   displayPieceSelectDialog(player: Player, players: Player[]) {
-    const dialogRef = this.dialog.open(PieceSelectDialog, {
+    this.dialogRef = this.dialog.open(PieceSelectDialog, {
       width: '250px',
       data: { player: player, players: players },
     });
   }
+
   displayErrorDialog(errorMsg: string): void {
     const dialogRef = this.dialog.open(ErrorDialog, {
       width: '250px',
@@ -58,6 +67,7 @@ export class ErrorDialog {
 @Component({
   selector: 'piece-select-dialog',
   templateUrl: './piece-select-dialog.html',
+  encapsulation: ViewEncapsulation.None,
 })
 export class PieceSelectDialog {
   constructor(

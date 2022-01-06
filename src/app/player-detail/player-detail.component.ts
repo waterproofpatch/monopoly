@@ -1,7 +1,8 @@
 import { Input, Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Player, Transaction } from '../types';
-import { DialogService } from '../dialog.service';
+import { DialogService, PieceSelectDialog } from '../dialog.service';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-player-detail',
@@ -18,7 +19,10 @@ export class PlayerDetailComponent implements OnInit {
     amount: new FormControl(''),
   });
 
-  constructor(private logger: DialogService) {}
+  constructor(
+    private logger: DialogService,
+    public dialogRef: MatDialogRef<PieceSelectDialog>
+  ) {}
 
   ngOnInit(): void {}
 

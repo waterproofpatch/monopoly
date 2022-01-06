@@ -13,9 +13,10 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCardModule } from '@angular/material/card';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { PlayerDetailComponent } from './player-detail/player-detail.component';
 import { TransactionComponent } from './transaction/transaction.component';
+import { PieceSelectDialog } from './dialog.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -23,6 +24,7 @@ import { TransactionComponent } from './transaction/transaction.component';
     GameBoardComponent,
     PlayerDetailComponent,
     TransactionComponent,
+    PieceSelectDialog,
   ],
   imports: [
     MatMenuModule,
@@ -38,7 +40,7 @@ import { TransactionComponent } from './transaction/transaction.component';
     ReactiveFormsModule,
     BrowserAnimationsModule,
   ],
-  providers: [],
+  providers: [{ provide: MatDialogRef, useValue: {} }],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
