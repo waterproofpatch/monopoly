@@ -16,7 +16,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { PlayerDetailComponent } from './player-detail/player-detail.component';
 import { TransactionComponent } from './transaction/transaction.component';
-import { PieceSelectDialog } from './dialog.service';
+import { PieceSelectDialog, ErrorDialog } from './dialog.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,6 +25,7 @@ import { PieceSelectDialog } from './dialog.service';
     PlayerDetailComponent,
     TransactionComponent,
     PieceSelectDialog,
+    ErrorDialog,
   ],
   imports: [
     MatMenuModule,
