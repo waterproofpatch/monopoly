@@ -14,7 +14,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    margin-top: 16px;
+    margin-top: 8px;
   }
 
   .card {
@@ -24,7 +24,7 @@
     height: 80px;
     width: 300px;
     margin: 0 8px 16px;
-    padding: 16px;
+    padding: 8px;
     display: flex;
     flex-direction: row;
     justify-content: center;
