@@ -65,7 +65,6 @@ export class ErrorDialog {
 @Component({
   selector: 'piece-select-dialog',
   templateUrl: './piece-select-dialog.html',
-  encapsulation: ViewEncapsulation.None,
 })
 export class PieceSelectDialog {
   constructor(
