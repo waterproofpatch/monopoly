@@ -1,15 +1,11 @@
-import {
-  Inject,
-  Component,
-  Injectable,
-  ViewEncapsulation,
-} from '@angular/core';
+import { Inject, Component, Injectable } from '@angular/core';
 import { Player } from './types';
 import {
   MatDialog,
   MatDialogRef,
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
+
 export interface ErrorDialogData {
   errorMsg: string;
 }
