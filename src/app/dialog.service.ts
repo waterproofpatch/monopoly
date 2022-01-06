@@ -24,14 +24,12 @@ export interface PieceSelectDialogData {
 export class DialogService {
   constructor(private dialog: MatDialog) {}
 
-  dialogRef?: MatDialogRef<PieceSelectDialog>;
-
   log(msg: any) {
     console.log(new Date() + ': ' + JSON.stringify(msg));
   }
 
   displayPieceSelectDialog(player: Player, players: Player[]) {
-    this.dialogRef = this.dialog.open(PieceSelectDialog, {
+    const dialogRef = this.dialog.open(PieceSelectDialog, {
       width: '250px',
       data: { player: player, players: players },
     });
