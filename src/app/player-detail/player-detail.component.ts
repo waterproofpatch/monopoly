@@ -28,20 +28,4 @@ export class PlayerDetailComponent implements OnInit {
     }
     this.logger.displayPieceSelectDialog(this.player, this.players);
   }
-
-  otherPlayers(): Player[] {
-    if (!this.players || !this.player) {
-      this.logger.displayErrorDialog('Players is not set!');
-      return [];
-    }
-
-    let retPlayers: Player[] = [];
-
-    for (let otherPlayer of this.players) {
-      if (otherPlayer.name != this.player.name) {
-        retPlayers.push(otherPlayer);
-      }
-    }
-    return retPlayers;
-  }
 }
