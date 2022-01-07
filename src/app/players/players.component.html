@@ -1,5 +1,26 @@
 <div class="container">
 	<div class="side">
+		<form [formGroup]="transactionForm" (ngSubmit)="makePayment()">
+			<mat-form-field appearance="fill">
+				<mat-label>From</mat-label>
+				<mat-select formControlName="fromPlayerName">
+				<mat-option *ngFor="let p of players" value="{{p.name}}">{{p.name}}</mat-option>
+				</mat-select>
+			</mat-form-field>
+			<mat-form-field appearance="fill">
+				<mat-label>Amount</mat-label>
+				<input matInput formControlName="amount" type="number">
+			</mat-form-field>
+			<mat-form-field appearance="fill">
+				<mat-label>To</mat-label>
+				<mat-select formControlName="toPlayerName">
+				<mat-option *ngFor="let p of players" value="{{p.name}}">{{p.name}}</mat-option>
+				</mat-select>
+			</mat-form-field>
+			<button mat-raised-button color="primary">Pay</button>
+		</form>
+	</div>
+	<div class="side">
 		<div *ngFor="let player of players">
 			<app-player-detail [player]="player" [players]="players" (gameState)="updateGameState($event)"></app-player-detail>
 		</div>

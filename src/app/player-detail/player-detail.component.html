@@ -1,22 +1,8 @@
 <div class="player-row">
-<div *ngIf="player" class="card-container">
-	<div (click)="openPieceSelectDialog()" class="card card-large" tabindex="0">
-		<img src="../assets/{{player.img}}.jpg" width="100" height="80">
-	<span *ngIf="player.name != 'Bank'">{{player.money | currency}}</span>
+	<div *ngIf="player" class="card-container">
+		<div (click)="openPieceSelectDialog()" class="card card-large" tabindex="0">
+			<img src="../assets/{{player.img}}.jpg" width="100" height="80">
+		<span *ngIf="player.name != 'Bank'">{{player.money | currency}}</span>
+		</div>
 	</div>
-</div>
-<form *ngIf="player" [formGroup]="transactionForm" (ngSubmit)="makePayment()">
-	<mat-form-field appearance="fill">
-	<mat-label>Amount</mat-label>
-	<input matInput formControlName="amount" type="number">
-	</mat-form-field>
-	<mat-form-field appearance="fill">
-	<mat-label>To</mat-label>
-	<mat-select formControlName="otherPlayer">
-	<mat-option *ngFor="let p of otherPlayers()" value="{{p.name}}">{{p.name}}</mat-option>
-	</mat-select>
-	</mat-form-field>
-	<button mat-button color="primary">Pay</button>
-</form>
-
 </div>
