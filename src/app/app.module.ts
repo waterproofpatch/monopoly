@@ -13,6 +13,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCardModule } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { PlayerDetailComponent } from './player-detail/player-detail.component';
 import { TransactionComponent } from './transaction/transaction.component';
@@ -29,6 +30,7 @@ import { PieceSelectDialog, ErrorDialog } from './dialog.service';
   ],
   imports: [
     MatMenuModule,
+    MatDividerModule,
     MatCardModule,
     MatDialogModule,
     MatCheckboxModule,
