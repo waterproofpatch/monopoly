@@ -7,7 +7,7 @@ import { DialogService } from './dialog.service';
   providedIn: 'root',
 })
 export class TransactionService {
-  constructor(private logger: DialogService) {}
+  constructor(private dialogService: DialogService) {}
   // Observable string sources
   private transactionSource = new Subject<Transaction>();
 
@@ -19,7 +19,7 @@ export class TransactionService {
   }
 
   handleTransaction(transaction: Transaction): void {
-    this.logger.log(
+    this.dialogService.log(
       'Transaction from ' +
         transaction.fromPlayer.name +
         ' to ' +
@@ -33,7 +33,7 @@ export class TransactionService {
       transaction.fromPlayer.name != 'Bank' &&
       transaction.fromPlayer.money < transaction.amount
     ) {
-      this.logger.displayErrorDialog(
+      this.dialogService.displayErrorDialog(
         'Not enough money. Must raise $' +
           (transaction.amount - transaction.fromPlayer.money) +
           '.'

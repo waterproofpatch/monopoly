@@ -20,15 +20,15 @@ export class PlayersComponent implements OnInit {
   });
 
   constructor(
-    private logger: DialogService,
+    private dialogService: DialogService,
     private transactionService: TransactionService
   ) {}
 
   ngOnInit(): void {}
   makePayment(): void {
-    this.logger.log('Handling transaction');
+    this.dialogService.log('Handling transaction');
     if (!this.players) {
-      this.logger.displayErrorDialog('No players available!');
+      this.dialogService.displayErrorDialog('No players available!');
       return;
     }
 
@@ -36,7 +36,7 @@ export class PlayersComponent implements OnInit {
       this.transactionForm.controls.fromPlayerName.value ==
       this.transactionForm.controls.toPlayerName.value
     ) {
-      this.logger.displayErrorDialog('Cannot pay yourself!');
+      this.dialogService.displayErrorDialog('Cannot pay yourself!');
       return;
     }
 
@@ -47,7 +47,9 @@ export class PlayersComponent implements OnInit {
       this.transactionForm.controls.fromPlayerName.value
     );
     if (!toPlayer || !fromPlayer) {
-      this.logger.displayErrorDialog('Unable to find to and from player!');
+      this.dialogService.displayErrorDialog(
+        'Unable to find to and from player!'
+      );
       return;
     }
 

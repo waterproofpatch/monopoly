@@ -11,13 +11,13 @@ export class TransactionComponent implements OnInit {
   @Input() transaction?: Transaction; // from game-board
   @Input() transactions?: Transaction[]; // from game-board
 
-  constructor(private logger: DialogService) {}
+  constructor(private dialogService: DialogService) {}
 
   ngOnInit(): void {}
 
   undoTransaction(): void {
     if (!this.transaction) {
-      this.logger.displayErrorDialog('Transaction is not set!');
+      this.dialogService.displayErrorDialog('Transaction is not set!');
       return;
     }
     // really, just make a new transaction that is the reverse of this transaction

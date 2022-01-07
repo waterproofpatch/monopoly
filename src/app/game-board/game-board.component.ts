@@ -16,7 +16,7 @@ export class GameBoardComponent implements OnInit {
   transactionStates: Array<Transaction[]> = new Array<Transaction[]>();
 
   constructor(
-    private logger: DialogService,
+    private dialogService: DialogService,
     private transactionService: TransactionService
   ) {
     // whenever a component registers a transaction, process it here.
@@ -26,7 +26,7 @@ export class GameBoardComponent implements OnInit {
   }
 
   updateGameState(t: Transaction): void {
-    this.logger.log('Updating gamestate with transaction ' + t);
+    this.dialogService.log('Updating gamestate with transaction ' + t);
     let clonedPlayers: Player[] = this.players.map((x) => Object.assign({}, x));
     let clonedTransactions: Transaction[] = this.transactions.map((x) =>
       Object.assign({}, x)

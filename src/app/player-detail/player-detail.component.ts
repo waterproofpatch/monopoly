@@ -16,15 +16,15 @@ export class PlayerDetailComponent implements OnInit {
     amount: new FormControl(''),
   });
 
-  constructor(private logger: DialogService) {}
+  constructor(private dialogService: DialogService) {}
 
   ngOnInit(): void {}
 
   openPieceSelectDialog(): void {
     if (!this.player || !this.players) {
-      this.logger.displayErrorDialog('Player is not set!');
+      this.dialogService.displayErrorDialog('Player is not set!');
       return;
     }
-    this.logger.displayPieceSelectDialog(this.player, this.players);
+    this.dialogService.displayPieceSelectDialog(this.player, this.players);
   }
 }

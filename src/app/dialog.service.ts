@@ -66,7 +66,7 @@ export class ErrorDialog {
 export class PieceSelectDialog {
   constructor(
     private transactionService: TransactionService,
-    private logger: DialogService,
+    private dialogService: DialogService,
     public dialogRef: MatDialogRef<PieceSelectDialog>,
     @Inject(MAT_DIALOG_DATA) public data: PieceSelectDialogData
   ) {}
@@ -91,7 +91,7 @@ export class PieceSelectDialog {
     );
 
     if (freeParking[0].money == 0) {
-      this.logger.displayErrorDialog('No money in free parking!');
+      this.dialogService.displayErrorDialog('No money in free parking!');
       return;
     }
 
