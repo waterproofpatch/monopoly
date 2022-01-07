@@ -5,7 +5,8 @@ import {
   MatDialogRef,
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
-
+import { TransactionService } from './transaction.service';
+import { Transaction } from './types';
 export interface ErrorDialogData {
   errorMsg: string;
 }
@@ -64,12 +65,22 @@ export class ErrorDialog {
 })
 export class PieceSelectDialog {
   constructor(
+    private transactionService: TransactionService,
     public dialogRef: MatDialogRef<PieceSelectDialog>,
     @Inject(MAT_DIALOG_DATA) public data: PieceSelectDialogData
   ) {}
 
   passGo(): void {
     this.dialogRef.close();
+    const bank: Player[] = this.data.players.filter((x) => x.name == 'Bank');
+
+    let t: Transaction = {
+      toPlayer: this.data.player,
+      fromPlayer: bank[0],
+      amount: 200,
+      timestamp: 'not yet',
+    };
+    this.transactionService.doTransaction(t);
   }
 
   collectFreeParking(): void {

@@ -36,19 +36,5 @@ export class GameBoardComponent implements OnInit {
     this.transactions.push(t);
   }
 
-  winningPlayer(): Player {
-    let winningPlayer: Player = this.players[0];
-    for (var p of this.players) {
-      // bank and free parking can't win
-      if (p.name == 'Bank' || p.name == 'Free Parking') {
-        continue;
-      }
-      if (p.money > winningPlayer.money) {
-        winningPlayer = p;
-      }
-    }
-    return winningPlayer;
-  }
-
   ngOnInit(): void {}
 }
