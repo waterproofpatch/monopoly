@@ -68,6 +68,14 @@ export class PieceSelectDialog {
     @Inject(MAT_DIALOG_DATA) public data: PieceSelectDialogData
   ) {}
 
+  passGo(): void {
+    this.dialogRef.close();
+  }
+
+  collectFreeParking(): void {
+    this.dialogRef.close();
+  }
+
   selectPlayer(newPlayer: Player, oldPlayer: Player) {
     console.log(
       'player selected: ' + newPlayer.name + ' from ' + oldPlayer.name

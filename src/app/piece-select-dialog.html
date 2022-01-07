@@ -6,9 +6,9 @@
     <button mat-menu-item *ngFor="let player of data.players" (click)="selectPlayer(player, data.player)">{{player.name}}</button>
   </mat-menu>
   <mat-divider></mat-divider>
-  <button mat-raised-button color="primary">Pass Go</button>
+  <button (click)="passGo()"mat-raised-button color="primary">Pass Go</button>
   <mat-divider></mat-divider>
-  <button mat-raised-button color="primary">Collect Free Parking</button>
+  <button (click)="collectFreeParking()" mat-raised-button color="primary">Collect Free Parking</button>
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="onOkClick()" cdkFocusInitial>Ok</button>
