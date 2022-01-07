@@ -2,6 +2,7 @@ import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Player, Transaction } from '../types';
 import { DialogService } from '../dialog.service';
+import { TransactionService } from '../transaction.service';
 
 @Component({
   selector: 'app-players',
@@ -11,7 +12,6 @@ import { DialogService } from '../dialog.service';
 export class PlayersComponent implements OnInit {
   @Input() players?: Player[]; // from game-board
   @Input() transactions?: Transaction[]; // from game-board
-  @Output() gameState = new EventEmitter<Transaction>();
 
   transactionForm = new FormGroup({
     fromPlayerName: new FormControl(''),
@@ -19,7 +19,10 @@ export class PlayersComponent implements OnInit {
     amount: new FormControl(''),
   });
 
-  constructor(private logger: DialogService) {}
+  constructor(
+    private logger: DialogService,
+    private transactionService: TransactionService
+  ) {}
 
   ngOnInit(): void {}
   handleTransaction(transaction: Transaction): void {
@@ -45,7 +48,7 @@ export class PlayersComponent implements OnInit {
       return;
     }
 
-    this.gameState.emit(transaction);
+    this.transactionService.doTransaction(transaction);
 
     transaction.fromPlayer.money -= transaction.amount;
     transaction.toPlayer.money += transaction.amount;
@@ -85,10 +88,6 @@ export class PlayersComponent implements OnInit {
     this.handleTransaction(t);
   }
 
-  updateGameState(t: Transaction): void {
-    // forward the event up to the game board
-    this.gameState.emit(t);
-  }
   findPlayerByName(name: string): Player | null {
     if (!this.players) {
       return null;

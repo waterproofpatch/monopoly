@@ -10,7 +10,6 @@ import { DialogService } from '../dialog.service';
 export class PlayerDetailComponent implements OnInit {
   @Input() player?: Player;
   @Input() players?: Player[]; // from players
-  @Output() gameState = new EventEmitter<Transaction>();
 
   transactionForm = new FormGroup({
     otherPlayer: new FormControl(''),

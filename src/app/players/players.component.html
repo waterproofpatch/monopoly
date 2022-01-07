@@ -22,7 +22,7 @@
 	</div>
 	<div class="row-center">
 		<div *ngFor="let player of players">
-			<app-player-detail [player]="player" [players]="players" (gameState)="updateGameState($event)"></app-player-detail>
+			<app-player-detail [player]="player" [players]="players"></app-player-detail>
 		</div>
 	</div>
 	<div class="row-left">

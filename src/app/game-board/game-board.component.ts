@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Player, Transaction } from '../types';
 import { PLAYERS } from '../players';
 import { DialogService } from '../dialog.service';
+import { TransactionService } from '../transaction.service';
 
 @Component({
   selector: 'app-game-board',
@@ -14,7 +15,14 @@ export class GameBoardComponent implements OnInit {
   playerStates: Array<Player[]> = new Array<Player[]>();
   transactionStates: Array<Transaction[]> = new Array<Transaction[]>();
 
-  constructor(private logger: DialogService) {}
+  constructor(
+    private logger: DialogService,
+    private transactionService: TransactionService
+  ) {
+    transactionService.transaction$.subscribe((transaction) => {
+      this.updateGameState(transaction);
+    });
+  }
 
   updateGameState(t: Transaction): void {
     this.logger.log('Updating gamestate with transaction ' + t);
