@@ -20,11 +20,13 @@
 			<button mat-raised-button color="primary">Pay</button>
 		</form>
 	</div>
+	<mat-divider></mat-divider>
 	<div class="row-center">
 		<div *ngFor="let player of nonHumanPlayers()">
 			<app-player-detail [player]="player" [players]="players"></app-player-detail>
 		</div>
 	</div>
+	<mat-divider></mat-divider>
 	<div class="row-center">
 		<div *ngFor="let player of humanPlayers()">
 			<app-player-detail [player]="player" [players]="players"></app-player-detail>
