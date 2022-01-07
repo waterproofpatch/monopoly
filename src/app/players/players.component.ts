@@ -25,6 +25,19 @@ export class PlayersComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {}
+  nonHumanPlayers(): Player[] {
+    return this.filteredPlayers(false);
+  }
+  humanPlayers(): Player[] {
+    return this.filteredPlayers(true);
+  }
+  private filteredPlayers(human: boolean) {
+    if (!this.players) {
+      this.dialogService.displayErrorDialog('Players not loaded yet!');
+      return [];
+    }
+    return this.players?.filter((x) => x.human == human);
+  }
   makePayment(): void {
     this.dialogService.log('Handling transaction');
     if (!this.players) {

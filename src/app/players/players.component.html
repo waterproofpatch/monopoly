@@ -21,7 +21,12 @@
 		</form>
 	</div>
 	<div class="row-center">
-		<div *ngFor="let player of players">
+		<div *ngFor="let player of nonHumanPlayers()">
+			<app-player-detail [player]="player" [players]="players"></app-player-detail>
+		</div>
+	</div>
+	<div class="row-center">
+		<div *ngFor="let player of humanPlayers()">
 			<app-player-detail [player]="player" [players]="players"></app-player-detail>
 		</div>
 	</div>
