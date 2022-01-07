@@ -66,6 +66,7 @@ export class ErrorDialog {
 export class PieceSelectDialog {
   constructor(
     private transactionService: TransactionService,
+    private logger: DialogService,
     public dialogRef: MatDialogRef<PieceSelectDialog>,
     @Inject(MAT_DIALOG_DATA) public data: PieceSelectDialogData
   ) {}
@@ -78,13 +79,29 @@ export class PieceSelectDialog {
       toPlayer: this.data.player,
       fromPlayer: bank[0],
       amount: 200,
-      timestamp: 'not yet',
+      timestamp: new Date().toISOString(),
     };
     this.transactionService.handleTransaction(t);
   }
 
   collectFreeParking(): void {
     this.dialogRef.close();
+    const freeParking: Player[] = this.data.players.filter(
+      (x) => x.name == 'Free Parking'
+    );
+
+    if (freeParking[0].money == 0) {
+      this.logger.displayErrorDialog('No money in free parking!');
+      return;
+    }
+
+    let t: Transaction = {
+      toPlayer: this.data.player,
+      fromPlayer: freeParking[0],
+      amount: freeParking[0].money,
+      timestamp: new Date().toISOString(),
+    };
+    this.transactionService.handleTransaction(t);
   }
 
   selectPlayer(newPlayer: Player, oldPlayer: Player) {
