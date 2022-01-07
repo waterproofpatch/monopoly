@@ -1,15 +1,16 @@
 <h1 mat-dialog-title>{{data.player.name}} - {{data.player.money | currency}}</h1>
 <div mat-dialog-content>
-  Select Piece
-  <button mat-button [matMenuTriggerFor]="menu">{{data.player.name}}</button>
+  <mat-label>Select Piece:</mat-label>
+  <button class="piece-select" mat-raised-button [matMenuTriggerFor]="menu">{{data.player.name}}</button>
   <mat-menu #menu="matMenu">
     <button mat-menu-item *ngFor="let player of data.players" (click)="selectPlayer(player, data.player)">{{player.name}}</button>
   </mat-menu>
   <mat-divider></mat-divider>
-  <button (click)="passGo()"mat-raised-button color="primary">Pass Go</button>
-  <mat-divider></mat-divider>
-  <button (click)="collectFreeParking()" mat-raised-button color="primary">Collect Free Parking</button>
+  <div class="button-panel">
+    <button (click)="passGo()"mat-raised-button>Pass Go</button>
+    <button (click)="collectFreeParking()" mat-raised-button>Collect Free Parking</button>
+  </div>
 </div>
 <div mat-dialog-actions>
-  <button mat-button (click)="onOkClick()" cdkFocusInitial>Ok</button>
+  <button mat-raised-button (click)="onOkClick()" color="primary">Ok</button>
 </div>

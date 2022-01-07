@@ -27,7 +27,7 @@ export class DialogService {
 
   displayPieceSelectDialog(player: Player, players: Player[]) {
     const dialogRef = this.dialog.open(PieceSelectDialog, {
-      width: '250px',
+      width: '350px',
       data: { player: player, players: players },
     });
   }
@@ -62,6 +62,7 @@ export class ErrorDialog {
 @Component({
   selector: 'piece-select-dialog',
   templateUrl: './piece-select-dialog.html',
+  styleUrls: ['./piece-select-dialog.css'],
 })
 export class PieceSelectDialog {
   constructor(
