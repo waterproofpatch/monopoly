@@ -1,5 +1,5 @@
 <div>
-	<div class="side">
+	<div class="row-center">
 		<form [formGroup]="transactionForm" (ngSubmit)="makePayment()">
 			<mat-form-field appearance="fill">
 				<mat-label>From</mat-label>
@@ -20,12 +20,12 @@
 			<button mat-raised-button color="primary">Pay</button>
 		</form>
 	</div>
-	<div class="side">
+	<div class="row-center">
 		<div *ngFor="let player of players">
 			<app-player-detail [player]="player" [players]="players" (gameState)="updateGameState($event)"></app-player-detail>
 		</div>
 	</div>
-	<div class="side">
+	<div class="row-left">
 		<div *ngFor="let transaction of transactions">
 			<app-transaction [transaction]="transaction" [transactions]="transactions"></app-transaction>
 		</div>

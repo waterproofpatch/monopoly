@@ -1,8 +1,15 @@
   mat-form-field {
     padding: 10px;
   }
-  .side {
+  .row-center {
     justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+  }
+
+  .row-left {
+    justify-content: left space-between;
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;

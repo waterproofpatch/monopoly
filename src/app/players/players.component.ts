@@ -83,7 +83,7 @@ export class PlayersComponent implements OnInit {
       amount: this.transactionForm.controls.amount.value,
     };
     this.handleTransaction(t);
-    this.transactionForm.reset();
+    // this.transactionForm.reset();
   }
 
   updateGameState(t: Transaction): void {
