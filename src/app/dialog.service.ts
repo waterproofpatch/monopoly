@@ -80,7 +80,7 @@ export class PieceSelectDialog {
       amount: 200,
       timestamp: 'not yet',
     };
-    this.transactionService.doTransaction(t);
+    this.transactionService.handleTransaction(t);
   }
 
   collectFreeParking(): void {

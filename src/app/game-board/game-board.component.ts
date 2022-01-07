@@ -19,6 +19,7 @@ export class GameBoardComponent implements OnInit {
     private logger: DialogService,
     private transactionService: TransactionService
   ) {
+    // whenever a component registers a transaction, process it here.
     transactionService.transaction$.subscribe((transaction) => {
       this.updateGameState(transaction);
     });

@@ -25,34 +25,6 @@ export class PlayersComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {}
-  handleTransaction(transaction: Transaction): void {
-    this.logger.log(
-      'Transaction from ' +
-        transaction.fromPlayer.name +
-        ' to ' +
-        transaction.toPlayer.name +
-        ' in the amount of ' +
-        transaction.amount
-    );
-
-    // the bank has unlimited money
-    if (
-      transaction.fromPlayer.name != 'Bank' &&
-      transaction.fromPlayer.money < transaction.amount
-    ) {
-      this.logger.displayErrorDialog(
-        'Not enough money. Must raise $' +
-          (transaction.amount - transaction.fromPlayer.money) +
-          '.'
-      );
-      return;
-    }
-
-    this.transactionService.doTransaction(transaction);
-
-    transaction.fromPlayer.money -= transaction.amount;
-    transaction.toPlayer.money += transaction.amount;
-  }
   makePayment(): void {
     this.logger.log('Handling transaction');
     if (!this.players) {
@@ -85,7 +57,7 @@ export class PlayersComponent implements OnInit {
       toPlayer: toPlayer,
       amount: this.transactionForm.controls.amount.value,
     };
-    this.handleTransaction(t);
+    this.transactionService.handleTransaction(t);
   }
 
   findPlayerByName(name: string): Player | null {
