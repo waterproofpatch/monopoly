@@ -11,7 +11,6 @@ import { TransactionService } from '../transaction-service/transaction.service';
 })
 export class PlayersComponent implements OnInit {
   @Input() players?: Player[]; // from game-board
-  @Input() transactions?: Transaction[]; // from game-board
 
   transactionForm = new FormGroup({
     fromPlayerName: new FormControl(''),
@@ -27,6 +26,9 @@ export class PlayersComponent implements OnInit {
   ngOnInit(): void {}
   nonHumanPlayers(): Player[] {
     return this.filteredPlayers(false);
+  }
+  getTransactions(): Transaction[] {
+    return this.transactionService.getTransactions();
   }
   humanPlayers(): Player[] {
     return this.filteredPlayers(true);

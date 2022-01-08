@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Transaction } from '../types';
 import { DialogService } from '../dialog-service/dialog.service';
+import { TransactionService } from '../transaction-service/transaction.service';
 
 @Component({
   selector: 'app-transaction',
@@ -9,9 +10,11 @@ import { DialogService } from '../dialog-service/dialog.service';
 })
 export class TransactionComponent implements OnInit {
   @Input() transaction?: Transaction; // from game-board
-  @Input() transactions?: Transaction[]; // from game-board
 
-  constructor(private dialogService: DialogService) {}
+  constructor(
+    private dialogService: DialogService,
+    private transactionService: TransactionService
+  ) {}
 
   ngOnInit(): void {}
 
@@ -29,10 +32,12 @@ export class TransactionComponent implements OnInit {
     };
     newTransaction.fromPlayer.money -= newTransaction.amount;
     newTransaction.toPlayer.money += newTransaction.amount;
-    if (this.transactions) {
-      const index = this.transactions.indexOf(this.transaction, 0);
+    if (this.transactionService.getTransactions()) {
+      const index = this.transactionService
+        .getTransactions()
+        .indexOf(this.transaction, 0);
       if (index > -1) {
-        this.transactions.splice(index, 1);
+        this.transactionService.getTransactions().splice(index, 1);
       }
     }
   }

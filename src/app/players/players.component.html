@@ -33,8 +33,8 @@
 		</div>
 	</div>
 	<div class="row-left">
-		<div *ngFor="let transaction of transactions">
-			<app-transaction [transaction]="transaction" [transactions]="transactions"></app-transaction>
+		<div *ngFor="let transaction of getTransactions()">
+			<app-transaction [transaction]="transaction"></app-transaction>
 		</div>
 	</div>
 </div>

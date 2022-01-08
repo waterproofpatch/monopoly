@@ -11,7 +11,8 @@ import { PlayerService } from '../player-service/player.service';
 })
 export class GameBoardComponent implements OnInit {
   players: Player[] = [];
-  transactions: Transaction[] = [];
+  // transactions: Transaction[] = [];
+
   playerStates: Array<Player[]> = new Array<Player[]>();
   transactionStates: Array<Transaction[]> = new Array<Transaction[]>();
 
@@ -25,6 +26,7 @@ export class GameBoardComponent implements OnInit {
       this.updateGameState(transaction);
     });
     this.players = this.playerService.getPlayers();
+    // this.transactions = this.transactionService.getTransactions();
   }
 
   reset(): void {
@@ -34,13 +36,11 @@ export class GameBoardComponent implements OnInit {
   updateGameState(t: Transaction): void {
     this.dialogService.log('Updating gamestate with transaction ' + t);
     let clonedPlayers: Player[] = this.players.map((x) => Object.assign({}, x));
-    let clonedTransactions: Transaction[] = this.transactions.map((x) =>
-      Object.assign({}, x)
-    );
+    let clonedTransactions: Transaction[] = this.transactionService
+      .getTransactions()
+      .map((x) => Object.assign({}, x));
     this.playerStates.push(clonedPlayers);
     this.transactionStates.push(clonedTransactions);
-
-    this.transactions.push(t);
   }
 
   ngOnInit(): void {}

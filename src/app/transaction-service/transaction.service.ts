@@ -8,6 +8,8 @@ import { DialogService } from '../dialog-service/dialog.service';
 })
 export class TransactionService {
   constructor(private dialogService: DialogService) {}
+  transactions: Transaction[] = [];
+
   // Observable string sources
   private transactionSource = new Subject<Transaction>();
 
@@ -16,6 +18,11 @@ export class TransactionService {
 
   private doTransaction(t: Transaction) {
     this.transactionSource.next(t);
+    this.transactions.push(t);
+  }
+
+  getTransactions(): Transaction[] {
+    return this.transactions;
   }
 
   handleTransaction(transaction: Transaction): void {
