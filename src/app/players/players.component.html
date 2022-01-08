@@ -4,7 +4,7 @@
 			<mat-form-field appearance="fill">
 				<mat-label>From</mat-label>
 				<mat-select formControlName="fromPlayerName">
-				<mat-option *ngFor="let p of players" value="{{p.name}}">{{p.name}}</mat-option>
+				<mat-option *ngFor="let p of inGamePlayers()" value="{{p.name}}">{{p.name}}</mat-option>
 				</mat-select>
 			</mat-form-field>
 			<mat-form-field appearance="fill">
@@ -14,7 +14,7 @@
 			<mat-form-field appearance="fill">
 				<mat-label>To</mat-label>
 				<mat-select formControlName="toPlayerName">
-				<mat-option *ngFor="let p of players" value="{{p.name}}">{{p.name}}</mat-option>
+				<mat-option *ngFor="let p of inGamePlayers()" value="{{p.name}}">{{p.name}}</mat-option>
 				</mat-select>
 			</mat-form-field>
 			<button mat-raised-button color="primary">Pay</button>

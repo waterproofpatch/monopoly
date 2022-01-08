@@ -31,6 +31,13 @@ export class PlayersComponent implements OnInit {
   humanPlayers(): Player[] {
     return this.filteredPlayers(true);
   }
+  inGamePlayers(): Player[] {
+    if (!this.players) {
+      this.dialogService.displayErrorDialog('Players not loaded yet!');
+      return [];
+    }
+    return this.players?.filter((x) => x.inGame);
+  }
   private filteredPlayers(human: boolean) {
     if (!this.players) {
       this.dialogService.displayErrorDialog('Players not loaded yet!');
