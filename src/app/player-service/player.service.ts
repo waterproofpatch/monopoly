@@ -6,7 +6,6 @@ import { Player } from '../types';
 })
 export class PlayerService {
   startingMoney: number = 1500;
-  originalPlayers: Player[] = [];
   players: Player[] = [
     {
       img: 'dog',
@@ -67,9 +66,7 @@ export class PlayerService {
     },
   ];
 
-  constructor() {
-    this.originalPlayers = this.players.map((x) => Object.assign({}, x));
-  }
+  constructor() {}
 
   getPlayers(): Player[] {
     return this.players;
@@ -82,7 +79,11 @@ export class PlayerService {
   reset() {
     for (let p of this.players) {
       p.inGame = true;
-      p.money = this.startingMoney;
+      if (p.name == 'Free Parking') {
+        p.money = 0;
+      } else {
+        p.money = this.startingMoney;
+      }
     }
   }
 }
