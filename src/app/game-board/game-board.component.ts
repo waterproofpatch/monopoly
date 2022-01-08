@@ -27,6 +27,10 @@ export class GameBoardComponent implements OnInit {
     this.players = this.playerService.getPlayers();
   }
 
+  reset(): void {
+    this.playerService.reset();
+  }
+
   updateGameState(t: Transaction): void {
     this.dialogService.log('Updating gamestate with transaction ' + t);
     let clonedPlayers: Player[] = this.players.map((x) => Object.assign({}, x));
