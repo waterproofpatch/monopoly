@@ -7,6 +7,7 @@ import {
 } from '@angular/material/dialog';
 import { TransactionService } from '../transaction-service/transaction.service';
 import { Transaction } from '../types';
+import { PlayerService } from '../player-service/player.service';
 export interface ErrorDialogData {
   errorMsg: string;
 }
@@ -68,6 +69,7 @@ export class PieceSelectDialog {
   constructor(
     private transactionService: TransactionService,
     private dialogService: DialogService,
+    private playerService: PlayerService,
     public dialogRef: MatDialogRef<PieceSelectDialog>,
     @Inject(MAT_DIALOG_DATA) public data: PieceSelectDialogData
   ) {}
@@ -103,6 +105,11 @@ export class PieceSelectDialog {
       timestamp: new Date().toISOString(),
     };
     this.transactionService.handleTransaction(t);
+  }
+
+  remove(): void {
+    this.playerService.removePlayer(this.data.player);
+    this.dialogRef.close();
   }
 
   selectPlayer(newPlayer: Player, oldPlayer: Player) {
