@@ -3,6 +3,7 @@ export interface Player {
   name: string;
   money: number;
   human: boolean;
+  inGame: boolean; // whether or not this player is active in the game
 }
 
 export interface Transaction {

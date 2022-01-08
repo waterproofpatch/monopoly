@@ -36,7 +36,7 @@ export class PlayersComponent implements OnInit {
       this.dialogService.displayErrorDialog('Players not loaded yet!');
       return [];
     }
-    return this.players?.filter((x) => x.human == human);
+    return this.players?.filter((x) => x.human == human && x.inGame);
   }
   makePayment(): void {
     this.dialogService.log('Handling transaction');

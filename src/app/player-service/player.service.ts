@@ -5,34 +5,74 @@ import { Player } from '../types';
   providedIn: 'root',
 })
 export class PlayerService {
-  STARTING_MONEY: number = 1500;
-  PLAYERS: Player[] = [
-    { img: 'dog', name: 'Dog', money: this.STARTING_MONEY, human: true },
-    { img: 'ship', name: 'Ship', money: this.STARTING_MONEY, human: true },
-    { img: 'dino', name: 'Dinosaur', money: this.STARTING_MONEY, human: true },
-    { img: 'car', name: 'Car', money: this.STARTING_MONEY, human: true },
-    { img: 'cat', name: 'Cat', money: this.STARTING_MONEY, human: true },
-    { img: 'duck', name: 'Duck', money: this.STARTING_MONEY, human: true },
+  startingMoney: number = 1500;
+  players: Player[] = [
+    {
+      img: 'dog',
+      name: 'Dog',
+      money: this.startingMoney,
+      human: true,
+      inGame: true,
+    },
+    {
+      img: 'ship',
+      name: 'Ship',
+      money: this.startingMoney,
+      human: true,
+      inGame: true,
+    },
+    {
+      img: 'dino',
+      name: 'Dinosaur',
+      money: this.startingMoney,
+      human: true,
+      inGame: true,
+    },
+    {
+      img: 'car',
+      name: 'Car',
+      money: this.startingMoney,
+      human: true,
+      inGame: true,
+    },
+    {
+      img: 'cat',
+      name: 'Cat',
+      money: this.startingMoney,
+      human: true,
+      inGame: true,
+    },
+    {
+      img: 'duck',
+      name: 'Duck',
+      money: this.startingMoney,
+      human: true,
+      inGame: true,
+    },
     {
       img: 'penguin',
       name: 'Penguin',
-      money: this.STARTING_MONEY,
+      money: this.startingMoney,
       human: true,
+      inGame: true,
     },
-    { img: 'bank', name: 'Bank', money: 0, human: false },
-    { img: 'parking', name: 'Free Parking', money: 0, human: false },
+    { img: 'bank', name: 'Bank', money: 0, human: false, inGame: true },
+    {
+      img: 'parking',
+      name: 'Free Parking',
+      money: 0,
+      human: false,
+      inGame: true,
+    },
   ];
 
   constructor() {}
 
   getPlayers(): Player[] {
-    return this.PLAYERS;
+    return this.players;
   }
 
   removePlayer(player: Player) {
-    const index = this.PLAYERS.indexOf(player, 0);
-    if (index > -1) {
-      this.PLAYERS.splice(index, 1);
-    }
+    player.inGame = false;
   }
 }
