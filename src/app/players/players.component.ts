@@ -20,15 +20,12 @@ export class PlayersComponent implements OnInit {
 
   constructor(
     private dialogService: DialogService,
-    private transactionService: TransactionService
+    public transactionService: TransactionService
   ) {}
 
   ngOnInit(): void {}
   nonHumanPlayers(): Player[] {
     return this.filteredPlayers(false);
-  }
-  getTransactions(): Transaction[] {
-    return this.transactionService.getTransactions();
   }
   humanPlayers(): Player[] {
     return this.filteredPlayers(true);

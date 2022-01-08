@@ -10,23 +10,18 @@ import { PlayerService } from '../player-service/player.service';
   styleUrls: ['./game-board.component.css'],
 })
 export class GameBoardComponent implements OnInit {
-  players: Player[] = [];
-  // transactions: Transaction[] = [];
-
   playerStates: Array<Player[]> = new Array<Player[]>();
   transactionStates: Array<Transaction[]> = new Array<Transaction[]>();
 
   constructor(
     private dialogService: DialogService,
     private transactionService: TransactionService,
-    private playerService: PlayerService
+    public playerService: PlayerService
   ) {
     // whenever a component registers a transaction, process it here.
     transactionService.transaction$.subscribe((transaction) => {
       this.updateGameState(transaction);
     });
-    this.players = this.playerService.getPlayers();
-    // this.transactions = this.transactionService.getTransactions();
   }
 
   reset(): void {
@@ -35,7 +30,9 @@ export class GameBoardComponent implements OnInit {
 
   updateGameState(t: Transaction): void {
     this.dialogService.log('Updating gamestate with transaction ' + t);
-    let clonedPlayers: Player[] = this.players.map((x) => Object.assign({}, x));
+    let clonedPlayers: Player[] = this.playerService
+      .getPlayers()
+      .map((x) => Object.assign({}, x));
     let clonedTransactions: Transaction[] = this.transactionService
       .getTransactions()
       .map((x) => Object.assign({}, x));
