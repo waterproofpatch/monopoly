@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Player, Transaction } from '../types';
-import { PLAYERS } from '../players';
 import { DialogService } from '../dialog-service/dialog.service';
 import { TransactionService } from '../transaction-service/transaction.service';
+import { PlayerService } from '../player.service';
 
 @Component({
   selector: 'app-game-board',
@@ -10,19 +10,21 @@ import { TransactionService } from '../transaction-service/transaction.service';
   styleUrls: ['./game-board.component.css'],
 })
 export class GameBoardComponent implements OnInit {
-  players: Player[] = PLAYERS;
+  players: Player[] = [];
   transactions: Transaction[] = [];
   playerStates: Array<Player[]> = new Array<Player[]>();
   transactionStates: Array<Transaction[]> = new Array<Transaction[]>();
 
   constructor(
     private dialogService: DialogService,
-    private transactionService: TransactionService
+    private transactionService: TransactionService,
+    private playerService: PlayerService
   ) {
     // whenever a component registers a transaction, process it here.
     transactionService.transaction$.subscribe((transaction) => {
       this.updateGameState(transaction);
     });
+    this.players = this.playerService.getPlayers();
   }
 
   updateGameState(t: Transaction): void {
