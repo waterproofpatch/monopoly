@@ -21,6 +21,7 @@ import {
   PieceSelectDialog,
   ErrorDialog,
 } from './dialog-service/dialog.service';
+import { AnimatedDigitComponent } from './animated/animated-digit.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -30,6 +31,7 @@ import {
     TransactionComponent,
     PieceSelectDialog,
     ErrorDialog,
+    AnimatedDigitComponent,
   ],
   imports: [
     MatMenuModule,

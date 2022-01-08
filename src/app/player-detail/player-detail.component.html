@@ -1,8 +1,9 @@
 <div class="player-row">
 	<div *ngIf="player" class="card-container">
 		<div (click)="openPieceSelectDialog()" class="card card-large" tabindex="0">
+			
 			<img src="../assets/{{player.img}}.jpg" width="100" height="80">
-			<span *ngIf="player.name != 'Bank'">{{player.money | currency}}</span>
+			<span *ngIf="player.name != 'Bank'"><animated-digit [digit]="player.money" [duration]="1000"></animated-digit></span>
 		</div>
 	</div>
 </div>
