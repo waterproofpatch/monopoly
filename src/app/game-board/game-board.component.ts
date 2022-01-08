@@ -3,6 +3,8 @@ import { Player, Transaction } from '../types';
 import { DialogService } from '../dialog-service/dialog.service';
 import { TransactionService } from '../transaction-service/transaction.service';
 import { PlayerService } from '../player-service/player.service';
+import { GameServiceService } from '../game-service.service';
+import { Game } from '../types';
 
 @Component({
   selector: 'app-game-board',
@@ -12,22 +14,31 @@ import { PlayerService } from '../player-service/player.service';
 export class GameBoardComponent implements OnInit {
   playerStates: Array<Player[]> = new Array<Player[]>();
   transactionStates: Array<Transaction[]> = new Array<Transaction[]>();
-  gameStarted: boolean = false;
+  games: Game[] = [];
 
   constructor(
     private dialogService: DialogService,
     private transactionService: TransactionService,
-    public playerService: PlayerService
+    public playerService: PlayerService,
+    private gameService: GameServiceService
   ) {
     // whenever a component registers a transaction, process it here.
     transactionService.transaction$.subscribe((transaction) => {
       this.updateGameState(transaction);
     });
+
+    gameService.game$.subscribe((game) => {
+      this.games.push(game);
+    });
   }
 
   newGame(): void {
     this.reset();
-    this.gameStarted = true;
+    this.gameService.newGame('new game name');
+  }
+
+  gameStarted(): boolean {
+    return this.games.length > 0;
   }
 
   reset(): void {
