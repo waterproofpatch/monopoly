@@ -21,6 +21,10 @@ export class TransactionService {
     this.transactions.push(t);
   }
 
+  reset() {
+    this.transactions = [];
+  }
+
   getTransactions(): Transaction[] {
     return this.transactions;
   }

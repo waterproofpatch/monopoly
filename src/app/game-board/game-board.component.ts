@@ -26,6 +26,7 @@ export class GameBoardComponent implements OnInit {
 
   reset(): void {
     this.playerService.reset();
+    this.transactionService.reset();
   }
 
   updateGameState(t: Transaction): void {
