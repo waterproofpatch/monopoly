@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Player, Transaction } from '../types';
 import { PLAYERS } from '../players';
-import { DialogService } from '../dialog.service';
-import { TransactionService } from '../transaction.service';
+import { DialogService } from '../dialog-service/dialog.service';
+import { TransactionService } from '../transaction-service/transaction.service';
 
 @Component({
   selector: 'app-game-board',

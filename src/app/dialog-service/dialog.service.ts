@@ -1,12 +1,12 @@
 import { Inject, Component, Injectable } from '@angular/core';
-import { Player } from './types';
+import { Player } from '../types';
 import {
   MatDialog,
   MatDialogRef,
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
-import { TransactionService } from './transaction.service';
-import { Transaction } from './types';
+import { TransactionService } from '../transaction-service/transaction.service';
+import { Transaction } from '../types';
 export interface ErrorDialogData {
   errorMsg: string;
 }

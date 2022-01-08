@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Transaction } from '../types';
-import { DialogService } from '../dialog.service';
+import { DialogService } from '../dialog-service/dialog.service';
 
 @Component({
   selector: 'app-transaction',

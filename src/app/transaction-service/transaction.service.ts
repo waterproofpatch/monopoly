@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { Transaction } from './types';
-import { DialogService } from './dialog.service';
+import { Transaction } from '../types';
+import { DialogService } from '../dialog-service/dialog.service';
 
 @Injectable({
   providedIn: 'root',

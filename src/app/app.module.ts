@@ -17,7 +17,10 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { PlayerDetailComponent } from './player-detail/player-detail.component';
 import { TransactionComponent } from './transaction/transaction.component';
-import { PieceSelectDialog, ErrorDialog } from './dialog.service';
+import {
+  PieceSelectDialog,
+  ErrorDialog,
+} from './dialog-service/dialog.service';
 @NgModule({
   declarations: [
     AppComponent,
