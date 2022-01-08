@@ -12,6 +12,7 @@ import { PlayerService } from '../player-service/player.service';
 export class GameBoardComponent implements OnInit {
   playerStates: Array<Player[]> = new Array<Player[]>();
   transactionStates: Array<Transaction[]> = new Array<Transaction[]>();
+  gameStarted: boolean = false;
 
   constructor(
     private dialogService: DialogService,
@@ -22,6 +23,11 @@ export class GameBoardComponent implements OnInit {
     transactionService.transaction$.subscribe((transaction) => {
       this.updateGameState(transaction);
     });
+  }
+
+  newGame(): void {
+    this.reset();
+    this.gameStarted = true;
   }
 
   reset(): void {
