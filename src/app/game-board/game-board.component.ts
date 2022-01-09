@@ -14,7 +14,7 @@ import { Game } from '../types';
 export class GameBoardComponent implements OnInit {
   playerStates: Array<Player[]> = new Array<Player[]>();
   transactionStates: Array<Transaction[]> = new Array<Transaction[]>();
-  games: Game[] = [];
+  games: Game[] = [{ name: 'test game' }];
 
   constructor(
     private dialogService: DialogService,
