@@ -3,6 +3,7 @@ package main
 
 import (
 	"crypto/tls"
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
@@ -25,21 +26,26 @@ func startServing(mux *http.ServeMux) {
 	server := http.Server{
 		Addr:    addrString,
 		Handler: mux,
-		TLSConfig: &tls.Config{
-			NextProtos: []string{"h2", "http/1.1"},
-		},
 	}
 
 	// load the certificates from the environment.
 	certs, err := getCertsFromEnv()
 	if err != nil {
-		log.Fatalf("failed loading certs: %v", err)
+		// heroku charges for this, so have an option to not...
+		server.TLSConfig = &tls.Config{
+			NextProtos: []string{"h2", "http/1.1"},
+		}
+		log.Print("Server listening on %v not using certs", server.Addr)
+		if err := server.ListenAndServe(); err != nil {
+			fmt.Println(err)
+		}
+	} else {
+		log.Println("Server listening on %v using certs: %+v\n", server.Addr, certs)
+		if err := server.ListenAndServeTLS(certs.certPath, certs.keyPath); err != nil {
+			fmt.Println(err)
+		}
 	}
 
-	log.Printf("Server listening on %v using certs: %+v\n", server.Addr, certs)
-	if err := server.ListenAndServeTLS(certs.certPath, certs.keyPath); err != nil {
-		fmt.Println(err)
-	}
 }
 
 // buildMux creates the server mux and registers endpoints with it.
@@ -54,6 +60,9 @@ func buildMux() *http.ServeMux {
 
 func getPortFromEnv() (string, error) {
 	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8081"
+	}
 	return port, nil
 }
 
@@ -62,10 +71,7 @@ func getCertsFromEnv() (*Certs, error) {
 	var certs Certs
 	certBasePath := os.Getenv("CERTS_PATH")
 	if len(certBasePath) == 0 {
-		log.Println("CERTS_PATH is not set, defaulting...")
-		certs.certPath = "/go/bin/certs/cert.pem"
-		certs.keyPath = "/go/bin/certs/key.pem"
-		return &certs, nil
+		return nil, errors.New("CERTS_PATH environment variable is not set")
 	}
 	certs.certPath = certBasePath + "/cert.pem"
 	certs.keyPath = certBasePath + "/key.pem"

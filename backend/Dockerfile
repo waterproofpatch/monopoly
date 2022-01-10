@@ -23,4 +23,5 @@ COPY certs/cert.pem /go/bin/certs/cert.pem
 COPY certs/key.pem /go/bin/certs/key.pem
 
 WORKDIR /go/bin
+# not using certs for now
 CMD /go/bin/web-app --port $PORT 
