@@ -9,6 +9,7 @@ COPY . .
 
 # build go src code
 RUN go get
+RUN go install
 RUN GOOS=linux go build -ldflags="-s -w" -v -o ./bin/web-app 
 
 FROM alpine:3.13
@@ -24,4 +25,4 @@ COPY certs/cert.pem /go/bin/certs/cert.pem
 COPY certs/key.pem /go/bin/certs/key.pem
 
 WORKDIR /go/bin
-ENTRYPOINT /go/bin/web-app --port 8081
+ENTRYPOINT /go/bin/web-app --port 8081 

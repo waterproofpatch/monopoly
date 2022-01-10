@@ -3,7 +3,6 @@ package main
 
 import (
 	"crypto/tls"
-	"errors"
 	"flag"
 	"fmt"
 	"log"
@@ -57,7 +56,10 @@ func getCertsFromEnv() (*Certs, error) {
 	var certs Certs
 	certBasePath := os.Getenv("CERTS_PATH")
 	if len(certBasePath) == 0 {
-		return nil, errors.New("CERTS_PATH environment variable is not set")
+		log.Println("CERTS_PATH is not set, defaulting...")
+		certs.certPath = "/go/bin/certs/cert.pem"
+		certs.keyPath = "/go/bin/certs/key.pem"
+		return &certs, nil
 	}
 	certs.certPath = certBasePath + "/cert.pem"
 	certs.keyPath = certBasePath + "/key.pem"
