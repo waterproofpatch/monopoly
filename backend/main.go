@@ -36,7 +36,7 @@ func startServing(mux *http.ServeMux) {
 		log.Fatalf("failed loading certs: %v", err)
 	}
 
-	log.Printf("Server listening on %v:%v using certs: %+v\n", server.Addr, port, certs)
+	log.Printf("Server listening on %v using certs: %+v\n", server.Addr, certs)
 	if err := server.ListenAndServeTLS(certs.certPath, certs.keyPath); err != nil {
 		fmt.Println(err)
 	}
