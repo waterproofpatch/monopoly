@@ -82,6 +82,6 @@ func main() {
 	mux := buildMux()
 
 	// start the server
-	portString := fmt.Sprintf(":%d", *port)
+	portString := fmt.Sprintf("0.0.0.0:%d", *port)
 	startServing(portString, mux)
 }
