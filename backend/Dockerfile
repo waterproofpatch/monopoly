@@ -7,11 +7,7 @@ WORKDIR /go/src/app
 # add go src code
 COPY . .
 
-RUN rm -rf vendor
-
 # build go src code
-# RUN go get
-# RUN go install
 RUN GOOS=linux go build -ldflags="-s -w" -v -o ./bin/web-app 
 
 FROM alpine:3.13
