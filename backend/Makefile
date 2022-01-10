@@ -1,13 +1,16 @@
 # Directories
 
-all: docker-backend
+all: build docker-backend
 
 # Build the backend docker image.
 docker-backend: 
 	docker build -t monopoly-backend . 
 
+build:
+	go build
 run:
 	CERTS_PATH=`pwd`/$(BACKEND_SRC_PATH)/certs/ go run *.go --port 8081
+
 run-docker: 
 	docker run monopoly-backend -p 8081:8081 
 
