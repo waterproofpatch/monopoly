@@ -6,8 +6,10 @@ all: docker-backend
 docker-backend: 
 	docker build -t monopoly-backend . 
 
-run-backend:
+run:
 	CERTS_PATH=`pwd`/$(BACKEND_SRC_PATH)/certs/ go run *.go --port 8081
+run-docker: 
+	docker run monopoly-backend -p 8081:8081 
 
 # Generate SSL certificates for the backend.
 certs:
