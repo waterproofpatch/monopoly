@@ -1,14 +1,16 @@
 # Directories
 
-all: build docker-backend
+all: build deploy
 
-# Build the backend docker image.
-docker-backend: 
-	docker build -t monopoly-backend . 
+deploy:
+	echo "Not implemented yet!"
 
 build:
 	go build
-run:
+	./build-docker.sh
+
+# run the development build
+run-devel:
 	CERTS_PATH=`pwd`/$(BACKEND_SRC_PATH)/certs/ go run *.go --port 8081
 
 run-docker: 
