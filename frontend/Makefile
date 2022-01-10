@@ -7,3 +7,5 @@ build:
 deploy:
 	./heroku-deploy.sh
 
+run:
+	ng serve --open
