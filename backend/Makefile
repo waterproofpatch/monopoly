@@ -11,10 +11,10 @@ build:
 
 # run the development build
 run-devel:
-	CERTS_PATH=`pwd`/$(BACKEND_SRC_PATH)/certs/ go run *.go --port 8081
+	PORT=8082 CERTS_PATH=`pwd`/$(BACKEND_SRC_PATH)/certs/ go run *.go 
 
 run-docker: 
-	docker run monopoly-backend -p 8081:8081 
+	docker run -e PORT=8082 -p 8082:8082 monopoly-backend 
 
 # Generate SSL certificates for the backend.
 certs:

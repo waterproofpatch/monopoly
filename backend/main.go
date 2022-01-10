@@ -3,7 +3,6 @@ package main
 
 import (
 	"crypto/tls"
-	"flag"
 	"fmt"
 	"log"
 	"net/http"
@@ -15,14 +14,16 @@ type Certs struct {
 	keyPath  string
 }
 
-// should match 'listen' port in src/frontend/nginx/nginx.conf
-const gDefaultPort int = 8081
-
 // startServing loads the HTTPS certs and begins listening for connections on
 // http2 at the specified portString.
-func startServing(portString string, mux *http.ServeMux) {
+func startServing(mux *http.ServeMux) {
+	port, err := getPortFromEnv()
+	if err != nil {
+		log.Fatalf("failed loading port: %v", err)
+	}
+	addrString := fmt.Sprintf("%s:%s", "0.0.0.0", port)
 	server := http.Server{
-		Addr:    portString,
+		Addr:    addrString,
 		Handler: mux,
 		TLSConfig: &tls.Config{
 			NextProtos: []string{"h2", "http/1.1"},
@@ -35,7 +36,7 @@ func startServing(portString string, mux *http.ServeMux) {
 		log.Fatalf("failed loading certs: %v", err)
 	}
 
-	log.Printf("Server listening on %v using certs: %+v\n", server.Addr, certs)
+	log.Printf("Server listening on %v:%v using certs: %+v\n", server.Addr, port, certs)
 	if err := server.ListenAndServeTLS(certs.certPath, certs.keyPath); err != nil {
 		fmt.Println(err)
 	}
@@ -49,6 +50,11 @@ func buildMux() *http.ServeMux {
 	})
 	mux.HandleFunc("/api/items", items)
 	return mux
+}
+
+func getPortFromEnv() (string, error) {
+	port := os.Getenv("PORT")
+	return port, nil
 }
 
 // getCertsFromEnv loads certificates from the environment
@@ -74,14 +80,9 @@ func main() {
 	log.Println("Initing DB...")
 	gDb = initDb()
 
-	// default port.
-	port := flag.Int("port", gDefaultPort, "listen port")
-	flag.Parse()
-
 	// build the mux
 	mux := buildMux()
 
 	// start the server
-	portString := fmt.Sprintf("0.0.0.0:%d", *port)
-	startServing(portString, mux)
+	startServing(mux)
 }
