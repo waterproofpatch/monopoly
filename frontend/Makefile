@@ -3,13 +3,13 @@ all: build deploy
 deploy:
 	./heroku-deploy.sh
 
-build:
-	ng build
+build: build-devel
 	./build-docker.sh
+
+build-devel:
+	ng build
 
 # run the development build
 run-devel:
 	ng serve --open
 
-run-docker:
-	echo "Not implemented yet!"

@@ -1,0 +1,1 @@
+docker run -e PORT=5001 -p 5001:5001 monopoly-backend 

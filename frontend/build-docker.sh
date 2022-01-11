@@ -1,1 +1,1 @@
-docker build -t monopoly .
+docker build -t monopoly-frontend .
