@@ -15,6 +15,14 @@ type Certs struct {
 	keyPath  string
 }
 
+type DbConfig struct {
+	host     string
+	user     string
+	password string
+	dbname   string
+	port     string
+}
+
 // startServing loads the HTTPS certs and begins listening for connections on
 // http2 at the specified portString.
 func startServing(mux *http.ServeMux) {
@@ -79,12 +87,43 @@ func getCertsFromEnv() (*Certs, error) {
 	return &certs, nil
 }
 
+func getDbConfigFromEnv() (*DbConfig, error) {
+	var dbConfig DbConfig
+	var found bool
+
+	dbConfig.host, found = os.LookupEnv("DB_HOST")
+	if !found {
+		panic("Failed finding DB_HOST")
+	}
+	dbConfig.user, found = os.LookupEnv("DB_USER")
+	if !found {
+		panic("Failed finding DB_USER")
+	}
+	dbConfig.password, found = os.LookupEnv("DB_PASSWORD")
+	if !found {
+		panic("Failed finding DB_PASSWORD")
+	}
+	dbConfig.dbname, found = os.LookupEnv("DB_NAME")
+	if !found {
+		panic("Failed finding DB_NAME")
+	}
+	dbConfig.port, found = os.LookupEnv("DB_PORT")
+	if !found {
+		panic("Failed finding DB_PORT")
+	}
+	return &dbConfig, nil
+}
+
 // main is the entrypoint to the program.
 func main() {
 	// init the database
-	log.Println("Starting up (version 123)...")
 	log.Println("Initing DB...")
-	gDb = initDb()
+	var dbConfig *DbConfig
+	dbConfig, err := getDbConfigFromEnv()
+	if err != nil {
+		panic("Can't get DB config from environment!")
+	}
+	gDb = initDb(*dbConfig)
 
 	// build the mux
 	mux := buildMux()
