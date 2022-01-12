@@ -17,6 +17,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { PlayerDetailComponent } from './player-detail/player-detail.component';
 import { TransactionComponent } from './transaction/transaction.component';
+import { HttpClientModule } from '@angular/common/http';
 import {
   PieceSelectDialog,
   ErrorDialog,
@@ -34,6 +35,7 @@ import { AnimatedDigitComponent } from './animated/animated-digit.component';
     AnimatedDigitComponent,
   ],
   imports: [
+    HttpClientModule,
     MatMenuModule,
     MatDividerModule,
     MatCardModule,
