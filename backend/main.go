@@ -54,7 +54,7 @@ func buildMux() *http.ServeMux {
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, "Hello HTTP/2")
 	})
-	mux.HandleFunc("/api/items", items)
+	mux.HandleFunc("/api/players", players)
 	return mux
 }
 

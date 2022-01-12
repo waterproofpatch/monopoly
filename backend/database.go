@@ -16,13 +16,11 @@ func initDb(dbUrl string) *gorm.DB {
 	}
 
 	// Migrate the schema
-	database.AutoMigrate(&Item{})
+	database.AutoMigrate(&Player{})
 
 	// Create
 	log.Println("Creating some items...")
-	database.Create(&Item{Desc: "Item 1 desc", Title: "Item 1 title"})
-	database.Create(&Item{Desc: "Item 2 desc", Title: "Item 2 title"})
-	database.Create(&Item{Desc: "Item 3 desc", Title: "Item 3 title"})
+	database.Create(&Player{Name: "Ship", Money: 1500, InGame: true, Human: true})
 
 	// Read
 	return database
