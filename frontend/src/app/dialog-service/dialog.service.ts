@@ -11,6 +11,9 @@ import { PlayerService } from '../player-service/player.service';
 export interface ErrorDialogData {
   errorMsg: string;
 }
+export interface LogDialogData {
+  logMsg: string;
+}
 export interface PieceSelectDialogData {
   player: Player;
   players: Player[];
@@ -42,6 +45,32 @@ export class DialogService {
     dialogRef.afterClosed().subscribe((result) => {
       console.log('The dialog was closed');
     });
+  }
+
+  displayLogDialog(logMsg: string): void {
+    const dialogRef = this.dialog.open(LogDialog, {
+      width: '250px',
+      data: { logMsg: logMsg },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('The dialog was closed');
+    });
+  }
+}
+
+@Component({
+  selector: 'log-dialog',
+  templateUrl: './log-dialog.html',
+})
+export class LogDialog {
+  constructor(
+    public dialogRef: MatDialogRef<LogDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: LogDialogData
+  ) {}
+
+  onOkClick(): void {
+    this.dialogRef.close();
   }
 }
 

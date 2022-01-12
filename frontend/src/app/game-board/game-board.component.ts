@@ -14,7 +14,6 @@ import { Game } from '../types';
 export class GameBoardComponent implements OnInit {
   playerStates: Array<Player[]> = new Array<Player[]>();
   transactionStates: Array<Transaction[]> = new Array<Transaction[]>();
-  games: Game[] = [{ name: 'test game' }];
 
   constructor(
     private dialogService: DialogService,
@@ -28,7 +27,7 @@ export class GameBoardComponent implements OnInit {
     });
 
     gameService.game$.subscribe((game) => {
-      this.games.push(game);
+      this.dialogService.displayLogDialog('New game started: ' + game.name);
     });
   }
 
@@ -38,7 +37,7 @@ export class GameBoardComponent implements OnInit {
   }
 
   gameStarted(): boolean {
-    return this.games.length > 0;
+    return this.gameService.getGames().length > 0;
   }
 
   reset(): void {
