@@ -9,6 +9,9 @@ build: build-devel
 build-devel:
 	go build
 
+start-db:
+	docker run -e POSTGRES_PASSWORD=docker -p 5432:5432 -d postgres
+
 # run the development build
 run-devel:
 	PORT=5001 DB_HOST=localhost DB_USER=postgres DB_PASSWORD=docker DB_PORT=5432 DB_NAME=postgres CERTS_PATH=`pwd`/$(BACKEND_SRC_PATH)/certs/ go run *.go
