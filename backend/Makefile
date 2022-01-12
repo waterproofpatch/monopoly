@@ -14,7 +14,7 @@ start-db:
 
 # run the development build
 run-devel:
-	PORT=5001 DB_HOST=localhost DB_USER=postgres DB_PASSWORD=docker DB_PORT=5432 DB_NAME=postgres CERTS_PATH=`pwd`/$(BACKEND_SRC_PATH)/certs/ go run *.go
+	PORT=5001 DATABASE_URL=postgres://postgres:docker@localhost:5432/postgres CERTS_PATH=`pwd`/$(BACKEND_SRC_PATH)/certs/ go run *.go
 
 # Generate SSL certificates for the backend.
 certs:
