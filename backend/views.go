@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 )
 
@@ -12,13 +11,12 @@ func dashboard(w http.ResponseWriter, r *http.Request) {
 }
 
 func players(w http.ResponseWriter, r *http.Request) {
-	log.Printf("Received request!")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type,Access-Control-Allow-Origin")
+
 	var players []Player
 	db := getDb()
 	db.Find(&players)
-
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type,Access-Control-Allow-Origin")
 
 	json.NewEncoder(w).Encode(players)
 }
