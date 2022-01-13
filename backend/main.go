@@ -2,12 +2,14 @@
 package main
 
 import (
-	"crypto/tls"
 	"errors"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
+	"time"
+
+	"github.com/gorilla/mux"
 )
 
 type Certs struct {
@@ -15,47 +17,25 @@ type Certs struct {
 	keyPath  string
 }
 
-// startServing loads the HTTPS certs and begins listening for connections on
-// http2 at the specified portString.
-func startServing(mux *http.ServeMux) {
+// startServing creates the server mux and registers endpoints with it.
+func startServing() {
 	port, err := getPortFromEnv()
 	if err != nil {
 		log.Fatalf("failed loading port: %v", err)
 	}
-	addrString := fmt.Sprintf("%s:%s", "0.0.0.0", port)
-	server := http.Server{
-		Addr:    addrString,
-		Handler: mux,
+	router := mux.NewRouter()
+	router.HandleFunc("/", dashboard).Methods("GET")
+	router.HandleFunc("/api/players", players).Methods("GET", "OPTIONS")
+	portStr := fmt.Sprintf("0.0.0.0:%s", port)
+	srv := &http.Server{
+		Handler: router,
+		Addr:    portStr,
+		// Good practice: enforce timeouts for servers you create!
+		WriteTimeout: 15 * time.Second,
+		ReadTimeout:  15 * time.Second,
 	}
 
-	// load the certificates from the environment.
-	certs, err := getCertsFromEnv()
-	if err != nil {
-		// heroku charges for this, so have an option to not...
-		server.TLSConfig = &tls.Config{
-			NextProtos: []string{"h2", "http/1.1"},
-		}
-		log.Print("Server listening on %v not using certs", server.Addr)
-		if err := server.ListenAndServe(); err != nil {
-			fmt.Println(err)
-		}
-	} else {
-		log.Println("Server listening on %v using certs: %+v\n", server.Addr, certs)
-		if err := server.ListenAndServeTLS(certs.certPath, certs.keyPath); err != nil {
-			fmt.Println(err)
-		}
-	}
-
-}
-
-// buildMux creates the server mux and registers endpoints with it.
-func buildMux() *http.ServeMux {
-	mux := http.NewServeMux()
-	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprint(w, "Hello HTTP/2")
-	})
-	mux.HandleFunc("/api/players", players)
-	return mux
+	log.Fatal(srv.ListenAndServe())
 }
 
 func getPortFromEnv() (string, error) {
@@ -96,9 +76,6 @@ func main() {
 	dbUrl := getDbConfigFromEnv()
 	gDb = initDb(dbUrl)
 
-	// build the mux
-	mux := buildMux()
-
-	// start the server
-	startServing(mux)
+	// build the mux and start serving
+	startServing()
 }

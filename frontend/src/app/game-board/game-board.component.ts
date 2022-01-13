@@ -28,6 +28,13 @@ export class GameBoardComponent implements OnInit {
 
     gameService.game$.subscribe((game) => {
       this.dialogService.displayLogDialog('New game started: ' + game.name);
+      this.playerService
+        .getPlayersHttp()
+        .subscribe((players) =>
+          this.dialogService.displayLogDialog(
+            'Got ' + players.length + ' players!'
+          )
+        );
     });
   }
 

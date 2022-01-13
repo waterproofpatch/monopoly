@@ -70,9 +70,12 @@ export class PlayerService {
     },
   ];
 
-  playersUrl = 'api/players';
+  playersUrl = 'http://localhost:5001/api/players';
   httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+    }),
   };
 
   constructor(private http: HttpClient, private dialogService: DialogService) {}
@@ -83,14 +86,14 @@ export class PlayerService {
 
   /** GET heroes from the server */
   getPlayersHttp(): Observable<Player[]> {
-    return this.http.get<Player[]>(this.playersUrl).pipe(
+    return this.http.get<Player[]>(this.playersUrl, this.httpOptions).pipe(
       tap((_) => console.log('Fetched players')),
       catchError(this.handleError<Player[]>('getPlayers', []))
     );
   }
 
   getPlayerById(id: number) {
-    const url = `${this.playersUrl}/${id}`;
+    const url = `${(this.playersUrl, this.httpOptions)}/${id}`;
     return this.http.get<Player>(url).pipe(
       tap((_) => console.log(`fetched hero id=${id}`)),
       catchError(this.handleError<Player>(`getPlayer id=${id}`))
