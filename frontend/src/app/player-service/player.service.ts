@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { DialogService } from '../dialog-service/dialog.service';
+import { environment } from '../../environments/environment'; // Change this to your file location
 
 @Injectable({
   providedIn: 'root',
@@ -70,7 +71,7 @@ export class PlayerService {
     },
   ];
 
-  playersUrl = 'http://localhost:5001/api/players';
+  playersUrl = '/api/players';
   httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
@@ -80,20 +81,27 @@ export class PlayerService {
 
   constructor(private http: HttpClient, private dialogService: DialogService) {}
 
+  getUrlBase(): string {
+    return environment.apiUrlBase;
+  }
   getPlayers(): Player[] {
     return this.players;
   }
 
   /** GET heroes from the server */
   getPlayersHttp(): Observable<Player[]> {
-    return this.http.get<Player[]>(this.playersUrl, this.httpOptions).pipe(
-      tap((_) => console.log('Fetched players')),
-      catchError(this.handleError<Player[]>('getPlayers', []))
-    );
+    return this.http
+      .get<Player[]>(this.getUrlBase() + this.playersUrl, this.httpOptions)
+      .pipe(
+        tap((_) => console.log('Fetched players')),
+        catchError(this.handleError<Player[]>('getPlayers', []))
+      );
   }
 
   getPlayerById(id: number) {
-    const url = `${(this.playersUrl, this.httpOptions)}/${id}`;
+    const url = `${
+      (this.getUrlBase() + this.playersUrl, this.httpOptions)
+    }/${id}`;
     return this.http.get<Player>(url).pipe(
       tap((_) => console.log(`fetched hero id=${id}`)),
       catchError(this.handleError<Player>(`getPlayer id=${id}`))
@@ -102,16 +110,22 @@ export class PlayerService {
 
   /** PUT: update the hero on the server */
   updatePlayer(player: Player): Observable<any> {
-    return this.http.put(this.playersUrl, player, this.httpOptions).pipe(
-      tap((_) => console.log(`updated player id=${player.name}`)),
-      catchError(this.handleError<any>('updatePlayer'))
-    );
+    return this.http
+      .put(this.getUrlBase() + this.playersUrl, player, this.httpOptions)
+      .pipe(
+        tap((_) => console.log(`updated player id=${player.name}`)),
+        catchError(this.handleError<any>('updatePlayer'))
+      );
   }
 
   /** POST: add a new hero to the server */
   addHero(player: Player): Observable<Player> {
     return this.http
-      .post<Player>(this.playersUrl, player, this.httpOptions)
+      .post<Player>(
+        this.getUrlBase() + this.playersUrl,
+        player,
+        this.httpOptions
+      )
       .pipe(
         tap((newPlayer: Player) =>
           console.log(`added player w/ id=${newPlayer.name}`)
@@ -122,7 +136,7 @@ export class PlayerService {
 
   /** DELETE: delete the hero from the server */
   deletePlayer(id: number): Observable<Player> {
-    const url = `${this.playersUrl}/${id}`;
+    const url = `${this.getUrlBase() + this.playersUrl}/${id}`;
 
     return this.http.delete<Player>(url, this.httpOptions).pipe(
       tap((_) => console.log(`deleted player id=${id}`)),
