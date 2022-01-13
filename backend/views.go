@@ -7,6 +7,9 @@ import (
 )
 
 func dashboard(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type,Access-Control-Allow-Origin")
+
 	fmt.Fprint(w, "Hello HTTP/2")
 }
 

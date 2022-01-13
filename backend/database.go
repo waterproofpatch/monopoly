@@ -9,7 +9,7 @@ import (
 
 var gDb *gorm.DB
 
-func initDb(dbUrl string) *gorm.DB {
+func initDb(dbUrl string) {
 	database, err := gorm.Open(postgres.Open(dbUrl), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database")
@@ -24,10 +24,13 @@ func initDb(dbUrl string) *gorm.DB {
 	database.Create(&Player{Name: "Ship", Money: 1500, InGame: true, Human: true})
 
 	// Read
-	return database
+	gDb = database
 }
 
 // getDb returns the database object
 func getDb() *gorm.DB {
+	if gDb == nil {
+		panic("gDb is not initialized!")
+	}
 	return gDb
 }
