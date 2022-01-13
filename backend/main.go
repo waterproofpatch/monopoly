@@ -15,8 +15,7 @@ func startServing(port string) {
 	portStr := fmt.Sprintf("0.0.0.0:%s", port)
 
 	router := mux.NewRouter()
-	router.HandleFunc("/", dashboard).Methods("GET")
-	router.HandleFunc("/api/players", players).Methods("GET", "OPTIONS")
+	initViews(router)
 
 	srv := &http.Server{
 		Handler: router,
@@ -34,7 +33,8 @@ func main() {
 	config := getConfig()
 	// init the database
 	log.Println("Initializing database...")
-
 	initDb(config.dbUrl)
+
+	log.Println("Starting server...")
 	startServing(config.port)
 }

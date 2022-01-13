@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
 func dashboard(w http.ResponseWriter, r *http.Request) {
@@ -22,4 +24,9 @@ func players(w http.ResponseWriter, r *http.Request) {
 	db.Find(&players)
 
 	json.NewEncoder(w).Encode(players)
+}
+
+func initViews(router *mux.Router) {
+	router.HandleFunc("/", dashboard).Methods("GET")
+	router.HandleFunc("/api/players", players).Methods("GET", "OPTIONS")
 }
