@@ -21,7 +21,13 @@ func initDb(dbUrl string) {
 
 	// Create
 	log.Println("Creating players ..")
-	database.Create(&Player{Name: "Ship", Money: 1500, InGame: true, Human: true})
+	database.Create(&Player{Name: "Ship", Money: 1500, InGame: true, Human: true, Img: "ship"})
+	database.Create(&Player{Name: "Dog", Money: 1500, InGame: true, Human: true, Img: "dog"})
+	database.Create(&Player{Name: "Penguin", Money: 1500, InGame: true, Human: true, Img: "penguin"})
+	database.Create(&Player{Name: "Car", Money: 1500, InGame: true, Human: true, Img: "car"})
+	database.Create(&Player{Name: "Hat", Money: 1500, InGame: true, Human: true, Img: "hat"})
+	database.Create(&Player{Name: "Dinosaur", Money: 1500, InGame: true, Human: true, Img: "dino"})
+	database.Create(&Player{Name: "Cat", Money: 1500, InGame: true, Human: true, Img: "cat"})
 
 	// Read
 	gDb = database
