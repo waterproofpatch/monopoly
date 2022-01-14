@@ -26,7 +26,19 @@ func players(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(players)
 }
 
+func transactions(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type,Access-Control-Allow-Origin")
+
+	var transactions []Transaction
+	db := getDb()
+	db.Find(&transactions)
+
+	json.NewEncoder(w).Encode(transactions)
+}
+
 func initViews(router *mux.Router) {
 	router.HandleFunc("/", dashboard).Methods("GET")
 	router.HandleFunc("/api/players", players).Methods("GET", "OPTIONS")
+	router.HandleFunc("/api/transactions", transactions).Methods("GET", "OPTIONS")
 }

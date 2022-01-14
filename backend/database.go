@@ -17,7 +17,9 @@ func initDb(dbUrl string) {
 
 	// Migrate the schema
 	database.Migrator().DropTable(&Player{})
+	database.Migrator().DropTable(&Transaction{})
 	database.AutoMigrate(&Player{})
+	database.AutoMigrate(&Transaction{})
 
 	// Create
 	log.Println("Creating players ..")

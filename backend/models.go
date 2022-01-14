@@ -12,3 +12,11 @@ type Player struct {
 	Human  bool   `json:"human"`
 	InGame bool   `json:"inGame"`
 }
+
+type Transaction struct {
+	gorm.Model
+	Id         uint   `gorm:"primaryKey;autoincrement:true"`
+	FromPlayer string `json:"fromPlayer"`
+	ToPlayer   string `json:"toPlayer"`
+	Amount     int    `json:"amount"`
+}
