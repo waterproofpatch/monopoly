@@ -2,4 +2,4 @@
 	<button (click)="reset()" mat-raised-button color="primary">Reset</button>
 	<button (click)="newGame()" mat-raised-button color="primary">New Game</button>
 </div>
-<app-players *ngIf="gameStarted()" [players]="players"></app-players>
+<app-players *ngIf="players.length > 0" [players]="players"></app-players>
