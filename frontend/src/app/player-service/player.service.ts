@@ -104,4 +104,18 @@ export class PlayerService {
   removePlayer(player: Player) {
     player.inGame = false;
   }
+<<<<<<< HEAD
+=======
+
+  // reset() {
+  //   for (let p of this.players) {
+  //     p.inGame = true;
+  //     if (p.name == 'Free Parking') {
+  //       p.money = 0;
+  //     } else {
+  //       p.money = this.startingMoney;
+  //     }
+  //   }
+  // }
+>>>>>>> 4c11edd1c95cb9416e32f6632044ab0d284cbb2d
 }
