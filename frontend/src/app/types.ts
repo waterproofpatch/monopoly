@@ -12,7 +12,3 @@ export interface Transaction {
   amount: number;
   timestamp: string;
 }
-
-export interface Game {
-  name: string;
-}
