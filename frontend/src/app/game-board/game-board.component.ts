@@ -14,6 +14,7 @@ import { Game } from '../types';
 export class GameBoardComponent implements OnInit {
   playerStates: Array<Player[]> = new Array<Player[]>();
   transactionStates: Array<Transaction[]> = new Array<Transaction[]>();
+  players: Player[] = [];
 
   constructor(
     private dialogService: DialogService,
@@ -26,15 +27,11 @@ export class GameBoardComponent implements OnInit {
       this.updateGameState(transaction);
     });
 
-    gameService.game$.subscribe((game) => {
+    gameService.game$.subscribe((game: Game) => {
       this.dialogService.displayLogDialog('New game started: ' + game.name);
       this.playerService
         .getPlayersHttp()
-        .subscribe((players) =>
-          this.dialogService.displayLogDialog(
-            'Got ' + players.length + ' players!'
-          )
-        );
+        .subscribe((players) => (this.players = players));
     });
   }
 
@@ -48,15 +45,13 @@ export class GameBoardComponent implements OnInit {
   }
 
   reset(): void {
-    this.playerService.reset();
+    // this.playerService.reset();
     this.transactionService.reset();
   }
 
   updateGameState(t: Transaction): void {
     this.dialogService.log('Updating gamestate with transaction ' + t);
-    let clonedPlayers: Player[] = this.playerService
-      .getPlayers()
-      .map((x) => Object.assign({}, x));
+    let clonedPlayers: Player[] = this.players.map((x) => Object.assign({}, x));
     let clonedTransactions: Transaction[] = this.transactionService
       .getTransactions()
       .map((x) => Object.assign({}, x));
