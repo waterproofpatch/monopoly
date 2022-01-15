@@ -12,3 +12,7 @@ export interface Transaction {
   amount: number;
   timestamp: string;
 }
+
+export interface Error {
+  message: string;
+}
