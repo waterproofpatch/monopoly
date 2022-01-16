@@ -24,13 +24,13 @@ export class PlayerService {
     return environment.apiUrlBase;
   }
 
-  /** GET heroes from the server */
+  /** GET players from the server */
   getPlayersHttp(): Observable<Player[]> {
     return this.http
       .get<Player[]>(this.getUrlBase() + this.playersUrl, this.httpOptions)
       .pipe(
         tap((_) => console.log('Fetched players')),
-        catchError(this.handleError<Player[]>('getPlayers', []))
+        catchError(this.handleError<Player[]>('getPlayersHttp', []))
       );
   }
 
@@ -54,8 +54,8 @@ export class PlayerService {
       );
   }
 
-  /** POST: add a new hero to the server */
-  addHero(player: Player): Observable<Player> {
+  /** POST: add a new player to the server */
+  addPlayer(player: Player): Observable<Player> {
     return this.http
       .post<Player>(
         this.getUrlBase() + this.playersUrl,
@@ -66,7 +66,7 @@ export class PlayerService {
         tap((newPlayer: Player) =>
           console.log(`added player w/ id=${newPlayer.name}`)
         ),
-        catchError(this.handleError<Player>('addHero'))
+        catchError(this.handleError<Player>('addPlayer'))
       );
   }
 
