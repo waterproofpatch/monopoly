@@ -15,7 +15,7 @@ type AddTransactionResponse struct {
 }
 
 type Error struct {
-	Message string `json"message"`
+	ErrorMessage string `json:"error_message"`
 }
 
 func dashboard(w http.ResponseWriter, r *http.Request) {
@@ -33,11 +33,12 @@ func players(w http.ResponseWriter, r *http.Request) {
 func transactions(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Transactions called with method %v", r.Method)
 
+	db := getDb()
+
 	switch r.Method {
 	case "GET":
 		log.Printf("GET transactions")
 		var transactions []Transaction
-		db := getDb()
 		db.Find(&transactions)
 
 		json.NewEncoder(w).Encode(transactions)
@@ -47,7 +48,6 @@ func transactions(w http.ResponseWriter, r *http.Request) {
 		id := vars["id"]
 		log.Printf("DELETE id %v", id)
 
-		db := getDb()
 		db.Delete(&Transaction{}, id)
 
 		var transactions []Transaction
@@ -59,26 +59,44 @@ func transactions(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Printf("Error decoding json request: %v", err)
 			w.WriteHeader(http.StatusBadRequest)
-			json.NewEncoder(w).Encode(&Error{Message: "Failed decoding transaction!"})
-		} else {
-			getDb().Create(&transaction)
-
-			// TODO update the relevant players...
-
-			var transactions []Transaction
-			var players []Player
-
-			db := getDb()
-			db.Find(&transactions)
-			db.Find(&players)
-
-			resp := AddTransactionResponse{
-				Transactions: transactions,
-				Players:      players,
-			}
-
-			json.NewEncoder(w).Encode(resp)
+			json.NewEncoder(w).Encode(&Error{ErrorMessage: "Failed decoding transaction!"})
+			return
 		}
+		db.Create(&transaction)
+
+		// TODO update the relevant players...
+		var fromPlayer Player
+		var toPlayer Player
+		db.First(&fromPlayer, "name = ?", transaction.FromPlayer)
+		db.First(&toPlayer, "name = ?", transaction.ToPlayer)
+		log.Printf("From player: %v, To player: %v", fromPlayer, toPlayer)
+
+		// bank has unlimited money...
+		if fromPlayer.Name != "bank" && fromPlayer.Money < uint(transaction.Amount) {
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(&Error{ErrorMessage: "Not enough money!"})
+			return
+		}
+
+		// update cash
+		fromPlayer.Money -= uint(transaction.Amount)
+		toPlayer.Money += uint(transaction.Amount)
+		db.Save(&fromPlayer)
+		db.Save(&toPlayer)
+
+		// return new set of players and transactions
+		var transactions []Transaction
+		var players []Player
+
+		db.Find(&transactions)
+		db.Find(&players)
+
+		resp := AddTransactionResponse{
+			Transactions: transactions,
+			Players:      players,
+		}
+
+		json.NewEncoder(w).Encode(resp)
 	}
 
 }

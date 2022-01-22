@@ -59,7 +59,7 @@ export class TransactionService {
 
       // TODO: better job of transforming error for user consumption
       this.dialogService.displayErrorDialog(
-        `${operation} failed: ${error.message}`
+        `${operation} failed: ${error.error.error_message}`
       );
 
       // Let the app keep running by returning an empty result.
