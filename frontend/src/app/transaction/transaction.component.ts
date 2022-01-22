@@ -60,8 +60,6 @@ export class TransactionComponent implements OnInit {
 
     this.transactionService
       .deleteTransactionHttp(this.transaction)
-      .subscribe((x) =>
-        this.dialogService.displayLogDialog('Got transactions' + x)
-      );
+      .subscribe((_) => this.dialogService.log('Deleted transaction.'));
   }
 }
