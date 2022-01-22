@@ -44,6 +44,7 @@ export class TransactionService {
       .pipe(
         tap((response) => {
           this.transactionSource.next(response.transactions);
+          this.playerService.setPlayers(response.players);
         }),
         catchError(
           this.dialogService.handleError<AddTransactionResponse>(
@@ -61,6 +62,7 @@ export class TransactionService {
     return this.http.delete<AddTransactionResponse>(url, this.httpOptions).pipe(
       tap((response) => {
         this.transactionSource.next(response.transactions);
+        this.playerService.setPlayers(response.players);
       }),
       catchError(
         this.dialogService.handleError<AddTransactionResponse>(
