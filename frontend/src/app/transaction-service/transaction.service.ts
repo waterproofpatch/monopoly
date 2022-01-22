@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { catchError, map, tap } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { BehaviorSubject } from 'rxjs';
+
 import { Transaction, AddTransactionResponse } from '../types';
 import { DialogService } from '../dialog-service/dialog.service';
 import { PlayerService } from '../player-service/player.service';
@@ -42,29 +43,13 @@ export class TransactionService {
       )
       .pipe(
         tap((_) => console.log('Fetched transactions')),
-        catchError(this.handleError<Transaction[]>('getTransactionsHttp', []))
+        catchError(
+          this.dialogService.handleError<Transaction[]>(
+            'getTransactionsHttp',
+            []
+          )
+        )
       );
-  }
-
-  /**
-   * Handle Http operation that failed.
-   * Let the app continue.
-   * @param operation - name of the operation that failed
-   * @param result - optional value to return as the observable result
-   */
-  private handleError<T>(operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
-      // TODO: send the error to remote logging infrastructure
-      console.error(error); // log to console instead
-
-      // TODO: better job of transforming error for user consumption
-      this.dialogService.displayErrorDialog(
-        `${operation} failed: ${error.error.error_message}`
-      );
-
-      // Let the app keep running by returning an empty result.
-      return of(result as T);
-    };
   }
 
   deleteTransactionHttp(transaction: Transaction): Observable<Transaction[]> {
@@ -74,7 +59,9 @@ export class TransactionService {
       tap((x) => {
         this.transactionSource.next(x);
       }),
-      catchError(this.handleError<Transaction[]>('deleteTransaction'))
+      catchError(
+        this.dialogService.handleError<Transaction[]>('deleteTransactionHttp')
+      )
     );
   }
 
@@ -101,7 +88,9 @@ export class TransactionService {
           );
         }),
         catchError(
-          this.handleError<AddTransactionResponse>('addTransactionHttp')
+          this.dialogService.handleError<AddTransactionResponse>(
+            'addTransactionHttp'
+          )
         )
       );
   }
