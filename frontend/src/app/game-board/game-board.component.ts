@@ -13,6 +13,7 @@ export class GameBoardComponent implements OnInit {
   playerStates: Array<Player[]> = new Array<Player[]>();
   transactionStates: Array<Transaction[]> = new Array<Transaction[]>();
   players: Player[] = [];
+  transactions: Transaction[] = [];
 
   constructor(
     private dialogService: DialogService,
@@ -28,9 +29,13 @@ export class GameBoardComponent implements OnInit {
   newGame(): void {
     this.reset();
     this.dialogService.displayLogDialog('New game started!');
+
     this.playerService
       .getPlayersHttp()
       .subscribe((players) => (this.players = players));
+    this.transactionService
+      .getTransactionsHttp()
+      .subscribe((transactions) => (this.transactions = transactions));
   }
 
   reset(): void {

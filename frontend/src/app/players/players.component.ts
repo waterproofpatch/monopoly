@@ -11,6 +11,7 @@ import { TransactionService } from '../transaction-service/transaction.service';
 })
 export class PlayersComponent implements OnInit {
   @Input() players?: Player[]; // from game-board
+  @Input() transactions?: Transaction[]; // from game-board
 
   transactionForm = new FormGroup({
     fromPlayerName: new FormControl(''),
