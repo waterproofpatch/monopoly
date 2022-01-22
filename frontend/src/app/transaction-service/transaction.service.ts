@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { catchError, map, tap } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { Subject } from 'rxjs';
-import { Transaction } from '../types';
+import { Transaction, AddTransactionResponse } from '../types';
 import { DialogService } from '../dialog-service/dialog.service';
 import { environment } from '../../environments/environment'; // Change this to your file location
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -70,6 +70,32 @@ export class TransactionService {
     );
   }
 
+  /** POST: add a new player to the server */
+  addTransactionHttp(
+    transaction: Transaction
+  ): Observable<AddTransactionResponse> {
+    return this.http
+      .post<AddTransactionResponse>(
+        this.getUrlBase() + this.transactionsUrl,
+        transaction,
+        this.httpOptions
+      )
+      .pipe(
+        tap((response) => {
+          console.log(
+            'Got a response' +
+              response.transactions.length +
+              ' transactions, ' +
+              response.players.length +
+              ' players.'
+          );
+        }),
+        catchError(
+          this.handleError<AddTransactionResponse>('addTransactionHttp')
+        )
+      );
+  }
+
   handleTransaction(transaction: Transaction): void {
     this.dialogService.log(
       'Transaction from ' +
@@ -79,5 +105,8 @@ export class TransactionService {
         ' in the amount of ' +
         transaction.amount
     );
+    this.addTransactionHttp(transaction).subscribe((x) => {
+      console.log('Transaction added!');
+    });
   }
 }

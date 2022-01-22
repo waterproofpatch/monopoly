@@ -44,7 +44,7 @@ export class PlayerService {
       );
   }
 
-  getPlayerById(id: number) {
+  getPlayerByIdHttp(id: number) {
     const url = `${
       (this.getUrlBase() + this.playersUrl, this.httpOptions)
     }/${id}`;
@@ -55,7 +55,7 @@ export class PlayerService {
   }
 
   /** PUT: update the hero on the server */
-  updatePlayer(player: Player): Observable<any> {
+  updatePlayerHttp(player: Player): Observable<any> {
     return this.http
       .put(this.getUrlBase() + this.playersUrl, player, this.httpOptions)
       .pipe(
@@ -65,7 +65,7 @@ export class PlayerService {
   }
 
   /** POST: add a new player to the server */
-  addPlayer(player: Player): Observable<Player> {
+  addPlayerHttp(player: Player): Observable<Player> {
     return this.http
       .post<Player>(
         this.getUrlBase() + this.playersUrl,
@@ -81,7 +81,7 @@ export class PlayerService {
   }
 
   /** DELETE: delete the hero from the server */
-  deletePlayer(id: number): Observable<Player> {
+  deletePlayerHttp(id: number): Observable<Player> {
     const url = `${this.getUrlBase() + this.playersUrl}/${id}`;
 
     return this.http.delete<Player>(url, this.httpOptions).pipe(

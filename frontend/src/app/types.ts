@@ -17,3 +17,8 @@ export interface Transaction {
 export interface Error {
   message: string;
 }
+
+export interface AddTransactionResponse {
+  transactions: Transaction[];
+  players: Player[];
+}
