@@ -24,7 +24,15 @@ export class GameBoardComponent implements OnInit {
       (x) => (this.transactions = x)
     );
     // start receiving notifications whenever the players list changes
-    this.playerService.playerObservable.subscribe((x) => (this.players = x));
+    this.playerService.playerObservable.subscribe((x) => {
+      for (let newP of x) {
+        for (let oldP of this.players) {
+          if (oldP.name == newP.name) {
+            oldP.money = newP.money;
+          }
+        }
+      }
+    });
   }
 
   newGame(): void {
