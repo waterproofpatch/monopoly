@@ -79,9 +79,10 @@ export class PlayersComponent implements OnInit {
     }
 
     let t: Transaction = {
+      id: -1, // filled in by backend
       timestamp: new Date().toISOString(),
-      fromPlayer: fromPlayer,
-      toPlayer: toPlayer,
+      fromPlayer: fromPlayer.name,
+      toPlayer: toPlayer.name,
       amount: this.transactionForm.controls.amount.value,
     };
     this.transactionService.handleTransaction(t);
