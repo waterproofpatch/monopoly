@@ -18,6 +18,36 @@ type Error struct {
 	ErrorMessage string `json:"error_message"`
 }
 
+func processTransaction(w http.ResponseWriter, transaction Transaction, reverse bool) {
+	db := getDb()
+
+	var fromPlayer Player
+	var toPlayer Player
+	db.First(&fromPlayer, "name = ?", transaction.FromPlayer)
+	db.First(&toPlayer, "name = ?", transaction.ToPlayer)
+
+	log.Printf("Processing transaction %v From player: %v, To player: %v", transaction, fromPlayer, toPlayer)
+
+	if reverse {
+		fromPlayer.Money += uint(transaction.Amount)
+		toPlayer.Money -= uint(transaction.Amount)
+	} else {
+		// bank has unlimited money...
+		if fromPlayer.Name != "bank" && fromPlayer.Money < uint(transaction.Amount) {
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(&Error{ErrorMessage: "Not enough money!"})
+			return
+		}
+
+		// update cash
+		fromPlayer.Money -= uint(transaction.Amount)
+		toPlayer.Money += uint(transaction.Amount)
+	}
+
+	db.Save(&fromPlayer)
+	db.Save(&toPlayer)
+}
+
 func dashboard(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "Hello HTTP/2")
 }
@@ -44,6 +74,10 @@ func transactions(w http.ResponseWriter, r *http.Request) {
 		id := vars["id"]
 		log.Printf("DELETE id %v", id)
 
+		// find, reverse, and then delete the transaction
+		var transaction Transaction
+		db.First(&transaction, id)
+		processTransaction(w, transaction, true)
 		db.Delete(&Transaction{}, id)
 	case "POST":
 		var transaction Transaction
@@ -54,27 +88,9 @@ func transactions(w http.ResponseWriter, r *http.Request) {
 			json.NewEncoder(w).Encode(&Error{ErrorMessage: "Failed decoding transaction!"})
 			return
 		}
+		// create and then process the transaction
 		db.Create(&transaction)
-
-		var fromPlayer Player
-		var toPlayer Player
-		db.First(&fromPlayer, "name = ?", transaction.FromPlayer)
-		db.First(&toPlayer, "name = ?", transaction.ToPlayer)
-		log.Printf("From player: %v, To player: %v", fromPlayer, toPlayer)
-
-		// bank has unlimited money...
-		if fromPlayer.Name != "bank" && fromPlayer.Money < uint(transaction.Amount) {
-			w.WriteHeader(http.StatusBadRequest)
-			json.NewEncoder(w).Encode(&Error{ErrorMessage: "Not enough money!"})
-			return
-		}
-
-		// update cash
-		fromPlayer.Money -= uint(transaction.Amount)
-		toPlayer.Money += uint(transaction.Amount)
-		db.Save(&fromPlayer)
-		db.Save(&toPlayer)
-
+		processTransaction(w, transaction, false)
 	}
 
 	// return new set of players and transactions
