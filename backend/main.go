@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
 
@@ -17,8 +18,11 @@ func startServing(port string) {
 	router := mux.NewRouter()
 	initViews(router)
 
+	methods := []string{"GET", "POST", "PUT", "DELETE"}
+	headers := []string{"Content-Type", "Access-Control-Allow-Origin"}
 	srv := &http.Server{
-		Handler: router,
+		// Handler: router,
+		Handler: handlers.CORS(handlers.AllowedMethods(methods), handlers.AllowedHeaders(headers))(router),
 		Addr:    portStr,
 		// Good practice: enforce timeouts for servers you create!
 		WriteTimeout: 15 * time.Second,

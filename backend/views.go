@@ -19,16 +19,10 @@ type Error struct {
 }
 
 func dashboard(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type,Access-Control-Allow-Origin")
-
 	fmt.Fprint(w, "Hello HTTP/2")
 }
 
 func players(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type,Access-Control-Allow-Origin")
-
 	var players []Player
 	db := getDb()
 	db.Find(&players)
@@ -37,10 +31,6 @@ func players(w http.ResponseWriter, r *http.Request) {
 }
 
 func transactions(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type,Access-Control-Allow-Origin,Access-Control-Allow-Methods")
-	w.Header().Set("Access-Control-Allow-Methods", "PUT,POST,PATCH,DELETE,GET")
-
 	log.Printf("Transactions called with method %v", r.Method)
 
 	switch r.Method {
