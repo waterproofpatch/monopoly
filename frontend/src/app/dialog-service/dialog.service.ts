@@ -108,7 +108,7 @@ export class PieceSelectDialog {
     const bank: Player[] = this.data.players.filter((x) => x.name == 'Bank');
 
     let t: Transaction = {
-      id: 0, // filled in by server
+      ID: 0, // filled in by server
       toPlayer: this.data.player.name,
       fromPlayer: bank[0].name,
       amount: 200,
@@ -129,7 +129,7 @@ export class PieceSelectDialog {
     }
 
     let t: Transaction = {
-      id: 0, // filled in by server
+      ID: 0, // filled in by server
       toPlayer: this.data.player.name,
       fromPlayer: freeParking[0].name,
       amount: freeParking[0].money,

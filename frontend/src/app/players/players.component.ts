@@ -79,7 +79,7 @@ export class PlayersComponent implements OnInit {
     }
 
     let t: Transaction = {
-      id: 0, // filled in by backend
+      ID: 0, // filled in by backend
       timestamp: new Date().toISOString(),
       fromPlayer: fromPlayer.name,
       toPlayer: toPlayer.name,

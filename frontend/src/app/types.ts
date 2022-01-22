@@ -1,4 +1,5 @@
 export interface Player {
+  ID: number;
   img: string;
   name: string;
   money: number;
@@ -7,7 +8,7 @@ export interface Player {
 }
 
 export interface Transaction {
-  id: number;
+  ID: number;
   fromPlayer: string;
   toPlayer: string;
   amount: number;

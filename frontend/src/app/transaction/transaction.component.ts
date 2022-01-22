@@ -12,7 +12,7 @@ import { fromEvent } from 'rxjs';
 })
 export class TransactionComponent implements OnInit {
   @Input() transaction: Transaction = {
-    id: 0,
+    ID: 0,
     fromPlayer: 'Loading...',
     toPlayer: 'Loading...',
     amount: 0,

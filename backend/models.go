@@ -5,7 +5,7 @@ import "gorm.io/gorm"
 // Item is a model for an Item.
 type Player struct {
 	gorm.Model
-	Id     uint   `gorm:"primaryKey;autoincrement:true"`
+	// Id     uint   `gorm:"primaryKey;autoincrement:true"`
 	Name   string `json:"name"`
 	Money  uint   `json:"money"`
 	Img    string `json:"img"`
@@ -15,7 +15,7 @@ type Player struct {
 
 type Transaction struct {
 	gorm.Model
-	Id         uint   `gorm:"primaryKey;autoincrement:true"`
+	// Id         uint   `gorm:"primaryKey;autoincrement:true"`
 	FromPlayer string `json:"fromPlayer"`
 	ToPlayer   string `json:"toPlayer"`
 	Amount     int    `json:"amount"`
