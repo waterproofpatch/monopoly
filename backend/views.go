@@ -38,29 +38,31 @@ func players(w http.ResponseWriter, r *http.Request) {
 
 func transactions(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type,Access-Control-Allow-Origin")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type,Access-Control-Allow-Origin,Access-Control-Allow-Methods")
+	w.Header().Set("Access-Control-Allow-Methods", "PUT,POST,PATCH,DELETE,GET")
+
+	log.Printf("Transactions called with method %v", r.Method)
 
 	switch r.Method {
 	case "GET":
+		log.Printf("GET transactions")
 		var transactions []Transaction
 		db := getDb()
 		db.Find(&transactions)
 
 		json.NewEncoder(w).Encode(transactions)
 	case "DELETE":
-		var transaction Transaction
-		err := json.NewDecoder(r.Body).Decode(&transaction)
-		if err != nil {
-			log.Printf("Error decoding json request: %v", err)
-			w.WriteHeader(http.StatusBadRequest)
-			json.NewEncoder(w).Encode(&Error{Message: "Failed decoding transaction!"})
-		} else {
-			log.Printf("Deleting transaction %v", transaction)
-			db := getDb()
-			var transactions []Transaction
-			db.Find(&transactions)
-			json.NewEncoder(w).Encode(transactions)
-		}
+		log.Printf("DELETE transactions")
+		vars := mux.Vars(r)
+		id := vars["id"]
+		log.Printf("DELETE id %v", id)
+
+		db := getDb()
+		db.Delete(&Transaction{}, id)
+
+		var transactions []Transaction
+		db.Find(&transactions)
+		json.NewEncoder(w).Encode(transactions)
 	case "POST":
 		var transaction Transaction
 		err := json.NewDecoder(r.Body).Decode(&transaction)
@@ -95,4 +97,5 @@ func initViews(router *mux.Router) {
 	router.HandleFunc("/", dashboard).Methods("GET")
 	router.HandleFunc("/api/players", players).Methods("GET", "OPTIONS")
 	router.HandleFunc("/api/transactions", transactions).Methods("GET", "POST", "OPTIONS")
+	router.HandleFunc("/api/transactions/{id:[0-9]+}", transactions).Methods("DELETE", "OPTIONS")
 }

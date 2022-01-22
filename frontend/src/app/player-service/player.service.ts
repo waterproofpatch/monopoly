@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Player } from '../types';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { DialogService } from '../dialog-service/dialog.service';
 import { environment } from '../../environments/environment'; // Change this to your file location
@@ -17,12 +17,21 @@ export class PlayerService {
       'Access-Control-Allow-Origin': '*',
     }),
   };
-  players: Player[] = [];
 
-  constructor(private http: HttpClient, private dialogService: DialogService) {}
+  players: Player[] = [];
+  private playerSource = new BehaviorSubject<Player[]>([]);
+  playerObservable = this.playerSource.asObservable();
+
+  constructor(private http: HttpClient, private dialogService: DialogService) {
+    this.playerObservable.subscribe((x) => (this.players = x));
+  }
 
   getUrlBase(): string {
     return environment.apiUrlBase;
+  }
+
+  setPlayers(players: Player[]) {
+    this.playerSource.next(players);
   }
 
   getPlayerByName(name: string): Player | null {
@@ -39,8 +48,10 @@ export class PlayerService {
     return this.http
       .get<Player[]>(this.getUrlBase() + this.playersUrl, this.httpOptions)
       .pipe(
-        tap((players) => (this.players = players)),
-        catchError(this.handleError<Player[]>('getPlayersHttp', []))
+        tap(
+          (players) => this.playerSource.next(players),
+          catchError(this.handleError<Player[]>('getPlayersHttp', []))
+        )
       );
   }
 

@@ -17,11 +17,19 @@ export class GameBoardComponent implements OnInit {
     private dialogService: DialogService,
     private transactionService: TransactionService,
     public playerService: PlayerService
-  ) {}
+  ) {
+    // start receiving notifications whenever the transaction list changes
+    this.transactionService.transactionObservable.subscribe(
+      (x) => (this.transactions = x)
+    );
+    // start receiving notifications whenever the players list changes
+    this.playerService.playerObservable.subscribe((x) => (this.players = x));
+  }
 
   newGame(): void {
     this.dialogService.displayLogDialog('New game started!');
 
+    // get the initial set of players and transactions
     this.playerService
       .getPlayersHttp()
       .subscribe((players) => (this.players = players));

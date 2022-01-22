@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { catchError, map, tap } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
-import { Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { Transaction, AddTransactionResponse } from '../types';
 import { DialogService } from '../dialog-service/dialog.service';
+import { PlayerService } from '../player-service/player.service';
 import { environment } from '../../environments/environment'; // Change this to your file location
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
@@ -19,9 +20,14 @@ export class TransactionService {
     }),
   };
 
-  transactions: Transaction[] = [];
+  private transactionSource = new BehaviorSubject<Transaction[]>([]);
+  transactionObservable = this.transactionSource.asObservable();
 
-  constructor(private http: HttpClient, private dialogService: DialogService) {}
+  constructor(
+    private http: HttpClient,
+    private playerService: PlayerService,
+    private dialogService: DialogService
+  ) {}
 
   getUrlBase(): string {
     return environment.apiUrlBase;
@@ -35,7 +41,7 @@ export class TransactionService {
         this.httpOptions
       )
       .pipe(
-        tap((_) => console.log('Fetched players')),
+        tap((_) => console.log('Fetched transactions')),
         catchError(this.handleError<Transaction[]>('getTransactionsHttp', []))
       );
   }
@@ -61,12 +67,14 @@ export class TransactionService {
     };
   }
 
-  deleteTransactionHttp(transaction: Transaction): Observable<Transaction> {
-    const url = `${this.getUrlBase() + this.transactionsUrl}/${transaction.id}`;
+  deleteTransactionHttp(transaction: Transaction): Observable<Transaction[]> {
+    const url = `${this.getUrlBase() + this.transactionsUrl}/${transaction.ID}`;
 
-    return this.http.delete<Transaction>(url, this.httpOptions).pipe(
-      tap((_) => console.log(`deleted player id=${transaction.id}`)),
-      catchError(this.handleError<Transaction>('deleteTransaction'))
+    return this.http.delete<Transaction[]>(url, this.httpOptions).pipe(
+      tap((x) => {
+        this.transactionSource.next(x);
+      }),
+      catchError(this.handleError<Transaction[]>('deleteTransaction'))
     );
   }
 
@@ -82,8 +90,10 @@ export class TransactionService {
       )
       .pipe(
         tap((response) => {
+          this.transactionSource.next(response.transactions);
+          this.playerService.setPlayers(response.players);
           console.log(
-            'Got a response' +
+            'Got a response - ' +
               response.transactions.length +
               ' transactions, ' +
               response.players.length +
