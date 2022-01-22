@@ -38,10 +38,6 @@ func transactions(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
 		log.Printf("GET transactions")
-		var transactions []Transaction
-		db.Find(&transactions)
-
-		json.NewEncoder(w).Encode(transactions)
 	case "DELETE":
 		log.Printf("DELETE transactions")
 		vars := mux.Vars(r)
@@ -49,10 +45,6 @@ func transactions(w http.ResponseWriter, r *http.Request) {
 		log.Printf("DELETE id %v", id)
 
 		db.Delete(&Transaction{}, id)
-
-		var transactions []Transaction
-		db.Find(&transactions)
-		json.NewEncoder(w).Encode(transactions)
 	case "POST":
 		var transaction Transaction
 		err := json.NewDecoder(r.Body).Decode(&transaction)
@@ -64,7 +56,6 @@ func transactions(w http.ResponseWriter, r *http.Request) {
 		}
 		db.Create(&transaction)
 
-		// TODO update the relevant players...
 		var fromPlayer Player
 		var toPlayer Player
 		db.First(&fromPlayer, "name = ?", transaction.FromPlayer)
@@ -84,21 +75,21 @@ func transactions(w http.ResponseWriter, r *http.Request) {
 		db.Save(&fromPlayer)
 		db.Save(&toPlayer)
 
-		// return new set of players and transactions
-		var transactions []Transaction
-		var players []Player
-
-		db.Find(&transactions)
-		db.Find(&players)
-
-		resp := AddTransactionResponse{
-			Transactions: transactions,
-			Players:      players,
-		}
-
-		json.NewEncoder(w).Encode(resp)
 	}
 
+	// return new set of players and transactions
+	var transactions []Transaction
+	var players []Player
+
+	db.Find(&transactions)
+	db.Find(&players)
+
+	resp := AddTransactionResponse{
+		Transactions: transactions,
+		Players:      players,
+	}
+
+	json.NewEncoder(w).Encode(resp)
 }
 
 func initViews(router *mux.Router) {

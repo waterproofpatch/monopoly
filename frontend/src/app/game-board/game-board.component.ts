@@ -33,9 +33,7 @@ export class GameBoardComponent implements OnInit {
     this.playerService
       .getPlayersHttp()
       .subscribe((players) => (this.players = players));
-    this.transactionService
-      .getTransactionsHttp()
-      .subscribe((transactions) => (this.transactions = transactions));
+    this.transactionService.getTransactionsHttp().subscribe();
   }
 
   ngOnInit(): void {}
