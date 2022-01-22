@@ -7,8 +7,9 @@ export interface Player {
 }
 
 export interface Transaction {
-  fromPlayer: Player;
-  toPlayer: Player;
+  id: number;
+  fromPlayer: string;
+  toPlayer: string;
   amount: number;
   timestamp: string;
 }

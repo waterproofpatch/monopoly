@@ -11,7 +11,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
   providedIn: 'root',
 })
 export class TransactionService {
-  playersUrl = '/api/transactions';
+  transactionsUrl = '/api/transactions';
   httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
@@ -20,11 +20,6 @@ export class TransactionService {
   };
 
   transactions: Transaction[] = [];
-  // Observable string sources
-  private transactionSource = new Subject<Transaction>();
-
-  // Observable string streams
-  transaction$ = this.transactionSource.asObservable();
 
   constructor(private http: HttpClient, private dialogService: DialogService) {}
 
@@ -35,7 +30,10 @@ export class TransactionService {
   /** GET players from the server */
   getTransactionsHttp(): Observable<Transaction[]> {
     return this.http
-      .get<Transaction[]>(this.getUrlBase() + this.playersUrl, this.httpOptions)
+      .get<Transaction[]>(
+        this.getUrlBase() + this.transactionsUrl,
+        this.httpOptions
+      )
       .pipe(
         tap((_) => console.log('Fetched players')),
         catchError(this.handleError<Transaction[]>('getTransactionsHttp', []))
@@ -63,45 +61,23 @@ export class TransactionService {
     };
   }
 
-  private doTransaction(t: Transaction) {
-    this.transactionSource.next(t);
-    this.transactions.push(t);
-  }
+  deleteTransactionHttp(transaction: Transaction): Observable<Transaction> {
+    const url = `${this.getUrlBase() + this.transactionsUrl}/${transaction.id}`;
 
-  reset() {
-    this.transactions = [];
-  }
-
-  getTransactions(): Transaction[] {
-    return this.transactions;
+    return this.http.delete<Transaction>(url, this.httpOptions).pipe(
+      tap((_) => console.log(`deleted player id=${transaction.id}`)),
+      catchError(this.handleError<Transaction>('deleteTransaction'))
+    );
   }
 
   handleTransaction(transaction: Transaction): void {
     this.dialogService.log(
       'Transaction from ' +
-        transaction.fromPlayer.name +
+        transaction.fromPlayer +
         ' to ' +
-        transaction.toPlayer.name +
+        transaction.toPlayer +
         ' in the amount of ' +
         transaction.amount
     );
-
-    // the bank has unlimited money
-    if (
-      transaction.fromPlayer.name != 'Bank' &&
-      transaction.fromPlayer.money < transaction.amount
-    ) {
-      this.dialogService.displayErrorDialog(
-        'Not enough money. Must raise $' +
-          (transaction.amount - transaction.fromPlayer.money) +
-          '.'
-      );
-      return;
-    }
-
-    this.doTransaction(transaction);
-
-    transaction.fromPlayer.money -= transaction.amount;
-    transaction.toPlayer.money += transaction.amount;
   }
 }

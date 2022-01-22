@@ -108,8 +108,9 @@ export class PieceSelectDialog {
     const bank: Player[] = this.data.players.filter((x) => x.name == 'Bank');
 
     let t: Transaction = {
-      toPlayer: this.data.player,
-      fromPlayer: bank[0],
+      id: -1, // filled in by server
+      toPlayer: this.data.player.name,
+      fromPlayer: bank[0].name,
       amount: 200,
       timestamp: new Date().toISOString(),
     };
@@ -128,8 +129,9 @@ export class PieceSelectDialog {
     }
 
     let t: Transaction = {
-      toPlayer: this.data.player,
-      fromPlayer: freeParking[0],
+      id: -1, // filled in by server
+      toPlayer: this.data.player.name,
+      fromPlayer: freeParking[0].name,
       amount: freeParking[0].money,
       timestamp: new Date().toISOString(),
     };

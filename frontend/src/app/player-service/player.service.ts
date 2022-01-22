@@ -17,6 +17,7 @@ export class PlayerService {
       'Access-Control-Allow-Origin': '*',
     }),
   };
+  players: Player[] = [];
 
   constructor(private http: HttpClient, private dialogService: DialogService) {}
 
@@ -24,12 +25,21 @@ export class PlayerService {
     return environment.apiUrlBase;
   }
 
+  getPlayerByName(name: string): Player | null {
+    for (let p of this.players) {
+      if (p.name == name) {
+        return p;
+      }
+    }
+    return null;
+  }
+
   /** GET players from the server */
   getPlayersHttp(): Observable<Player[]> {
     return this.http
       .get<Player[]>(this.getUrlBase() + this.playersUrl, this.httpOptions)
       .pipe(
-        tap((_) => console.log('Fetched players')),
+        tap((players) => (this.players = players)),
         catchError(this.handleError<Player[]>('getPlayersHttp', []))
       );
   }

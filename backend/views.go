@@ -42,6 +42,20 @@ func transactions(w http.ResponseWriter, r *http.Request) {
 		db.Find(&transactions)
 
 		json.NewEncoder(w).Encode(transactions)
+	case "DELETE":
+		var transaction Transaction
+		err := json.NewDecoder(r.Body).Decode(&transaction)
+		if err != nil {
+			log.Printf("Error decoding json request: %v", err)
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(&Error{Message: "Failed decoding transaction!"})
+		} else {
+			log.Printf("Deleting transaction %v", transaction)
+			db := getDb()
+			var transactions []Transaction
+			db.Find(&transactions)
+			json.NewEncoder(w).Encode(transactions)
+		}
 	case "POST":
 		var transaction Transaction
 		err := json.NewDecoder(r.Body).Decode(&transaction)
