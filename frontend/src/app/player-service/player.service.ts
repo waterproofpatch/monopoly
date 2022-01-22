@@ -50,7 +50,9 @@ export class PlayerService {
       .pipe(
         tap(
           (players) => this.playerSource.next(players),
-          catchError(this.handleError<Player[]>('getPlayersHttp', []))
+          catchError(
+            this.dialogService.handleError<Player[]>('getPlayersHttp', [])
+          )
         )
       );
   }
@@ -61,7 +63,7 @@ export class PlayerService {
     }/${id}`;
     return this.http.get<Player>(url).pipe(
       tap((_) => console.log(`fetched hero id=${id}`)),
-      catchError(this.handleError<Player>(`getPlayer id=${id}`))
+      catchError(this.dialogService.handleError<Player>(`getPlayer id=${id}`))
     );
   }
 
@@ -71,7 +73,7 @@ export class PlayerService {
       .put(this.getUrlBase() + this.playersUrl, player, this.httpOptions)
       .pipe(
         tap((_) => console.log(`updated player id=${player.name}`)),
-        catchError(this.handleError<any>('updatePlayer'))
+        catchError(this.dialogService.handleError<any>('updatePlayer'))
       );
   }
 
@@ -87,7 +89,7 @@ export class PlayerService {
         tap((newPlayer: Player) =>
           console.log(`added player w/ id=${newPlayer.name}`)
         ),
-        catchError(this.handleError<Player>('addPlayer'))
+        catchError(this.dialogService.handleError<Player>('addPlayer'))
       );
   }
 
@@ -97,29 +99,8 @@ export class PlayerService {
 
     return this.http.delete<Player>(url, this.httpOptions).pipe(
       tap((_) => console.log(`deleted player id=${id}`)),
-      catchError(this.handleError<Player>('deletePlayer'))
+      catchError(this.dialogService.handleError<Player>('deletePlayer'))
     );
-  }
-
-  /**
-   * Handle Http operation that failed.
-   * Let the app continue.
-   * @param operation - name of the operation that failed
-   * @param result - optional value to return as the observable result
-   */
-  private handleError<T>(operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
-      // TODO: send the error to remote logging infrastructure
-      console.error(error); // log to console instead
-
-      // TODO: better job of transforming error for user consumption
-      this.dialogService.displayErrorDialog(
-        `${operation} failed: ${error.message}`
-      );
-
-      // Let the app keep running by returning an empty result.
-      return of(result as T);
-    };
   }
 
   removePlayer(player: Player) {

@@ -1,4 +1,6 @@
+import { Observable, of } from 'rxjs';
 import { Inject, Component, Injectable } from '@angular/core';
+
 import { Player } from '../types';
 import {
   MatDialog,
@@ -56,6 +58,22 @@ export class DialogService {
     dialogRef.afterClosed().subscribe((result) => {
       console.log('The dialog was closed');
     });
+  }
+  /**
+   * Handle Http operation that failed.
+   * Let the app continue.
+   * @param operation - name of the operation that failed
+   * @param result - optional value to return as the observable result
+   */
+  handleError<T>(operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
+      this.displayErrorDialog(
+        `${operation} failed: ${error.error.error_message}`
+      );
+
+      // Let the app keep running by returning an empty result.
+      return of(result as T);
+    };
   }
 }
 
