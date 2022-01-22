@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+
 import { Player, Transaction } from '../types';
 import { DialogService } from '../dialog-service/dialog.service';
 import { TransactionService } from '../transaction-service/transaction.service';

@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, tap } from 'rxjs/operators';
-import { Observable } from 'rxjs';
-import { BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 
 import { Transaction, AddTransactionResponse } from '../types';
 import { DialogService } from '../dialog-service/dialog.service';
 import { PlayerService } from '../player-service/player.service';
 import { environment } from '../../environments/environment'; // Change this to your file location
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
