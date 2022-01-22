@@ -9,6 +9,11 @@ import (
 	"github.com/gorilla/mux"
 )
 
+type AddTransactionResponse struct {
+	Transactions []Transaction `json:"transactions"`
+	Players      []Player      `json:"players"`
+}
+
 type Error struct {
 	Message string `json"message"`
 }
@@ -65,10 +70,22 @@ func transactions(w http.ResponseWriter, r *http.Request) {
 			json.NewEncoder(w).Encode(&Error{Message: "Failed decoding transaction!"})
 		} else {
 			getDb().Create(&transaction)
+
+			// TODO update the relevant players...
+
 			var transactions []Transaction
+			var players []Player
+
 			db := getDb()
 			db.Find(&transactions)
-			json.NewEncoder(w).Encode(transactions)
+			db.Find(&players)
+
+			resp := AddTransactionResponse{
+				Transactions: transactions,
+				Players:      players,
+			}
+
+			json.NewEncoder(w).Encode(resp)
 		}
 	}
 
