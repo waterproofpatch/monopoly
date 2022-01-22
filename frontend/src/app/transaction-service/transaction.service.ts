@@ -35,32 +35,37 @@ export class TransactionService {
   }
 
   /** GET players from the server */
-  getTransactionsHttp(): Observable<Transaction[]> {
+  getTransactionsHttp(): Observable<AddTransactionResponse> {
     return this.http
-      .get<Transaction[]>(
+      .get<AddTransactionResponse>(
         this.getUrlBase() + this.transactionsUrl,
         this.httpOptions
       )
       .pipe(
-        tap((_) => console.log('Fetched transactions')),
+        tap((response) => {
+          this.transactionSource.next(response.transactions);
+        }),
         catchError(
-          this.dialogService.handleError<Transaction[]>(
-            'getTransactionsHttp',
-            []
+          this.dialogService.handleError<AddTransactionResponse>(
+            'getTransactionsHttp'
           )
         )
       );
   }
 
-  deleteTransactionHttp(transaction: Transaction): Observable<Transaction[]> {
+  deleteTransactionHttp(
+    transaction: Transaction
+  ): Observable<AddTransactionResponse> {
     const url = `${this.getUrlBase() + this.transactionsUrl}/${transaction.ID}`;
 
-    return this.http.delete<Transaction[]>(url, this.httpOptions).pipe(
-      tap((x) => {
-        this.transactionSource.next(x);
+    return this.http.delete<AddTransactionResponse>(url, this.httpOptions).pipe(
+      tap((response) => {
+        this.transactionSource.next(response.transactions);
       }),
       catchError(
-        this.dialogService.handleError<Transaction[]>('deleteTransactionHttp')
+        this.dialogService.handleError<AddTransactionResponse>(
+          'deleteTransactionHttp'
+        )
       )
     );
   }
@@ -79,13 +84,6 @@ export class TransactionService {
         tap((response) => {
           this.transactionSource.next(response.transactions);
           this.playerService.setPlayers(response.players);
-          console.log(
-            'Got a response - ' +
-              response.transactions.length +
-              ' transactions, ' +
-              response.players.length +
-              ' players.'
-          );
         }),
         catchError(
           this.dialogService.handleError<AddTransactionResponse>(
@@ -96,16 +94,8 @@ export class TransactionService {
   }
 
   handleTransaction(transaction: Transaction): void {
-    this.dialogService.log(
-      'Transaction from ' +
-        transaction.fromPlayer +
-        ' to ' +
-        transaction.toPlayer +
-        ' in the amount of ' +
-        transaction.amount
-    );
     this.addTransactionHttp(transaction).subscribe((x) => {
-      console.log('Transaction added!');
+      console.log('Transaction handled!');
     });
   }
 }
