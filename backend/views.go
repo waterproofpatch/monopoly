@@ -14,6 +14,11 @@ type AddTransactionResponse struct {
 	Players      []Player      `json:"players"`
 }
 
+type ChangePlayerRequest struct {
+	First  Player `json:"first"`
+	Second Player `json:"second"`
+}
+
 type Error struct {
 	ErrorMessage string `json:"error_message"`
 }
@@ -53,21 +58,41 @@ func dashboard(w http.ResponseWriter, r *http.Request) {
 }
 
 func players(w http.ResponseWriter, r *http.Request) {
-	var players []Player
+	log.Printf("%v players", r.Method)
 	db := getDb()
-	db.Find(&players)
 
+	switch r.Method {
+	case "GET":
+	case "PUT":
+		var req ChangePlayerRequest
+		err := json.NewDecoder(r.Body).Decode(&req)
+		if err != nil {
+			log.Printf("Error decoding json request: %v", err)
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(&Error{ErrorMessage: "Failed decoding change player request!"})
+			return
+		}
+		log.Printf("first player ID %v, second player ID %v", req.First, req.Second)
+		firstName := req.First.Name
+		firstImg := req.First.Img
+		results := db.Model(&req.First).Updates(Player{Name: req.Second.Name, Img: req.Second.Img})
+		log.Printf("Affected %d rows", results.RowsAffected)
+		results = db.Model(&req.Second).Updates(Player{Name: firstName, Img: firstImg})
+		log.Printf("Affected %d rows", results.RowsAffected)
+	}
+
+	var players []Player
+	db.Find(&players)
 	json.NewEncoder(w).Encode(players)
 }
 
 func transactions(w http.ResponseWriter, r *http.Request) {
-	log.Printf("Transactions called with method %v", r.Method)
+	log.Printf("%v transactions", r.Method)
 
 	db := getDb()
 
 	switch r.Method {
 	case "GET":
-		log.Printf("GET transactions")
 	case "DELETE":
 		log.Printf("DELETE transactions")
 		vars := mux.Vars(r)
@@ -110,7 +135,7 @@ func transactions(w http.ResponseWriter, r *http.Request) {
 
 func initViews(router *mux.Router) {
 	router.HandleFunc("/", dashboard).Methods("GET")
-	router.HandleFunc("/api/players", players).Methods("GET", "OPTIONS")
+	router.HandleFunc("/api/players", players).Methods("GET", "PUT", "OPTIONS")
 	router.HandleFunc("/api/transactions", transactions).Methods("GET", "POST", "OPTIONS")
 	router.HandleFunc("/api/transactions/{id:[0-9]+}", transactions).Methods("DELETE", "OPTIONS")
 }

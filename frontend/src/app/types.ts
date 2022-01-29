@@ -23,3 +23,8 @@ export interface AddTransactionResponse {
   transactions: Transaction[];
   players: Player[];
 }
+
+export interface ChangePlayerRequest {
+  first: Player;
+  second: Player;
+}
