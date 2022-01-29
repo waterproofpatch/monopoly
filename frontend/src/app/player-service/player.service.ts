@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { Player } from '../types';
+import { Player, ChangePlayerRequest } from '../types';
 import { catchError, map, tap } from 'rxjs/operators';
 import { DialogService } from '../dialog-service/dialog.service';
 import { environment } from '../../environments/environment'; // Change this to your file location
@@ -43,13 +43,34 @@ export class PlayerService {
     return null;
   }
 
+  changePlayersHttp(first: Player, second: Player): Observable<Player[]> {
+    let request: ChangePlayerRequest = {
+      first: first,
+      second: second,
+    };
+    return this.http
+      .put<Player[]>(
+        this.getUrlBase() + this.playersUrl,
+        request,
+        this.httpOptions
+      )
+      .pipe(
+        tap(
+          (players) => this.setPlayers(players),
+          catchError(
+            this.dialogService.handleError<Player[]>('changePlayersHttp', [])
+          )
+        )
+      );
+  }
+
   /** GET players from the server */
   getPlayersHttp(): Observable<Player[]> {
     return this.http
       .get<Player[]>(this.getUrlBase() + this.playersUrl, this.httpOptions)
       .pipe(
         tap(
-          (players) => this.playerSource.next(players),
+          (players) => this.setPlayers(players),
           catchError(
             this.dialogService.handleError<Player[]>('getPlayersHttp', [])
           )
