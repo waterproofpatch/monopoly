@@ -9,7 +9,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-type AddTransactionResponse struct {
+type PlayersTransactionsResponse struct {
 	Transactions []Transaction `json:"transactions"`
 	Players      []Player      `json:"players"`
 }
@@ -93,6 +93,29 @@ func players(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(players)
 }
 
+func games(w http.ResponseWriter, r *http.Request) {
+	log.Printf("%v games", r.Method)
+
+	db := getDb()
+
+	// re-init the whole db
+	resetDb()
+
+	// return new set of players and transactions
+	var transactions []Transaction
+	var players []Player
+
+	db.Find(&transactions)
+	db.Find(&players)
+
+	resp := PlayersTransactionsResponse{
+		Transactions: transactions,
+		Players:      players,
+	}
+
+	json.NewEncoder(w).Encode(resp)
+}
+
 func transactions(w http.ResponseWriter, r *http.Request) {
 	log.Printf("%v transactions", r.Method)
 
@@ -132,7 +155,7 @@ func transactions(w http.ResponseWriter, r *http.Request) {
 	db.Find(&transactions)
 	db.Find(&players)
 
-	resp := AddTransactionResponse{
+	resp := PlayersTransactionsResponse{
 		Transactions: transactions,
 		Players:      players,
 	}
@@ -142,6 +165,7 @@ func transactions(w http.ResponseWriter, r *http.Request) {
 
 func initViews(router *mux.Router) {
 	router.HandleFunc("/", dashboard).Methods("GET")
+	router.HandleFunc("/api/games", games).Methods("GET", "POST", "OPTIONS")
 	router.HandleFunc("/api/players", players).Methods("GET", "PUT", "OPTIONS")
 	router.HandleFunc("/api/players/{id:[0-9]+}", players).Methods("DELETE", "OPTIONS")
 	router.HandleFunc("/api/transactions", transactions).Methods("GET", "POST", "OPTIONS")

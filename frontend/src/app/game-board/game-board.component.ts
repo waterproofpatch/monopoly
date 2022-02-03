@@ -4,6 +4,7 @@ import { Player, Transaction } from '../types';
 import { DialogService } from '../dialog-service/dialog.service';
 import { TransactionService } from '../transaction-service/transaction.service';
 import { PlayerService } from '../player-service/player.service';
+import { GameService } from '../game.service';
 
 @Component({
   selector: 'app-game-board',
@@ -17,8 +18,14 @@ export class GameBoardComponent implements OnInit {
   constructor(
     private dialogService: DialogService,
     private transactionService: TransactionService,
+    private gamesServices: GameService,
     public playerService: PlayerService
   ) {
+    // start receiving notifications whenever the players+transactions lists change
+    this.gamesServices.gameObservable.subscribe((x) => {
+      this.players = x.players;
+      this.transactions = x.transactions;
+    });
     // start receiving notifications whenever the transaction list changes
     this.transactionService.transactionObservable.subscribe(
       (x) => (this.transactions = x)
@@ -39,11 +46,13 @@ export class GameBoardComponent implements OnInit {
   newGame(): void {
     this.dialogService.displayLogDialog('New game started!');
 
+    this.gamesServices.getGameHttp().subscribe();
+
     // get the initial set of players and transactions
-    this.playerService
-      .getPlayersHttp()
-      .subscribe((players) => (this.players = players));
-    this.transactionService.getTransactionsHttp().subscribe();
+    // this.playerService
+    //   .getPlayersHttp()
+    //   .subscribe((players) => (this.players = players));
+    // this.transactionService.getTransactionsHttp().subscribe();
   }
 
   ngOnInit(): void {}
