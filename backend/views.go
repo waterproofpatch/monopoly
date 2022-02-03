@@ -63,6 +63,13 @@ func players(w http.ResponseWriter, r *http.Request) {
 
 	switch r.Method {
 	case "GET":
+	case "DELETE":
+		log.Printf("DELETE players")
+		vars := mux.Vars(r)
+		id := vars["id"]
+		log.Printf("DELETE id %v", id)
+		results := db.Model(&Player{}).Where("id=?", id).Update("InGame", false)
+		log.Printf("Affected %d rows", results.RowsAffected)
 	case "PUT":
 		var req ChangePlayerRequest
 		err := json.NewDecoder(r.Body).Decode(&req)
@@ -136,6 +143,7 @@ func transactions(w http.ResponseWriter, r *http.Request) {
 func initViews(router *mux.Router) {
 	router.HandleFunc("/", dashboard).Methods("GET")
 	router.HandleFunc("/api/players", players).Methods("GET", "PUT", "OPTIONS")
+	router.HandleFunc("/api/players/{id:[0-9]+}", players).Methods("DELETE", "OPTIONS")
 	router.HandleFunc("/api/transactions", transactions).Methods("GET", "POST", "OPTIONS")
 	router.HandleFunc("/api/transactions/{id:[0-9]+}", transactions).Methods("DELETE", "OPTIONS")
 }

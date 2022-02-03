@@ -157,7 +157,9 @@ export class PieceSelectDialog {
   }
 
   remove(): void {
-    this.playerService.removePlayer(this.data.player);
+    this.playerService
+      .deletePlayerHttp(this.data.player)
+      .subscribe((_) => this.dialogService.displayLogDialog('Removed player!'));
     this.dialogRef.close();
   }
 
