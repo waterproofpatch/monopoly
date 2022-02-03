@@ -4,8 +4,8 @@ import { catchError, tap } from 'rxjs/operators';
 import { Observable, BehaviorSubject } from 'rxjs';
 
 import { Transaction, PlayersTransactionsResponse } from '../types';
-import { DialogService } from '../dialog-service/dialog.service';
-import { PlayerService } from '../player-service/player.service';
+import { DialogService } from './dialog-service/dialog.service';
+import { PlayerService } from '../services/player.service';
 import { environment } from '../../environments/environment'; // Change this to your file location
 
 @Injectable({

@@ -1,7 +1,8 @@
 import { Input, Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Player, Transaction } from '../types';
-import { DialogService } from '../dialog-service/dialog.service';
+
+import { Player } from '../types';
+import { DialogService } from '../services/dialog-service/dialog.service';
 @Component({
   selector: 'app-player-detail',
   templateUrl: './player-detail.component.html',

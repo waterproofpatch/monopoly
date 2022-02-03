@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { Player, ChangePlayerRequest } from '../types';
 import { catchError, map, tap } from 'rxjs/operators';
-import { DialogService } from '../dialog-service/dialog.service';
+
+import { Player, ChangePlayerRequest } from '../types';
+import { DialogService } from './dialog-service/dialog.service';
 import { environment } from '../../environments/environment'; // Change this to your file location
 
 @Injectable({

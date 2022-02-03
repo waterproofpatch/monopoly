@@ -1,9 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Player, Transaction } from '../types';
-import { DialogService } from '../dialog-service/dialog.service';
-import { TransactionService } from '../transaction-service/transaction.service';
-import { PlayerService } from '../player-service/player.service';
-import { fromEvent } from 'rxjs';
+
+import { Transaction } from '../types';
+import { DialogService } from '../services/dialog-service/dialog.service';
+import { TransactionService } from '../services/transaction.service';
+import { PlayerService } from '../services/player.service';
 
 @Component({
   selector: 'app-transaction',
