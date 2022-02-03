@@ -7,6 +7,11 @@ export interface Player {
   inGame: boolean; // whether or not this player is active in the game
 }
 
+export interface Game {
+  players: Player[];
+  transactions: Transaction[];
+}
+
 export interface Transaction {
   ID: number;
   fromPlayerId: number;
@@ -19,7 +24,7 @@ export interface Error {
   message: string;
 }
 
-export interface AddTransactionResponse {
+export interface PlayersTransactionsResponse {
   transactions: Transaction[];
   players: Player[];
 }
