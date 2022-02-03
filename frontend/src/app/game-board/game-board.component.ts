@@ -44,15 +44,11 @@ export class GameBoardComponent implements OnInit {
   }
 
   newGame(): void {
-    this.dialogService.displayLogDialog('New game started!');
-
-    this.gamesServices.getGameHttp().subscribe();
-
-    // get the initial set of players and transactions
-    // this.playerService
-    //   .getPlayersHttp()
-    //   .subscribe((players) => (this.players = players));
-    // this.transactionService.getTransactionsHttp().subscribe();
+    this.gamesServices
+      .getGameHttp()
+      .subscribe((_) =>
+        this.dialogService.displayLogDialog('New game started!')
+      );
   }
 
   ngOnInit(): void {}
