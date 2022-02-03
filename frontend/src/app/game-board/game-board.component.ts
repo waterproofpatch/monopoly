@@ -33,15 +33,6 @@ export class GameBoardComponent implements OnInit {
         p.inGame = newPlayer.inGame;
         p.name = newPlayer.name;
       }
-      // this.players = x;
-      // for money transition animation, we need to set the attribute, not change the entire list
-      // for (let newP of x) {
-      //   for (let oldP of this.players) {
-      //     if (oldP.name == newP.name) {
-      //       oldP.money = newP.money;
-      //     }
-      //   }
-      // }
     });
   }
 
