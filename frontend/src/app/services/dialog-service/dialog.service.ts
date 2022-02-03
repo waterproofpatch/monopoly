@@ -1,15 +1,16 @@
 import { Observable, of } from 'rxjs';
 import { Inject, Component, Injectable } from '@angular/core';
 
-import { Player } from '../types';
+import { Player } from '../../types';
 import {
   MatDialog,
   MatDialogRef,
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
-import { TransactionService } from '../transaction-service/transaction.service';
-import { Transaction } from '../types';
-import { PlayerService } from '../player-service/player.service';
+import { TransactionService } from '../../services/transaction.service';
+import { PlayerService } from '../../services/player.service';
+import { Transaction } from '../../types';
+
 export interface ErrorDialogData {
   errorMsg: string;
 }

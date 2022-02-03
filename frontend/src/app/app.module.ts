@@ -21,7 +21,7 @@ import { HttpClientModule } from '@angular/common/http';
 import {
   PieceSelectDialog,
   ErrorDialog,
-} from './dialog-service/dialog.service';
+} from './services/dialog-service/dialog.service';
 import { AnimatedDigitComponent } from './animated/animated-digit.component';
 @NgModule({
   declarations: [

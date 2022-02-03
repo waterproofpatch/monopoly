@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Subject, Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
-import { PlayersTransactionsResponse, Game } from './types';
 import { environment } from 'src/environments/environment';
+
+import { PlayersTransactionsResponse, Game } from '../types';
 import { DialogService } from './dialog-service/dialog.service';
 
 @Injectable({
