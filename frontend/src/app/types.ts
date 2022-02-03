@@ -9,8 +9,8 @@ export interface Player {
 
 export interface Transaction {
   ID: number;
-  fromPlayer: string;
-  toPlayer: string;
+  fromPlayerId: number;
+  toPlayerId: number;
   amount: number;
   timestamp: string;
 }

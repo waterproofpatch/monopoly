@@ -15,8 +15,9 @@ type Player struct {
 
 type Transaction struct {
 	gorm.Model
-	// Id         uint   `gorm:"primaryKey;autoincrement:true"`
-	FromPlayer string `json:"fromPlayer"`
-	ToPlayer   string `json:"toPlayer"`
-	Amount     int    `json:"amount"`
+	// FromPlayer string `json:"fromPlayer"`
+	// ToPlayer   string `json:"toPlayer"`
+	FromPlayerId uint `json:"fromPlayerId"`
+	ToPlayerId   uint `json:"toPlayerId"`
+	Amount       int  `json:"amount"`
 }

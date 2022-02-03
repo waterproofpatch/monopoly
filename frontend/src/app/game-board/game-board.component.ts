@@ -25,7 +25,15 @@ export class GameBoardComponent implements OnInit {
     );
     // start receiving notifications whenever the players list changes
     this.playerService.playerObservable.subscribe((x) => {
-      this.players = x;
+      for (let p of this.players) {
+        let newPlayer = x.filter((x) => x.ID == p.ID)[0];
+        p.human = newPlayer.human;
+        p.money = newPlayer.money;
+        p.img = newPlayer.img;
+        p.inGame = newPlayer.inGame;
+        p.name = newPlayer.name;
+      }
+      // this.players = x;
       // for money transition animation, we need to set the attribute, not change the entire list
       // for (let newP of x) {
       //   for (let oldP of this.players) {
