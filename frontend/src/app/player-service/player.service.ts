@@ -122,17 +122,18 @@ export class PlayerService {
       );
   }
 
-  /** DELETE: delete the hero from the server */
-  deletePlayerHttp(id: number): Observable<Player> {
-    const url = `${this.getUrlBase() + this.playersUrl}/${id}`;
+  /** DELETE: delete the player from the server (by setting their inGame to false!) */
+  deletePlayerHttp(player: Player): Observable<Player[]> {
+    const url = `${this.getUrlBase() + this.playersUrl}/${player.ID}`;
 
-    return this.http.delete<Player>(url, this.httpOptions).pipe(
-      tap((_) => console.log(`deleted player id=${id}`)),
-      catchError(this.dialogService.handleError<Player>('deletePlayer'))
+    return this.http.delete<Player[]>(url, this.httpOptions).pipe(
+      tap(
+        (players) => this.setPlayers(players),
+        catchError(
+          this.dialogService.handleError<Player[]>('getPlayersHttp', [])
+        )
+      ),
+      catchError(this.dialogService.handleError<Player[]>('deletePlayer'))
     );
-  }
-
-  removePlayer(player: Player) {
-    player.inGame = false;
   }
 }
