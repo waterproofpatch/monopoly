@@ -127,8 +127,8 @@ export class PieceSelectDialog {
 
     let t: Transaction = {
       ID: 0, // filled in by server
-      toPlayer: this.data.player.name,
-      fromPlayer: bank[0].name,
+      toPlayerId: this.data.player.ID,
+      fromPlayerId: bank[0].ID,
       amount: 200,
       timestamp: new Date().toISOString(),
     };
@@ -148,8 +148,8 @@ export class PieceSelectDialog {
 
     let t: Transaction = {
       ID: 0, // filled in by server
-      toPlayer: this.data.player.name,
-      fromPlayer: freeParking[0].name,
+      toPlayerId: this.data.player.ID,
+      fromPlayerId: freeParking[0].ID,
       amount: freeParking[0].money,
       timestamp: new Date().toISOString(),
     };

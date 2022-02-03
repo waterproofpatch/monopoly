@@ -33,6 +33,14 @@ export class PlayerService {
   setPlayers(players: Player[]) {
     this.playerSource.next(players);
   }
+  getPlayerById(id: number): Player | null {
+    for (let p of this.players) {
+      if (p.ID == id) {
+        return p;
+      }
+    }
+    return null;
+  }
 
   getPlayerByName(name: string): Player | null {
     for (let p of this.players) {

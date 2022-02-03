@@ -28,8 +28,8 @@ func processTransaction(w http.ResponseWriter, transaction Transaction, reverse 
 
 	var fromPlayer Player
 	var toPlayer Player
-	db.First(&fromPlayer, "name = ?", transaction.FromPlayer)
-	db.First(&toPlayer, "name = ?", transaction.ToPlayer)
+	db.First(&fromPlayer, "id = ?", transaction.FromPlayerId)
+	db.First(&toPlayer, "id = ?", transaction.ToPlayerId)
 
 	log.Printf("Processing transaction %v From player: %v, To player: %v", transaction, fromPlayer, toPlayer)
 

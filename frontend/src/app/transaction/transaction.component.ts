@@ -13,8 +13,8 @@ import { fromEvent } from 'rxjs';
 export class TransactionComponent implements OnInit {
   @Input() transaction: Transaction = {
     ID: 0,
-    fromPlayer: 'Loading...',
-    toPlayer: 'Loading...',
+    fromPlayerId: 0,
+    toPlayerId: 0,
     amount: 0,
     timestamp: 'N/A',
   }; // from game-board
@@ -27,12 +27,12 @@ export class TransactionComponent implements OnInit {
 
   ngOnInit(): void {}
   getToPlayerImgUrl(): string {
-    let toPlayer = this.playerService.getPlayerByName(
-      this.transaction.toPlayer
+    let toPlayer = this.playerService.getPlayerById(
+      this.transaction.toPlayerId
     );
     if (toPlayer == null) {
       this.dialogService.displayErrorDialog(
-        'Failed finding player ' + this.transaction.toPlayer
+        'Failed finding player ' + this.transaction.toPlayerId
       );
       return '';
     }
@@ -40,12 +40,12 @@ export class TransactionComponent implements OnInit {
   }
 
   getFromPlayerImgUrl(): string {
-    let fromPlayer = this.playerService.getPlayerByName(
-      this.transaction.fromPlayer
+    let fromPlayer = this.playerService.getPlayerById(
+      this.transaction.fromPlayerId
     );
     if (fromPlayer == null) {
       this.dialogService.displayErrorDialog(
-        'Failed finding player ' + this.transaction.fromPlayer
+        'Failed finding player ' + this.transaction.fromPlayerId
       );
       return '';
     }
