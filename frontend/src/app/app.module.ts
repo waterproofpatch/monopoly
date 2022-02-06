@@ -21,6 +21,7 @@ import { HttpClientModule } from '@angular/common/http';
 import {
   PieceSelectDialog,
   ErrorDialog,
+  LogDialog,
 } from './services/dialog-service/dialog.service';
 import { AnimatedDigitComponent } from './animated/animated-digit.component';
 import { BaseComponent } from './base/base/base.component';
@@ -33,6 +34,7 @@ import { BaseComponent } from './base/base/base.component';
     TransactionComponent,
     PieceSelectDialog,
     ErrorDialog,
+    LogDialog,
     AnimatedDigitComponent,
     BaseComponent,
   ],
