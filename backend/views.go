@@ -94,6 +94,7 @@ func players(w http.ResponseWriter, r *http.Request) {
 }
 
 func games(w http.ResponseWriter, r *http.Request) {
+	db := getDb()
 	log.Printf("%v games", r.Method)
 
 	switch r.Method {
@@ -101,10 +102,10 @@ func games(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
 		id := vars["id"]
 		log.Printf("Getting game ID %v", id)
+		var game Game
+		db.First(&game, "id = ?", id)
 	case "PUT": // modify a game, look for Players and Transactions
 	case "POST": // start a new game
-		db := getDb()
-
 		// re-init the whole db
 		resetDb()
 
