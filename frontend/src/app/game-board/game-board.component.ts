@@ -44,12 +44,7 @@ export class GameBoardComponent extends BaseComponent implements OnInit {
   }
 
   newGame(): void {
-    this.gamesServices
-      .getGameHttp()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((_) =>
-        this.dialogService.displayLogDialog('New game started!')
-      );
+    this.gamesServices.newGame();
   }
 
   ngOnInit(): void {}
