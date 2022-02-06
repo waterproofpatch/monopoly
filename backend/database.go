@@ -10,6 +10,7 @@ import (
 var gDb *gorm.DB
 
 func resetDb() {
+	log.Printf("Resetting db...")
 	db := getDb()
 	// Migrate the schema
 	db.Migrator().DropTable(&Player{})
