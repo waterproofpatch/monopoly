@@ -99,11 +99,19 @@ func games(w http.ResponseWriter, r *http.Request) {
 
 	switch r.Method {
 	case "GET": // get a specific game that was already existing
-		vars := mux.Vars(r)
-		id := vars["id"]
-		log.Printf("Getting game ID %v", id)
-		var game Game
-		db.First(&game, "id = ?", id)
+		id, Ok := mux.Vars(r)["id"]
+		if !Ok {
+			log.Printf("All games!")
+			// return a list of names for each game in the db
+			var games []Game
+			db.Find(&games)
+			json.NewEncoder(w).Encode(games)
+		} else {
+			var game Game
+			log.Printf("Game %v!", id)
+			db.First(&game, "id = ?", id)
+			json.NewEncoder(w).Encode(game)
+		}
 	case "PUT": // modify a game, look for Players and Transactions
 	case "POST": // start a new game
 		// re-init the whole db
@@ -175,7 +183,7 @@ func transactions(w http.ResponseWriter, r *http.Request) {
 func initViews(router *mux.Router) {
 	router.HandleFunc("/", dashboard).Methods("GET")
 
-	router.HandleFunc("/api/games", games).Methods("POST", "OPTIONS")
+	router.HandleFunc("/api/games", games).Methods("GET", "POST", "OPTIONS")
 	router.HandleFunc("/api/games/{id:[0-9]+}", games).Methods("GET", "OPTIONS")
 	router.HandleFunc("/api/games/{id:[0-9]+}", games).Methods("POST", "OPTIONS")
 
