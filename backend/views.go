@@ -96,24 +96,32 @@ func players(w http.ResponseWriter, r *http.Request) {
 func games(w http.ResponseWriter, r *http.Request) {
 	log.Printf("%v games", r.Method)
 
-	db := getDb()
+	switch r.Method {
+	case "GET": // get a specific game that was already existing
+		vars := mux.Vars(r)
+		id := vars["id"]
+		log.Printf("Getting game ID %v", id)
+	case "PUT": // modify a game, look for Players and Transactions
+	case "POST": // start a new game
+		db := getDb()
 
-	// re-init the whole db
-	resetDb()
+		// re-init the whole db
+		resetDb()
 
-	// return new set of players and transactions
-	var transactions []Transaction
-	var players []Player
+		// return new set of players and transactions
+		var transactions []Transaction
+		var players []Player
 
-	db.Find(&transactions)
-	db.Find(&players)
+		db.Find(&transactions)
+		db.Find(&players)
 
-	resp := PlayersTransactionsResponse{
-		Transactions: transactions,
-		Players:      players,
+		resp := PlayersTransactionsResponse{
+			Transactions: transactions,
+			Players:      players,
+		}
+
+		json.NewEncoder(w).Encode(resp)
 	}
-
-	json.NewEncoder(w).Encode(resp)
 }
 
 func transactions(w http.ResponseWriter, r *http.Request) {
@@ -165,9 +173,14 @@ func transactions(w http.ResponseWriter, r *http.Request) {
 
 func initViews(router *mux.Router) {
 	router.HandleFunc("/", dashboard).Methods("GET")
-	router.HandleFunc("/api/games", games).Methods("GET", "POST", "OPTIONS")
+
+	router.HandleFunc("/api/games", games).Methods("POST", "OPTIONS")
+	router.HandleFunc("/api/games/{id:[0-9]+}", games).Methods("GET", "OPTIONS")
+	router.HandleFunc("/api/games/{id:[0-9]+}", games).Methods("POST", "OPTIONS")
+
 	router.HandleFunc("/api/players", players).Methods("GET", "PUT", "OPTIONS")
 	router.HandleFunc("/api/players/{id:[0-9]+}", players).Methods("DELETE", "OPTIONS")
+
 	router.HandleFunc("/api/transactions", transactions).Methods("GET", "POST", "OPTIONS")
 	router.HandleFunc("/api/transactions/{id:[0-9]+}", transactions).Methods("DELETE", "OPTIONS")
 }

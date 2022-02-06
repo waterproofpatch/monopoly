@@ -8,6 +8,11 @@ export interface Player {
 }
 
 export interface Game {
+  ID: number;
+  name: string;
+}
+
+export interface Game {
   players: Player[];
   transactions: Transaction[];
 }
