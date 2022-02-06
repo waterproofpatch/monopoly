@@ -56,17 +56,16 @@ export class GameService extends BaseComponent {
       );
   }
 
-  newGameHttp(): Observable<PlayersTransactionsResponse> {
+  newGameHttp(): Observable<Game> {
     return this.http
-      .post<PlayersTransactionsResponse>(
-        this.getUrlBase() + this.gamesUrl,
-        this.httpOptions
-      )
+      .post<Game>(this.getUrlBase() + this.gamesUrl, this.httpOptions)
       .pipe(
         tap((game) => {
-          this.playerService.setPlayers(game.players);
-          this.transactionService.setTransactions(game.transactions);
-        }, catchError(this.dialogService.handleError<PlayersTransactionsResponse>('newGameHttp')))
+          this.playerService
+            .getPlayersHttp(game.ID)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe();
+        }, catchError(this.dialogService.handleError<Game>('newGameHttp')))
       );
   }
 }

@@ -81,9 +81,12 @@ export class PlayerService extends BaseComponent {
   }
 
   /** GET players from the server */
-  getPlayersHttp(): Observable<Player[]> {
+  getPlayersHttp(gameId: number): Observable<Player[]> {
     return this.http
-      .get<Player[]>(this.getUrlBase() + this.playersUrl, this.httpOptions)
+      .get<Player[]>(
+        this.getUrlBase() + this.playersUrl + '?gameId=' + gameId,
+        this.httpOptions
+      )
       .pipe(
         tap(
           (players) => this.setPlayers(players),
