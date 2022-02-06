@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 
-import { Player, Transaction } from '../types';
+import { Game, Player, Transaction } from '../types';
 import { DialogService } from '../services/dialog-service/dialog.service';
 import { TransactionService } from '../services/transaction.service';
 import { PlayerService } from '../services/player.service';
@@ -16,6 +16,7 @@ import { BaseComponent } from '../base/base/base.component';
 export class GameBoardComponent extends BaseComponent implements OnInit {
   players: Player[] = [];
   transactions: Transaction[] = [];
+  games: Game[] = [];
 
   constructor(
     private dialogService: DialogService,
@@ -24,6 +25,8 @@ export class GameBoardComponent extends BaseComponent implements OnInit {
     public playerService: PlayerService
   ) {
     super();
+    this.getGames();
+
     // start receiving notifications whenever the players+transactions lists change
     this.playerService.playerObservable
       .pipe(takeUntil(this.destroy$))
@@ -45,6 +48,17 @@ export class GameBoardComponent extends BaseComponent implements OnInit {
 
   newGame(): void {
     this.gamesServices.newGame();
+  }
+
+  getGames(): void {
+    this.gamesServices
+      .getGamesHttp()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((x) => (this.games = x));
+  }
+
+  resumeGame(gameId: number): void {
+    console.log('Resuming game ' + gameId);
   }
 
   ngOnInit(): void {}

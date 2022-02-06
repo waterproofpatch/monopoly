@@ -40,14 +40,23 @@ export class GameService extends BaseComponent {
   }
 
   newGame(): void {
-    this.getGameHttp()
+    this.newGameHttp()
       .pipe(takeUntil(this.destroy$))
       .subscribe((_) =>
         this.dialogService.displayLogDialog('New game started!')
       );
   }
 
-  getGameHttp(): Observable<PlayersTransactionsResponse> {
+  getGamesHttp(): Observable<Game[]> {
+    return this.http
+      .get<Game[]>(this.getUrlBase() + this.gamesUrl, this.httpOptions)
+      .pipe(
+        tap((games) => {},
+        catchError(this.dialogService.handleError<Game[]>('getGamesHttp')))
+      );
+  }
+
+  newGameHttp(): Observable<PlayersTransactionsResponse> {
     return this.http
       .post<PlayersTransactionsResponse>(
         this.getUrlBase() + this.gamesUrl,
@@ -57,7 +66,7 @@ export class GameService extends BaseComponent {
         tap((game) => {
           this.playerService.setPlayers(game.players);
           this.transactionService.setTransactions(game.transactions);
-        }, catchError(this.dialogService.handleError<PlayersTransactionsResponse>('getGameHttp')))
+        }, catchError(this.dialogService.handleError<PlayersTransactionsResponse>('newGameHttp')))
       );
   }
 }
