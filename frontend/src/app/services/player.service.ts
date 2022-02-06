@@ -20,6 +20,7 @@ export class PlayerService {
   };
 
   players: Player[] = [];
+
   private playerSource = new BehaviorSubject<Player[]>([]);
   playerObservable = this.playerSource.asObservable();
 
@@ -34,6 +35,7 @@ export class PlayerService {
   setPlayers(players: Player[]) {
     this.playerSource.next(players);
   }
+
   getPlayerById(id: number): Player | null {
     for (let p of this.players) {
       if (p.ID == id) {
