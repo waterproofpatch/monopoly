@@ -107,4 +107,8 @@ export class TransactionService extends BaseComponent {
         console.log('Transaction handled!');
       });
   }
+
+  setTransactions(transactions: Transaction[]) {
+    this.transactionSource.next(transactions);
+  }
 }

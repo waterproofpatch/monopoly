@@ -28,12 +28,16 @@ export class GameBoardComponent extends BaseComponent implements OnInit {
     this.gamesServices.gameObservable
       .pipe(takeUntil(this.destroy$))
       .subscribe((x) => {
-        this.players = x.players;
-        this.transactions = x.transactions;
+        this.playerService.setPlayers(x.players);
+        this.transactionService.setTransactions(x.transactions);
       });
     this.playerService.playerObservable
       .pipe(takeUntil(this.destroy$))
       .subscribe((x) => {
+        if (this.players.length == 0) {
+          this.players = x;
+          return;
+        }
         for (let p of this.players) {
           let newPlayer = x.filter((x) => x.ID == p.ID)[0];
           p.human = newPlayer.human;
