@@ -5,6 +5,7 @@ export interface Player {
   money: number;
   human: boolean;
   inGame: boolean; // whether or not this player is active in the game
+  GameID: number;
 }
 
 export interface Game {
@@ -23,6 +24,7 @@ export interface Transaction {
   toPlayerId: number;
   amount: number;
   timestamp: string;
+  GameID: number;
 }
 
 export interface Error {

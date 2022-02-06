@@ -19,6 +19,7 @@ export class TransactionComponent extends BaseComponent implements OnInit {
     toPlayerId: 0,
     amount: 0,
     timestamp: 'N/A',
+    GameID: 0,
   }; // from game-board
 
   constructor(
