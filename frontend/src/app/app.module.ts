@@ -23,6 +23,7 @@ import {
   ErrorDialog,
 } from './services/dialog-service/dialog.service';
 import { AnimatedDigitComponent } from './animated/animated-digit.component';
+import { BaseComponent } from './base/base/base.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -33,6 +34,7 @@ import { AnimatedDigitComponent } from './animated/animated-digit.component';
     PieceSelectDialog,
     ErrorDialog,
     AnimatedDigitComponent,
+    BaseComponent,
   ],
   imports: [
     HttpClientModule,
