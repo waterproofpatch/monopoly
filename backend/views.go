@@ -61,8 +61,26 @@ func players(w http.ResponseWriter, r *http.Request) {
 	log.Printf("%v players", r.Method)
 	db := getDb()
 
+	gameId := r.FormValue("gameId")
+
 	switch r.Method {
 	case "GET":
+		if gameId == "" {
+			log.Printf("All players, no gameId specified!\n")
+			var players []Player
+			db.Find(&players)
+			json.NewEncoder(w).Encode(players)
+			return
+		} else {
+			log.Printf("All players, gameId %v!\n", gameId)
+			var players []Player
+			var game Game
+			db.Find(&game, "ID = ?", gameId)
+			db.Model(&game).Association("Players").Find(&players)
+
+			json.NewEncoder(w).Encode(players)
+			return
+		}
 	case "DELETE":
 		log.Printf("DELETE players")
 		vars := mux.Vars(r)
@@ -116,20 +134,9 @@ func games(w http.ResponseWriter, r *http.Request) {
 	case "POST": // start a new game
 		// re-init the whole db
 		resetDb()
-
-		// return new set of players and transactions
-		var transactions []Transaction
-		var players []Player
-
-		db.Find(&transactions)
-		db.Find(&players)
-
-		resp := PlayersTransactionsResponse{
-			Transactions: transactions,
-			Players:      players,
-		}
-
-		json.NewEncoder(w).Encode(resp)
+		var game Game
+		db.First(&game, "id = ?", 1)
+		json.NewEncoder(w).Encode(game)
 	}
 }
 
@@ -187,6 +194,7 @@ func initViews(router *mux.Router) {
 	router.HandleFunc("/api/games/{id:[0-9]+}", games).Methods("GET", "OPTIONS")
 	router.HandleFunc("/api/games/{id:[0-9]+}", games).Methods("POST", "OPTIONS")
 
+	router.HandleFunc("/api/players", players).Methods("GET", "PUT", "OPTIONS").Queries("gameId", "[0-9]*")
 	router.HandleFunc("/api/players", players).Methods("GET", "PUT", "OPTIONS")
 	router.HandleFunc("/api/players/{id:[0-9]+}", players).Methods("DELETE", "OPTIONS")
 
