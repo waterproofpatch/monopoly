@@ -17,7 +17,7 @@ export class GameBoardComponent implements OnInit {
 
   constructor(
     private dialogService: DialogService,
-    private transactionService: TransactionService,
+    public transactionService: TransactionService,
     private gamesServices: GameService,
     public playerService: PlayerService
   ) {
@@ -26,11 +26,6 @@ export class GameBoardComponent implements OnInit {
       this.players = x.players;
       this.transactions = x.transactions;
     });
-    // start receiving notifications whenever the transaction list changes
-    this.transactionService.transactionObservable.subscribe(
-      (x) => (this.transactions = x)
-    );
-    // start receiving notifications whenever the players list changes
     this.playerService.playerObservable.subscribe((x) => {
       for (let p of this.players) {
         let newPlayer = x.filter((x) => x.ID == p.ID)[0];

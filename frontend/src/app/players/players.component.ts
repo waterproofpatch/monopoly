@@ -12,7 +12,7 @@ import { TransactionService } from '../services/transaction.service';
 })
 export class PlayersComponent implements OnInit {
   @Input() players?: Player[]; // from game-board
-  @Input() transactions?: Transaction[]; // from game-board
+  @Input() transactions?: Transaction[] | null; // from game-board
 
   transactionForm = new FormGroup({
     fromPlayerName: new FormControl(''),
