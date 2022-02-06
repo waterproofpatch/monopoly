@@ -49,7 +49,7 @@ export class GameService extends BaseComponent {
 
   getGameHttp(): Observable<PlayersTransactionsResponse> {
     return this.http
-      .get<PlayersTransactionsResponse>(
+      .post<PlayersTransactionsResponse>(
         this.getUrlBase() + this.gamesUrl,
         this.httpOptions
       )
