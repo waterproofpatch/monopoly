@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
+import { takeUntil } from 'rxjs/operators';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, tap } from 'rxjs/operators';
 import { Observable, BehaviorSubject } from 'rxjs';
 
+import { BaseComponent } from '../base/base/base.component';
 import { Transaction, PlayersTransactionsResponse } from '../types';
 import { DialogService } from './dialog-service/dialog.service';
 import { PlayerService } from '../services/player.service';
@@ -11,7 +13,7 @@ import { environment } from '../../environments/environment'; // Change this to 
 @Injectable({
   providedIn: 'root',
 })
-export class TransactionService {
+export class TransactionService extends BaseComponent {
   transactionsUrl = '/api/transactions';
   httpOptions = {
     headers: new HttpHeaders({
@@ -27,7 +29,9 @@ export class TransactionService {
     private http: HttpClient,
     private playerService: PlayerService,
     private dialogService: DialogService
-  ) {}
+  ) {
+    super();
+  }
 
   getUrlBase(): string {
     return environment.apiUrlBase;
@@ -97,8 +101,10 @@ export class TransactionService {
   }
 
   handleTransaction(transaction: Transaction): void {
-    this.addTransactionHttp(transaction).subscribe((x) => {
-      console.log('Transaction handled!');
-    });
+    this.addTransactionHttp(transaction)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((x) => {
+        console.log('Transaction handled!');
+      });
   }
 }

@@ -1,4 +1,5 @@
 import { Observable, of } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { Inject, Component, Injectable } from '@angular/core';
 
 import { Player } from '../../types';
@@ -10,6 +11,7 @@ import {
 import { TransactionService } from '../../services/transaction.service';
 import { PlayerService } from '../../services/player.service';
 import { Transaction } from '../../types';
+import { BaseComponent } from 'src/app/base/base/base.component';
 
 export interface ErrorDialogData {
   errorMsg: string;
@@ -25,8 +27,10 @@ export interface PieceSelectDialogData {
 @Injectable({
   providedIn: 'root',
 })
-export class DialogService {
-  constructor(private dialog: MatDialog) {}
+export class DialogService extends BaseComponent {
+  constructor(private dialog: MatDialog) {
+    super();
+  }
 
   log(msg: any) {
     console.log(new Date() + ': ' + JSON.stringify(msg));
@@ -45,9 +49,12 @@ export class DialogService {
       data: { errorMsg: errorMsg },
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log('The dialog was closed');
-    });
+    dialogRef
+      .afterClosed()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((result) => {
+        console.log('The dialog was closed');
+      });
   }
 
   displayLogDialog(logMsg: string): void {
@@ -56,9 +63,12 @@ export class DialogService {
       data: { logMsg: logMsg },
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log('The dialog was closed');
-    });
+    dialogRef
+      .afterClosed()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((result) => {
+        console.log('The dialog was closed');
+      });
   }
   /**
    * Handle Http operation that failed.
@@ -113,14 +123,16 @@ export class ErrorDialog {
   templateUrl: './piece-select-dialog.html',
   styleUrls: ['./piece-select-dialog.css'],
 })
-export class PieceSelectDialog {
+export class PieceSelectDialog extends BaseComponent {
   constructor(
     private transactionService: TransactionService,
     private dialogService: DialogService,
     private playerService: PlayerService,
     public dialogRef: MatDialogRef<PieceSelectDialog>,
     @Inject(MAT_DIALOG_DATA) public data: PieceSelectDialogData
-  ) {}
+  ) {
+    super();
+  }
 
   passGo(): void {
     this.dialogRef.close();
@@ -160,6 +172,7 @@ export class PieceSelectDialog {
   remove(): void {
     this.playerService
       .deletePlayerHttp(this.data.player)
+      .pipe(takeUntil(this.destroy$))
       .subscribe((_) => this.dialogService.displayLogDialog('Removed player!'));
     this.dialogRef.close();
   }
@@ -170,6 +183,7 @@ export class PieceSelectDialog {
     );
     this.playerService
       .changePlayersHttp(oldPlayer, newPlayer)
+      .pipe(takeUntil(this.destroy$))
       .subscribe((_) => {
         this.dialogService.displayLogDialog('Changed players!');
         this.dialogRef.close();

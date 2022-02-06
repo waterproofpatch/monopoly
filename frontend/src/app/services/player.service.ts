@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
+import { takeUntil } from 'rxjs/operators';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
+import { BaseComponent } from '../base/base/base.component';
 import { Player, ChangePlayerRequest } from '../types';
 import { DialogService } from './dialog-service/dialog.service';
 import { environment } from '../../environments/environment'; // Change this to your file location
@@ -10,7 +12,7 @@ import { environment } from '../../environments/environment'; // Change this to 
 @Injectable({
   providedIn: 'root',
 })
-export class PlayerService {
+export class PlayerService extends BaseComponent {
   playersUrl = '/api/players';
   httpOptions = {
     headers: new HttpHeaders({
@@ -25,7 +27,10 @@ export class PlayerService {
   playerObservable = this.playerSource.asObservable();
 
   constructor(private http: HttpClient, private dialogService: DialogService) {
-    this.playerObservable.subscribe((x) => (this.players = x));
+    super();
+    this.playerObservable
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((x) => (this.players = x));
   }
 
   getUrlBase(): string {
