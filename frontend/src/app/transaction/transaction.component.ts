@@ -1,16 +1,18 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { takeUntil } from 'rxjs/operators';
 
 import { Transaction } from '../types';
 import { DialogService } from '../services/dialog-service/dialog.service';
 import { TransactionService } from '../services/transaction.service';
 import { PlayerService } from '../services/player.service';
+import { BaseComponent } from '../base/base/base.component';
 
 @Component({
   selector: 'app-transaction',
   templateUrl: './transaction.component.html',
   styleUrls: ['./transaction.component.css'],
 })
-export class TransactionComponent implements OnInit {
+export class TransactionComponent extends BaseComponent implements OnInit {
   @Input() transaction: Transaction = {
     ID: 0,
     fromPlayerId: 0,
@@ -23,7 +25,9 @@ export class TransactionComponent implements OnInit {
     private dialogService: DialogService,
     private transactionService: TransactionService,
     private playerService: PlayerService
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {}
   getToPlayerImgUrl(): string {
@@ -60,6 +64,7 @@ export class TransactionComponent implements OnInit {
 
     this.transactionService
       .deleteTransactionHttp(this.transaction)
+      .pipe(takeUntil(this.destroy$))
       .subscribe((_) => this.dialogService.log('Deleted transaction.'));
   }
 }
