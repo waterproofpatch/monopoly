@@ -6,6 +6,8 @@ import { environment } from 'src/environments/environment';
 
 import { PlayersTransactionsResponse, Game } from '../types';
 import { DialogService } from './dialog-service/dialog.service';
+import { PlayerService } from './player.service';
+import { TransactionService } from './transaction.service';
 
 @Injectable({
   providedIn: 'root',
@@ -22,7 +24,12 @@ export class GameService {
   private gameSource = new Subject<Game>();
   gameObservable = this.gameSource.asObservable();
 
-  constructor(private http: HttpClient, private dialogService: DialogService) {}
+  constructor(
+    private http: HttpClient,
+    private dialogService: DialogService,
+    private playerService: PlayerService,
+    private transactionService: TransactionService
+  ) {}
 
   getUrlBase(): string {
     return environment.apiUrlBase;
@@ -35,14 +42,10 @@ export class GameService {
         this.httpOptions
       )
       .pipe(
-        tap(
-          (game) => this.gameSource.next(game),
-          catchError(
-            this.dialogService.handleError<PlayersTransactionsResponse>(
-              'getGameHttp'
-            )
-          )
-        )
+        tap((game) => {
+          this.playerService.setPlayers(game.players);
+          this.transactionService.setTransactions(game.transactions);
+        }, catchError(this.dialogService.handleError<PlayersTransactionsResponse>('getGameHttp')))
       );
   }
 }

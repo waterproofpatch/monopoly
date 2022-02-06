@@ -25,12 +25,6 @@ export class GameBoardComponent extends BaseComponent implements OnInit {
   ) {
     super();
     // start receiving notifications whenever the players+transactions lists change
-    this.gamesServices.gameObservable
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((x) => {
-        this.playerService.setPlayers(x.players);
-        this.transactionService.setTransactions(x.transactions);
-      });
     this.playerService.playerObservable
       .pipe(takeUntil(this.destroy$))
       .subscribe((x) => {
