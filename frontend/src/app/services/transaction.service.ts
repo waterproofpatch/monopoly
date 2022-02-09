@@ -5,7 +5,7 @@ import { catchError, tap } from 'rxjs/operators';
 import { Observable, BehaviorSubject } from 'rxjs';
 
 import { BaseComponent } from '../base/base/base.component';
-import { Transaction, PlayersTransactionsResponse } from '../types';
+import { Transaction } from '../types';
 import { DialogService } from './dialog-service/dialog.service';
 import { PlayerService } from '../services/player.service';
 import { environment } from '../../environments/environment'; // Change this to your file location
@@ -37,64 +37,56 @@ export class TransactionService extends BaseComponent {
     return environment.apiUrlBase;
   }
 
-  /** GET players from the server */
-  getTransactionsHttp(gameId: number): Observable<PlayersTransactionsResponse> {
+  getTransactionsHttp(gameId: number): Observable<Transaction[]> {
     return this.http
-      .get<PlayersTransactionsResponse>(
+      .get<Transaction[]>(
         this.getUrlBase() + this.transactionsUrl + '?gameId=' + gameId,
         this.httpOptions
       )
       .pipe(
-        tap((response) => {
-          this.transactionSource.next(response.transactions);
+        tap((transactions) => {
+          this.transactionSource.next(transactions);
         }),
         catchError(
-          this.dialogService.handleError<PlayersTransactionsResponse>(
-            'getTransactionsHttp'
-          )
+          this.dialogService.handleError<Transaction[]>('getTransactionsHttp')
         )
       );
   }
 
-  deleteTransactionHttp(
-    transaction: Transaction
-  ): Observable<PlayersTransactionsResponse> {
+  deleteTransactionHttp(transaction: Transaction): Observable<Transaction[]> {
     const url = `${this.getUrlBase() + this.transactionsUrl}/${transaction.ID}`;
 
-    return this.http
-      .delete<PlayersTransactionsResponse>(url, this.httpOptions)
-      .pipe(
-        tap((response) => {
-          this.transactionSource.next(response.transactions);
-          this.playerService.setPlayers(response.players);
-        }),
-        catchError(
-          this.dialogService.handleError<PlayersTransactionsResponse>(
-            'deleteTransactionHttp'
-          )
-        )
-      );
+    return this.http.delete<Transaction[]>(url, this.httpOptions).pipe(
+      tap((transactions) => {
+        this.transactionSource.next(transactions);
+        this.playerService
+          .getPlayersHttp(transaction.GameID)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe();
+      }),
+      catchError(
+        this.dialogService.handleError<Transaction[]>('deleteTransactionHttp')
+      )
+    );
   }
 
-  /** POST: add a new player to the server */
-  addTransactionHttp(
-    transaction: Transaction
-  ): Observable<PlayersTransactionsResponse> {
+  addTransactionHttp(transaction: Transaction): Observable<Transaction[]> {
     return this.http
-      .post<PlayersTransactionsResponse>(
+      .post<Transaction[]>(
         this.getUrlBase() + this.transactionsUrl,
         transaction,
         this.httpOptions
       )
       .pipe(
-        tap((response) => {
-          this.transactionSource.next(response.transactions);
-          this.playerService.setPlayers(response.players);
+        tap((transactions) => {
+          this.transactionSource.next(transactions);
+          this.playerService
+            .getPlayersHttp(transaction.GameID)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe();
         }),
         catchError(
-          this.dialogService.handleError<PlayersTransactionsResponse>(
-            'addTransactionHttp'
-          )
+          this.dialogService.handleError<Transaction[]>('addTransactionHttp')
         )
       );
   }

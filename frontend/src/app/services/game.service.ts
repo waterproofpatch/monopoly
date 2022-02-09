@@ -5,7 +5,7 @@ import { Subject, Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
-import { PlayersTransactionsResponse, Game } from '../types';
+import { Game } from '../types';
 import { DialogService } from './dialog-service/dialog.service';
 import { PlayerService } from './player.service';
 import { TransactionService } from './transaction.service';
