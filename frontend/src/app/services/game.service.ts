@@ -65,6 +65,10 @@ export class GameService extends BaseComponent {
             .getPlayersHttp(game.ID)
             .pipe(takeUntil(this.destroy$))
             .subscribe();
+          this.transactionService
+            .getTransactionsHttp(game.ID)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe();
         }, catchError(this.dialogService.handleError<Game>('newGameHttp')))
       );
   }

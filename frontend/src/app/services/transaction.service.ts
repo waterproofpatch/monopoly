@@ -38,16 +38,15 @@ export class TransactionService extends BaseComponent {
   }
 
   /** GET players from the server */
-  getTransactionsHttp(): Observable<PlayersTransactionsResponse> {
+  getTransactionsHttp(gameId: number): Observable<PlayersTransactionsResponse> {
     return this.http
       .get<PlayersTransactionsResponse>(
-        this.getUrlBase() + this.transactionsUrl,
+        this.getUrlBase() + this.transactionsUrl + '?gameId=' + gameId,
         this.httpOptions
       )
       .pipe(
         tap((response) => {
           this.transactionSource.next(response.transactions);
-          this.playerService.setPlayers(response.players);
         }),
         catchError(
           this.dialogService.handleError<PlayersTransactionsResponse>(

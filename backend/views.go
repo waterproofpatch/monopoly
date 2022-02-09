@@ -147,6 +147,18 @@ func transactions(w http.ResponseWriter, r *http.Request) {
 
 	switch r.Method {
 	case "GET":
+		gameId, Ok := mux.Vars(r)["id"]
+		if !Ok {
+			break
+		} else {
+			log.Printf("All players, gameId %v!\n", gameId)
+			var transactions []Transaction
+			var game Game
+			db.Find(&game, "ID = ?", gameId)
+			db.Model(&game).Association("Transactions").Find(&transactions)
+			json.NewEncoder(w).Encode(transactions)
+			return
+		}
 	case "DELETE":
 		log.Printf("DELETE transactions")
 		vars := mux.Vars(r)
@@ -198,6 +210,7 @@ func initViews(router *mux.Router) {
 	router.HandleFunc("/api/players", players).Methods("GET", "PUT", "OPTIONS")
 	router.HandleFunc("/api/players/{id:[0-9]+}", players).Methods("DELETE", "OPTIONS")
 
+	router.HandleFunc("/api/transactions", transactions).Methods("GET", "OPTIONS").Queries("gameId", "[0-9]*")
 	router.HandleFunc("/api/transactions", transactions).Methods("GET", "POST", "OPTIONS")
 	router.HandleFunc("/api/transactions/{id:[0-9]+}", transactions).Methods("DELETE", "OPTIONS")
 }
