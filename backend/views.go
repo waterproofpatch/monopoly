@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 
@@ -23,6 +22,11 @@ type Error struct {
 	ErrorMessage string `json:"error_message"`
 }
 
+func writeError(w http.ResponseWriter, message string) {
+	w.WriteHeader(http.StatusBadRequest)
+	json.NewEncoder(w).Encode(&Error{ErrorMessage: message})
+}
+
 func processTransaction(w http.ResponseWriter, transaction Transaction, reverse bool) {
 	db := getDb()
 
@@ -39,8 +43,7 @@ func processTransaction(w http.ResponseWriter, transaction Transaction, reverse 
 	} else {
 		// bank has unlimited money...
 		if fromPlayer.Name != "bank" && fromPlayer.Money < uint(transaction.Amount) {
-			w.WriteHeader(http.StatusBadRequest)
-			json.NewEncoder(w).Encode(&Error{ErrorMessage: "Not enough money!"})
+			writeError(w, "Not enougn money!")
 			return
 		}
 
@@ -51,10 +54,6 @@ func processTransaction(w http.ResponseWriter, transaction Transaction, reverse 
 
 	db.Save(&fromPlayer)
 	db.Save(&toPlayer)
-}
-
-func dashboard(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "Hello HTTP/2")
 }
 
 func players(w http.ResponseWriter, r *http.Request) {
@@ -92,9 +91,7 @@ func players(w http.ResponseWriter, r *http.Request) {
 		var req ChangePlayerRequest
 		err := json.NewDecoder(r.Body).Decode(&req)
 		if err != nil {
-			log.Printf("Error decoding json request: %v", err)
-			w.WriteHeader(http.StatusBadRequest)
-			json.NewEncoder(w).Encode(&Error{ErrorMessage: "Failed decoding change player request!"})
+			writeError(w, "Failed decoding change player request!")
 			return
 		}
 		log.Printf("first player ID %v, second player ID %v", req.First, req.Second)
@@ -147,9 +144,10 @@ func transactions(w http.ResponseWriter, r *http.Request) {
 
 	switch r.Method {
 	case "GET":
-		gameId, Ok := mux.Vars(r)["id"]
+		gameId, Ok := mux.Vars(r)["gameId"]
 		if !Ok {
-			break
+			writeError(w, "Missing gameId!")
+			return
 		} else {
 			log.Printf("All players, gameId %v!\n", gameId)
 			var transactions []Transaction
@@ -174,9 +172,7 @@ func transactions(w http.ResponseWriter, r *http.Request) {
 		var transaction Transaction
 		err := json.NewDecoder(r.Body).Decode(&transaction)
 		if err != nil {
-			log.Printf("Error decoding json request: %v", err)
-			w.WriteHeader(http.StatusBadRequest)
-			json.NewEncoder(w).Encode(&Error{ErrorMessage: "Failed decoding transaction!"})
+			writeError(w, "Failed decoding transaction!")
 			return
 		}
 		// create and then process the transaction
@@ -186,31 +182,21 @@ func transactions(w http.ResponseWriter, r *http.Request) {
 
 	// return new set of players and transactions
 	var transactions []Transaction
-	var players []Player
 
 	db.Find(&transactions)
-	db.Find(&players)
 
-	resp := PlayersTransactionsResponse{
-		Transactions: transactions,
-		Players:      players,
-	}
-
-	json.NewEncoder(w).Encode(resp)
+	json.NewEncoder(w).Encode(transactions)
 }
 
 func initViews(router *mux.Router) {
-	router.HandleFunc("/", dashboard).Methods("GET")
-
 	router.HandleFunc("/api/games", games).Methods("GET", "POST", "OPTIONS")
-	router.HandleFunc("/api/games/{id:[0-9]+}", games).Methods("GET", "OPTIONS")
-	router.HandleFunc("/api/games/{id:[0-9]+}", games).Methods("POST", "OPTIONS")
+	router.HandleFunc("/api/games/{id:[0-9]+}", games).Methods("GET", "POST", "OPTIONS")
 
-	router.HandleFunc("/api/players", players).Methods("GET", "PUT", "OPTIONS").Queries("gameId", "[0-9]*")
-	router.HandleFunc("/api/players", players).Methods("GET", "PUT", "OPTIONS")
+	router.HandleFunc("/api/players", players).Methods("PUT", "OPTIONS")
+	router.HandleFunc("/api/players", players).Methods("GET", "OPTIONS").Queries("gameId", "[0-9]*")
 	router.HandleFunc("/api/players/{id:[0-9]+}", players).Methods("DELETE", "OPTIONS")
 
+	router.HandleFunc("/api/transactions", transactions).Methods("POST", "OPTIONS")
 	router.HandleFunc("/api/transactions", transactions).Methods("GET", "OPTIONS").Queries("gameId", "[0-9]*")
-	router.HandleFunc("/api/transactions", transactions).Methods("GET", "POST", "OPTIONS")
 	router.HandleFunc("/api/transactions/{id:[0-9]+}", transactions).Methods("DELETE", "OPTIONS")
 }

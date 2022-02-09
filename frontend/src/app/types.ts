@@ -31,11 +31,6 @@ export interface Error {
   message: string;
 }
 
-export interface PlayersTransactionsResponse {
-  transactions: Transaction[];
-  players: Player[];
-}
-
 export interface ChangePlayerRequest {
   first: Player;
   second: Player;
