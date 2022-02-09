@@ -8,11 +8,6 @@ import (
 	"github.com/gorilla/mux"
 )
 
-type PlayersTransactionsResponse struct {
-	Transactions []Transaction `json:"transactions"`
-	Players      []Player      `json:"players"`
-}
-
 type ChangePlayerRequest struct {
 	First  Player `json:"first"`
 	Second Player `json:"second"`
@@ -144,8 +139,8 @@ func transactions(w http.ResponseWriter, r *http.Request) {
 
 	switch r.Method {
 	case "GET":
-		gameId, Ok := mux.Vars(r)["gameId"]
-		if !Ok {
+		gameId := r.FormValue("gameId")
+		if gameId == "" {
 			writeError(w, "Missing gameId!")
 			return
 		} else {
