@@ -187,11 +187,11 @@ func initViews(router *mux.Router) {
 	router.HandleFunc("/api/games", games).Methods("GET", "POST", "OPTIONS")
 	router.HandleFunc("/api/games/{id:[0-9]+}", games).Methods("GET", "POST", "OPTIONS")
 
-	router.HandleFunc("/api/players", players).Methods("PUT", "OPTIONS")
 	router.HandleFunc("/api/players", players).Methods("GET", "OPTIONS").Queries("gameId", "[0-9]*")
+	router.HandleFunc("/api/players", players).Methods("GET", "PUT", "OPTIONS")
 	router.HandleFunc("/api/players/{id:[0-9]+}", players).Methods("DELETE", "OPTIONS")
 
-	router.HandleFunc("/api/transactions", transactions).Methods("POST", "OPTIONS")
 	router.HandleFunc("/api/transactions", transactions).Methods("GET", "OPTIONS").Queries("gameId", "[0-9]*")
+	router.HandleFunc("/api/transactions", transactions).Methods("GET", "POST", "OPTIONS")
 	router.HandleFunc("/api/transactions/{id:[0-9]+}", transactions).Methods("DELETE", "OPTIONS")
 }
