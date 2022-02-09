@@ -85,7 +85,7 @@ export class PlayersComponent implements OnInit {
       fromPlayerId: fromPlayer.ID,
       toPlayerId: toPlayer.ID,
       amount: this.transactionForm.controls.amount.value,
-      GameID: fromPlayer.ID,
+      GameID: fromPlayer.GameID,
     };
     this.transactionService.handleTransaction(t);
   }
