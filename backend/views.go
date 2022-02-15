@@ -75,6 +75,7 @@ func players(w http.ResponseWriter, r *http.Request) {
 			var game Game
 			db.Find(&game, "ID = ?", gameId)
 			db.Model(&game).Association("Players").Find(&players)
+			log.Printf("Game ID is %v\n", game.ID)
 
 			json.NewEncoder(w).Encode(players)
 			return
@@ -129,12 +130,18 @@ func games(w http.ResponseWriter, r *http.Request) {
 	case "PUT": // modify a game, look for Players and Transactions
 	case "POST": // start a new game
 		// create a new game given a name
-		var gameName NewGameRequest
-		json.NewDecoder(r.Body).Decode(&gameName)
-		log.Printf("Game name is %v", gameName.GameName)
-		resetDb()
+		var newGameRequest NewGameRequest
 		var game Game
-		db.First(&game, "id = ?", 1)
+
+		json.NewDecoder(r.Body).Decode(&newGameRequest)
+
+		log.Printf("Game name is %v", newGameRequest.GameName)
+
+		id := newGame(newGameRequest.GameName)
+		db.First(&game, "id = ?", id)
+
+		log.Printf("new game ID is %v", id)
+
 		json.NewEncoder(w).Encode(game)
 	}
 }

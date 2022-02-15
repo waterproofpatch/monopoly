@@ -9,21 +9,12 @@ import (
 
 var gDb *gorm.DB
 
-func resetDb() {
-	log.Printf("Resetting db...")
+func newGame(gameName string) uint {
 	db := getDb()
-	// Migrate the schema
-	db.Migrator().DropTable(&Game{})
-	db.Migrator().DropTable(&Player{})
-	db.Migrator().DropTable(&Transaction{})
-	db.AutoMigrate(&Game{})
-	db.AutoMigrate(&Player{})
-	db.AutoMigrate(&Transaction{})
-
-	db.Create(&Game{Name: "Default Game"})
+	db.Create(&Game{Name: gameName})
 
 	var game Game
-	db.First(&game)
+	db.Last(&game)
 
 	// Create
 	log.Printf("Creating players for game %s\n", game.Name)
@@ -36,8 +27,23 @@ func resetDb() {
 	db.Create(&Player{GameID: game.ID, Name: "Cat", Money: 1500, InGame: true, Human: true, Img: "cat"})
 	db.Create(&Player{GameID: game.ID, Name: "Bank", Money: 1500, InGame: true, Human: false, Img: "bank"})
 	db.Create(&Player{GameID: game.ID, Name: "Free Parking", Money: 0, InGame: true, Human: false, Img: "parking"})
-
+	return game.ID
 }
+
+func resetDb() {
+	log.Printf("Resetting db...")
+	db := getDb()
+	// Migrate the schema
+	db.Migrator().DropTable(&Game{})
+	db.Migrator().DropTable(&Player{})
+	db.Migrator().DropTable(&Transaction{})
+	db.AutoMigrate(&Game{})
+	db.AutoMigrate(&Player{})
+	db.AutoMigrate(&Transaction{})
+
+	newGame("Default Game")
+}
+
 func initDb(dbUrl string) {
 	database, err := gorm.Open(postgres.Open(dbUrl), &gorm.Config{})
 	if err != nil {
