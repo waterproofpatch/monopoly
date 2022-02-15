@@ -58,7 +58,11 @@ export class GameService extends BaseComponent {
 
   newGameHttp(): Observable<Game> {
     return this.http
-      .post<Game>(this.getUrlBase() + this.gamesUrl, this.httpOptions)
+      .post<Game>(
+        this.getUrlBase() + this.gamesUrl,
+        { name: 'someNewName' },
+        this.httpOptions
+      )
       .pipe(
         tap((game) => {
           this.playerService

@@ -13,6 +13,10 @@ type ChangePlayerRequest struct {
 	Second Player `json:"second"`
 }
 
+type NewGameRequest struct {
+	GameName string `json:"name"`
+}
+
 type Error struct {
 	ErrorMessage string `json:"error_message"`
 }
@@ -124,7 +128,10 @@ func games(w http.ResponseWriter, r *http.Request) {
 		}
 	case "PUT": // modify a game, look for Players and Transactions
 	case "POST": // start a new game
-		// re-init the whole db
+		// create a new game given a name
+		var gameName NewGameRequest
+		json.NewDecoder(r.Body).Decode(&gameName)
+		log.Printf("Game name is %v", gameName.GameName)
 		resetDb()
 		var game Game
 		db.First(&game, "id = ?", 1)
