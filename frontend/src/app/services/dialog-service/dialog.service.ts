@@ -12,6 +12,7 @@ import { TransactionService } from '../../services/transaction.service';
 import { PlayerService } from '../../services/player.service';
 import { Transaction } from '../../types';
 import { BaseComponent } from 'src/app/base/base/base.component';
+import { FormControl, FormGroup } from '@angular/forms';
 
 export interface ErrorDialogData {
   errorMsg: string;
@@ -23,6 +24,7 @@ export interface PieceSelectDialogData {
   player: Player;
   players: Player[];
 }
+export interface NewGameDialogData {}
 
 @Injectable({
   providedIn: 'root',
@@ -34,6 +36,13 @@ export class DialogService extends BaseComponent {
 
   log(msg: any) {
     console.log(new Date() + ': ' + JSON.stringify(msg));
+  }
+
+  displayNewGameDialog() {
+    const dialogRef = this.dialog.open(NewGameDialog, {
+      width: '350px',
+      data: {},
+    });
   }
 
   displayPieceSelectDialog(player: Player, players: Player[]) {
@@ -88,6 +97,25 @@ export class DialogService extends BaseComponent {
   }
 }
 
+@Component({
+  selector: 'new-game-dialog',
+  templateUrl: './new-game-dialog.html',
+})
+export class NewGameDialog {
+  newGameForm = new FormGroup({
+    name: new FormControl(''),
+  });
+
+  constructor(
+    public dialogRef: MatDialogRef<NewGameDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: NewGameDialogData
+  ) {}
+
+  onOkClick(): void {
+    console.log('New game name is ' + this.newGameForm.controls.name.value);
+    this.dialogRef.close();
+  }
+}
 @Component({
   selector: 'log-dialog',
   templateUrl: './log-dialog.html',

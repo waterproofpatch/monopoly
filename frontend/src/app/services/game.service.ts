@@ -39,8 +39,8 @@ export class GameService extends BaseComponent {
     return environment.apiUrlBase;
   }
 
-  newGame(): void {
-    this.newGameHttp()
+  newGame(name: string): void {
+    this.newGameHttp(name)
       .pipe(takeUntil(this.destroy$))
       .subscribe((_) =>
         this.dialogService.displayLogDialog('New game started!')
@@ -56,11 +56,11 @@ export class GameService extends BaseComponent {
       );
   }
 
-  newGameHttp(): Observable<Game> {
+  newGameHttp(name: string): Observable<Game> {
     return this.http
       .post<Game>(
         this.getUrlBase() + this.gamesUrl,
-        { name: 'someNewName' },
+        { name: name },
         this.httpOptions
       )
       .pipe(

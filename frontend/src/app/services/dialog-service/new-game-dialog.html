@@ -1,0 +1,10 @@
+<h1 mat-dialog-title>New Game</h1>
+<div mat-dialog-content>
+  <form [formGroup]="newGameForm">
+  <label for="name">Name: </label>
+  <input id="name" type="text" formControlName="name">
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button (click)="onOkClick()" mat-button cdkFocusInitial>Ok</button>
+</div>
