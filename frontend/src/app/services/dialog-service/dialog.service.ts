@@ -43,6 +43,7 @@ export class DialogService extends BaseComponent {
       width: '350px',
       data: {},
     });
+    return dialogRef;
   }
 
   displayPieceSelectDialog(player: Player, players: Player[]) {
