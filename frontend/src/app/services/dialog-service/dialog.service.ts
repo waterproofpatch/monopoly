@@ -110,10 +110,13 @@ export class NewGameDialog {
   constructor(
     public dialogRef: MatDialogRef<NewGameDialog>,
     @Inject(MAT_DIALOG_DATA) public data: NewGameDialogData
-  ) {}
+  ) {
+    dialogRef
+      .beforeClosed()
+      .subscribe(() => dialogRef.close(this.newGameForm.controls.name.value));
+  }
 
   onOkClick(): void {
-    console.log('New game name is ' + this.newGameForm.controls.name.value);
     this.dialogRef.close();
   }
 }
