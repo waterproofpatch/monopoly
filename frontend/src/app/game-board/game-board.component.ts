@@ -47,13 +47,16 @@ export class GameBoardComponent extends BaseComponent implements OnInit {
   }
 
   newGame(): void {
-    this.dialogService
-      .displayNewGameDialog()
-      .afterClosed()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((name) => {
-        this.gamesServices.newGame(name);
-      });
+    // this.dialogService
+    //   .displayNewGameDialog()
+    //   .afterClosed()
+    //   .pipe(takeUntil(this.destroy$))
+    //   .subscribe((name) => {
+    //     this.gamesServices.newGame(name);
+    //   });
+    this.gamesServices
+      .newGameHttp('New Game!!!')
+      .subscribe((x) => this.games.push(x));
   }
 
   getGames(): void {
