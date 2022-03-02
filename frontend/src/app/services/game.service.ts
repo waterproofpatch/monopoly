@@ -39,14 +39,6 @@ export class GameService extends BaseComponent {
     return environment.apiUrlBase;
   }
 
-  newGame(name: string): void {
-    this.newGameHttp(name)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((_) =>
-        this.dialogService.displayLogDialog('New game started!')
-      );
-  }
-
   getGamesHttp(): Observable<Game[]> {
     return this.http
       .get<Game[]>(this.getUrlBase() + this.gamesUrl, this.httpOptions)
