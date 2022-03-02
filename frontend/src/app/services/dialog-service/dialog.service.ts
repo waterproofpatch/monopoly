@@ -178,7 +178,10 @@ export class PieceSelectDialog extends BaseComponent {
       timestamp: new Date().toISOString(),
       GameID: this.data.player.GameID,
     };
-    this.transactionService.handleTransaction(t);
+    this.transactionService
+      .addTransactionHttp(t)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe();
   }
 
   collectFreeParking(): void {
@@ -200,7 +203,10 @@ export class PieceSelectDialog extends BaseComponent {
       timestamp: new Date().toISOString(),
       GameID: this.data.player.GameID,
     };
-    this.transactionService.handleTransaction(t);
+    this.transactionService
+      .addTransactionHttp(t)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe();
   }
 
   remove(): void {

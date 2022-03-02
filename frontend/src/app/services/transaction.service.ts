@@ -91,14 +91,6 @@ export class TransactionService extends BaseComponent {
       );
   }
 
-  handleTransaction(transaction: Transaction): void {
-    this.addTransactionHttp(transaction)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((x) => {
-        console.log('Transaction handled!');
-      });
-  }
-
   setTransactions(transactions: Transaction[]) {
     this.transactionSource.next(transactions);
   }
