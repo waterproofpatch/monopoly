@@ -198,7 +198,7 @@ export class PieceSelectDialog extends BaseComponent {
       fromPlayerId: freeParking[0].ID,
       amount: freeParking[0].money,
       timestamp: new Date().toISOString(),
-      GameID: this.data.player.ID,
+      GameID: this.data.player.GameID,
     };
     this.transactionService.handleTransaction(t);
   }
