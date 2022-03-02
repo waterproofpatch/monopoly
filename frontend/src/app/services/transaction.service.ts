@@ -45,7 +45,7 @@ export class TransactionService extends BaseComponent {
       )
       .pipe(
         tap((transactions) => {
-          this.transactionSource.next(transactions);
+          this.setTransactions(transactions);
         }),
         catchError(
           this.dialogService.handleError<Transaction[]>('getTransactionsHttp')
@@ -58,7 +58,7 @@ export class TransactionService extends BaseComponent {
 
     return this.http.delete<Transaction[]>(url, this.httpOptions).pipe(
       tap((transactions) => {
-        this.transactionSource.next(transactions);
+        this.setTransactions(transactions);
         this.playerService
           .getPlayersHttp(transaction.GameID)
           .pipe(takeUntil(this.destroy$))
@@ -79,7 +79,7 @@ export class TransactionService extends BaseComponent {
       )
       .pipe(
         tap((transactions) => {
-          this.transactionSource.next(transactions);
+          this.setTransactions(transactions);
           this.playerService
             .getPlayersHttp(transaction.GameID)
             .pipe(takeUntil(this.destroy$))
