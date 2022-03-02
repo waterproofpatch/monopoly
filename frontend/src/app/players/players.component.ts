@@ -1,16 +1,18 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { takeUntil } from 'rxjs/operators';
 
 import { Player, Transaction } from '../types';
 import { DialogService } from '../services/dialog-service/dialog.service';
 import { TransactionService } from '../services/transaction.service';
+import { BaseComponent } from 'src/app/base/base/base.component';
 
 @Component({
   selector: 'app-players',
   templateUrl: './players.component.html',
   styleUrls: ['./players.component.css'],
 })
-export class PlayersComponent implements OnInit {
+export class PlayersComponent extends BaseComponent implements OnInit {
   @Input() players?: Player[]; // from game-board
   @Input() transactions?: Transaction[] | null; // from game-board
 
@@ -23,7 +25,9 @@ export class PlayersComponent implements OnInit {
   constructor(
     private dialogService: DialogService,
     public transactionService: TransactionService
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {}
 
@@ -87,7 +91,10 @@ export class PlayersComponent implements OnInit {
       amount: this.transactionForm.controls.amount.value,
       GameID: fromPlayer.GameID,
     };
-    this.transactionService.handleTransaction(t);
+    this.transactionService
+      .addTransactionHttp(t)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe();
   }
 
   findPlayerByName(name: string): Player | null {
