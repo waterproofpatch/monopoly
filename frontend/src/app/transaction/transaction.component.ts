@@ -35,12 +35,12 @@ export class TransactionComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.playerService
-      .getPlayerByIdHttp(this.transaction.fromPlayerId)
-      .subscribe((x) => (this.fromPlayer = x));
-    this.playerService
-      .getPlayerByIdHttp(this.transaction.toPlayerId)
-      .subscribe((x) => (this.toPlayer = x));
+    // this.playerService
+    //   .getPlayerByIdHttp(this.transaction.fromPlayerId)
+    //   .subscribe((x) => (this.fromPlayer = x));
+    // this.playerService
+    //   .getPlayerByIdHttp(this.transaction.toPlayerId)
+    //   .subscribe((x) => (this.toPlayer = x));
   }
 
   getToPlayerImgUrl(): string {

@@ -120,11 +120,13 @@ export class PlayersComponent extends BaseComponent implements OnInit {
       .displayPieceSelectDialog(player, this.players)
       .afterClosed()
       .pipe(takeUntil(this.destroy$))
-      .subscribe((result) => {
-        console.log('Piece select dialog closed with result ' + result);
+      .subscribe((_) => {
         this.playerService
           .getPlayersHttp(id)
           .subscribe((x) => (this.players = x));
+        this.transactionService
+          .getTransactionsHttp(id)
+          .subscribe((x) => (this.transactions = x));
       });
   }
 }
