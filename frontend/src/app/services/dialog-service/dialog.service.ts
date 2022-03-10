@@ -52,11 +52,6 @@ export class DialogService extends BaseComponent {
       data: { player: player, players: players },
     });
     return dialogRef;
-
-    // dialogRef
-    //   .afterClosed()
-    //   .pipe(takeUntil(this.destroy$))
-    //   .subscribe((x) => console.log('Piece select dialog closed!'));
   }
 
   displayErrorDialog(errorMsg: string): void {
@@ -186,9 +181,8 @@ export class PieceSelectDialog extends BaseComponent {
     this.transactionService
       .addTransactionHttp(t)
       .pipe(takeUntil(this.destroy$))
-      .subscribe((transactions) => {
-        console.log('Got ' + transactions.length + ' transactions');
-        this.dialogRef.close(transactions);
+      .subscribe((_) => {
+        this.dialogRef.close();
       });
   }
 

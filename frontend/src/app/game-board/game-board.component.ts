@@ -14,8 +14,6 @@ import { BaseComponent } from '../base/base/base.component';
   styleUrls: ['./game-board.component.css'],
 })
 export class GameBoardComponent extends BaseComponent implements OnInit {
-  players: Player[] = [];
-  transactions: Transaction[] = [];
   games: Game[] = [];
   selectedGame?: Game;
 
