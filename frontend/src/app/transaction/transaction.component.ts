@@ -1,11 +1,12 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 
-import { Transaction } from '../types';
+import { Transaction, Player } from '../types';
 import { DialogService } from '../services/dialog-service/dialog.service';
 import { TransactionService } from '../services/transaction.service';
 import { PlayerService } from '../services/player.service';
 import { BaseComponent } from '../base/base/base.component';
+import { EventListenerFocusTrapInertStrategy } from '@angular/cdk/a11y';
 
 @Component({
   selector: 'app-transaction',
@@ -20,7 +21,10 @@ export class TransactionComponent extends BaseComponent implements OnInit {
     amount: 0,
     timestamp: 'N/A',
     GameID: 0,
-  }; // from game-board
+  }; // from players
+
+  fromPlayer: Player | null = null;
+  toPlayer: Player | null = null;
 
   constructor(
     private dialogService: DialogService,
@@ -30,31 +34,29 @@ export class TransactionComponent extends BaseComponent implements OnInit {
     super();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.playerService
+      .getPlayerByIdHttp(this.transaction.fromPlayerId)
+      .subscribe((x) => (this.fromPlayer = x));
+    this.playerService
+      .getPlayerByIdHttp(this.transaction.toPlayerId)
+      .subscribe((x) => (this.toPlayer = x));
+  }
+
   getToPlayerImgUrl(): string {
-    let toPlayer = this.playerService.getPlayerById(
-      this.transaction.toPlayerId
-    );
-    if (toPlayer == null) {
-      this.dialogService.displayErrorDialog(
-        'Failed finding player ' + this.transaction.toPlayerId
-      );
+    if (!this.toPlayer) {
+      this.dialogService.displayErrorDialog('toPlayer is NULL!');
       return '';
     }
-    return toPlayer.img;
+    return this.toPlayer.img;
   }
 
   getFromPlayerImgUrl(): string {
-    let fromPlayer = this.playerService.getPlayerById(
-      this.transaction.fromPlayerId
-    );
-    if (fromPlayer == null) {
-      this.dialogService.displayErrorDialog(
-        'Failed finding player ' + this.transaction.fromPlayerId
-      );
+    if (!this.fromPlayer) {
+      this.dialogService.displayErrorDialog('fromPlayer is NULL!');
       return '';
     }
-    return fromPlayer.img;
+    return this.fromPlayer.img;
   }
 
   undoTransaction(): void {

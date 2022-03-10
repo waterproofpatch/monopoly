@@ -21,42 +21,12 @@ export class PlayerService extends BaseComponent {
     }),
   };
 
-  players: Player[] = [];
-
-  private playerSource = new BehaviorSubject<Player[]>([]);
-  playerObservable = this.playerSource.asObservable();
-
   constructor(private http: HttpClient, private dialogService: DialogService) {
     super();
-    this.playerObservable
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((x) => (this.players = x));
   }
 
   getUrlBase(): string {
     return environment.apiUrlBase;
-  }
-
-  setPlayers(players: Player[]) {
-    this.playerSource.next(players);
-  }
-
-  getPlayerById(id: number): Player | null {
-    for (let p of this.players) {
-      if (p.ID == id) {
-        return p;
-      }
-    }
-    return null;
-  }
-
-  getPlayerByName(name: string): Player | null {
-    for (let p of this.players) {
-      if (p.name == name) {
-        return p;
-      }
-    }
-    return null;
   }
 
   changePlayersHttp(first: Player, second: Player): Observable<Player[]> {
@@ -71,11 +41,8 @@ export class PlayerService extends BaseComponent {
         this.httpOptions
       )
       .pipe(
-        tap(
-          (players) => this.setPlayers(players),
-          catchError(
-            this.dialogService.handleError<Player[]>('changePlayersHttp', [])
-          )
+        catchError(
+          this.dialogService.handleError<Player[]>('changePlayersHttp', [])
         )
       );
   }
@@ -88,11 +55,8 @@ export class PlayerService extends BaseComponent {
         this.httpOptions
       )
       .pipe(
-        tap(
-          (players) => this.setPlayers(players),
-          catchError(
-            this.dialogService.handleError<Player[]>('getPlayersHttp', [])
-          )
+        catchError(
+          this.dialogService.handleError<Player[]>('getPlayersHttp', [])
         )
       );
   }
@@ -101,20 +65,18 @@ export class PlayerService extends BaseComponent {
     const url = `${
       (this.getUrlBase() + this.playersUrl, this.httpOptions)
     }/${id}`;
-    return this.http.get<Player>(url).pipe(
-      tap((_) => console.log(`fetched hero id=${id}`)),
-      catchError(this.dialogService.handleError<Player>(`getPlayer id=${id}`))
-    );
+    return this.http
+      .get<Player>(url)
+      .pipe(
+        catchError(this.dialogService.handleError<Player>(`getPlayer id=${id}`))
+      );
   }
 
   /** PUT: update the hero on the server */
   updatePlayerHttp(player: Player): Observable<any> {
     return this.http
       .put(this.getUrlBase() + this.playersUrl, player, this.httpOptions)
-      .pipe(
-        tap((_) => console.log(`updated player id=${player.name}`)),
-        catchError(this.dialogService.handleError<any>('updatePlayer'))
-      );
+      .pipe(catchError(this.dialogService.handleError<any>('updatePlayer')));
   }
 
   /** POST: add a new player to the server */
@@ -125,26 +87,17 @@ export class PlayerService extends BaseComponent {
         player,
         this.httpOptions
       )
-      .pipe(
-        tap((newPlayer: Player) =>
-          console.log(`added player w/ id=${newPlayer.name}`)
-        ),
-        catchError(this.dialogService.handleError<Player>('addPlayer'))
-      );
+      .pipe(catchError(this.dialogService.handleError<Player>('addPlayer')));
   }
 
   /** DELETE: delete the player from the server (by setting their inGame to false!) */
   deletePlayerHttp(player: Player): Observable<Player[]> {
     const url = `${this.getUrlBase() + this.playersUrl}/${player.ID}`;
 
-    return this.http.delete<Player[]>(url, this.httpOptions).pipe(
-      tap(
-        (players) => this.setPlayers(players),
-        catchError(
-          this.dialogService.handleError<Player[]>('getPlayersHttp', [])
-        )
-      ),
-      catchError(this.dialogService.handleError<Player[]>('deletePlayer'))
-    );
+    return this.http
+      .delete<Player[]>(url, this.httpOptions)
+      .pipe(
+        catchError(this.dialogService.handleError<Player[]>('deletePlayer'))
+      );
   }
 }

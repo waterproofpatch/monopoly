@@ -7,7 +7,6 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { BaseComponent } from '../base/base/base.component';
 import { Transaction } from '../types';
 import { DialogService } from './dialog-service/dialog.service';
-import { PlayerService } from '../services/player.service';
 import { environment } from '../../environments/environment'; // Change this to your file location
 
 @Injectable({
@@ -22,14 +21,7 @@ export class TransactionService extends BaseComponent {
     }),
   };
 
-  private transactionSource = new BehaviorSubject<Transaction[]>([]);
-  transactionObservable = this.transactionSource.asObservable();
-
-  constructor(
-    private http: HttpClient,
-    private playerService: PlayerService,
-    private dialogService: DialogService
-  ) {
+  constructor(private http: HttpClient, private dialogService: DialogService) {
     super();
   }
 
@@ -44,9 +36,6 @@ export class TransactionService extends BaseComponent {
         this.httpOptions
       )
       .pipe(
-        tap((transactions) => {
-          this.setTransactions(transactions);
-        }),
         catchError(
           this.dialogService.handleError<Transaction[]>('getTransactionsHttp')
         )
@@ -56,18 +45,13 @@ export class TransactionService extends BaseComponent {
   deleteTransactionHttp(transaction: Transaction): Observable<Transaction[]> {
     const url = `${this.getUrlBase() + this.transactionsUrl}/${transaction.ID}`;
 
-    return this.http.delete<Transaction[]>(url, this.httpOptions).pipe(
-      tap((transactions) => {
-        this.setTransactions(transactions);
-        this.playerService
-          .getPlayersHttp(transaction.GameID)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe();
-      }),
-      catchError(
-        this.dialogService.handleError<Transaction[]>('deleteTransactionHttp')
-      )
-    );
+    return this.http
+      .delete<Transaction[]>(url, this.httpOptions)
+      .pipe(
+        catchError(
+          this.dialogService.handleError<Transaction[]>('deleteTransactionHttp')
+        )
+      );
   }
 
   addTransactionHttp(transaction: Transaction): Observable<Transaction[]> {
@@ -78,20 +62,9 @@ export class TransactionService extends BaseComponent {
         this.httpOptions
       )
       .pipe(
-        tap((transactions) => {
-          this.setTransactions(transactions);
-          this.playerService
-            .getPlayersHttp(transaction.GameID)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe();
-        }),
         catchError(
           this.dialogService.handleError<Transaction[]>('addTransactionHttp')
         )
       );
-  }
-
-  setTransactions(transactions: Transaction[]) {
-    this.transactionSource.next(transactions);
   }
 }
