@@ -30,6 +30,7 @@ export class PlayersComponent extends BaseComponent implements OnInit {
     private playerService: PlayerService
   ) {
     super();
+    console.log('I am constructing!');
   }
 
   ngOnInit(): void {
@@ -45,6 +46,7 @@ export class PlayersComponent extends BaseComponent implements OnInit {
     this.transactionService
       .getTransactionsHttp(this.game.ID)
       .subscribe((x) => (this.transactions = x));
+    console.log('I am done init for game ' + this.game.ID);
   }
 
   nonHumanPlayers(): Player[] {
