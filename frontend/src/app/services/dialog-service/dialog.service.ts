@@ -51,6 +51,12 @@ export class DialogService extends BaseComponent {
       width: '350px',
       data: { player: player, players: players },
     });
+    return dialogRef;
+
+    // dialogRef
+    //   .afterClosed()
+    //   .pipe(takeUntil(this.destroy$))
+    //   .subscribe((x) => console.log('Piece select dialog closed!'));
   }
 
   displayErrorDialog(errorMsg: string): void {
@@ -167,7 +173,6 @@ export class PieceSelectDialog extends BaseComponent {
   }
 
   passGo(): void {
-    this.dialogRef.close();
     const bank: Player[] = this.data.players.filter((x) => x.name == 'Bank');
 
     let t: Transaction = {
@@ -181,7 +186,10 @@ export class PieceSelectDialog extends BaseComponent {
     this.transactionService
       .addTransactionHttp(t)
       .pipe(takeUntil(this.destroy$))
-      .subscribe();
+      .subscribe((transactions) => {
+        console.log('Got ' + transactions.length + ' transactions');
+        this.dialogRef.close(transactions);
+      });
   }
 
   collectFreeParking(): void {

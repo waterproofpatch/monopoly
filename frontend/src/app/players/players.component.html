@@ -23,13 +23,31 @@
 	<mat-divider></mat-divider>
 	<div class="row-center">
 		<div *ngFor="let player of nonHumanPlayers()">
-			<app-player-detail [player]="player" [players]="players"></app-player-detail>
+			<div class="player-row">
+				<div *ngIf="player" class="card-container">
+					<div (click)="openPieceSelectDialog(player)" class="card card-large" tabindex="0">
+						<div class="img-holder">
+						<img src="../assets/{{player.img}}.jpg">
+						</div>
+						<span *ngIf="player.name != 'Bank'"><animated-digit [digit]="player.money" [duration]="1000"></animated-digit></span>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 	<mat-divider></mat-divider>
 	<div class="row-center">
 		<div *ngFor="let player of humanPlayers()">
-			<app-player-detail [player]="player" [players]="players"></app-player-detail>
+			<div class="player-row">
+				<div *ngIf="player" class="card-container">
+					<div (click)="openPieceSelectDialog(player)" class="card card-large" tabindex="0">
+						<div class="img-holder">
+						<img src="../assets/{{player.img}}.jpg">
+						</div>
+						<span *ngIf="player.name != 'Bank'"><animated-digit [digit]="player.money" [duration]="1000"></animated-digit></span>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 	<div class="row-left">

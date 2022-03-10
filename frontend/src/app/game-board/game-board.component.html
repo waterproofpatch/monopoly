@@ -3,4 +3,4 @@
 
 	<button *ngFor="let game of games" (click)="resumeGame(game.ID)" mat-raised-button color="primary">Resume "{{game.name}}"</button>
 </div>
-<app-players *ngIf="players.length > 0" [transactions]="transactionService.transactionObservable | async" [players]="players"></app-players>
+<app-players *ngIf="selectedGame" [game]="selectedGame"></app-players>

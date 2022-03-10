@@ -17,6 +17,7 @@ export class GameBoardComponent extends BaseComponent implements OnInit {
   players: Player[] = [];
   transactions: Transaction[] = [];
   games: Game[] = [];
+  selectedGame?: Game;
 
   constructor(
     private dialogService: DialogService,
@@ -26,24 +27,6 @@ export class GameBoardComponent extends BaseComponent implements OnInit {
   ) {
     super();
     this.getGames();
-
-    // start receiving notifications whenever the players+transactions lists change
-    this.playerService.playerObservable
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((x) => {
-        if (this.players.length == 0) {
-          this.players = x;
-          return;
-        }
-        for (let p of this.players) {
-          let newPlayer = x.filter((x) => x.ID == p.ID)[0];
-          p.human = newPlayer.human;
-          p.money = newPlayer.money;
-          p.img = newPlayer.img;
-          p.inGame = newPlayer.inGame;
-          p.name = newPlayer.name;
-        }
-      });
   }
 
   newGame(): void {
@@ -68,6 +51,7 @@ export class GameBoardComponent extends BaseComponent implements OnInit {
 
   resumeGame(gameId: number): void {
     console.log('Resuming game ' + gameId);
+    this.selectedGame = this.games.filter((x) => x.ID == gameId)[0];
   }
 
   ngOnInit(): void {}
