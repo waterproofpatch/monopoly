@@ -15,7 +15,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { TransactionComponent } from './transaction/transaction.component';
+import { TransactionsComponent } from './transactions/transactions.component';
 import { HttpClientModule } from '@angular/common/http';
 import {
   PieceSelectDialog,
@@ -30,13 +30,13 @@ import { BaseComponent } from './base/base/base.component';
     AppComponent,
     PlayersComponent,
     GameBoardComponent,
-    TransactionComponent,
     PieceSelectDialog,
     ErrorDialog,
     LogDialog,
     NewGameDialog,
     AnimatedDigitComponent,
     BaseComponent,
+    TransactionsComponent,
   ],
   imports: [
     HttpClientModule,

@@ -16,7 +16,6 @@ import { PlayerService } from '../services/player.service';
 export class PlayersComponent extends BaseComponent implements OnInit {
   @Input() game?: Game; // from game-board
   players: Player[] = [];
-  transactions: Transaction[] = [];
 
   transactionForm = new FormGroup({
     fromPlayerName: new FormControl(''),
@@ -30,7 +29,6 @@ export class PlayersComponent extends BaseComponent implements OnInit {
     private playerService: PlayerService
   ) {
     super();
-    console.log('I am constructing!');
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -48,23 +46,12 @@ export class PlayersComponent extends BaseComponent implements OnInit {
       }
     }
   }
-  ngOnInit(): void {
-    if (!this.game) {
-      this.dialogService.displayErrorDialog(
-        'Game not loaded on player component ngoninit!'
-      );
-      return;
-    }
-    console.log('I am done init for game ' + this.game.ID);
-  }
+  ngOnInit(): void {}
 
   getPlayersForGame(gameId: number) {
     this.playerService
       .getPlayersHttp(gameId)
       .subscribe((x) => (this.players = x));
-    this.transactionService
-      .getTransactionsHttp(gameId)
-      .subscribe((x) => (this.transactions = x));
   }
 
   nonHumanPlayers(): Player[] {
@@ -139,12 +126,7 @@ export class PlayersComponent extends BaseComponent implements OnInit {
       .afterClosed()
       .pipe(takeUntil(this.destroy$))
       .subscribe((_) => {
-        this.playerService
-          .getPlayersHttp(id)
-          .subscribe((x) => (this.players = x));
-        this.transactionService
-          .getTransactionsHttp(id)
-          .subscribe((x) => (this.transactions = x));
+        this.getPlayersForGame(id);
       });
   }
 }

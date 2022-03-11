@@ -42,8 +42,8 @@ export class TransactionService extends BaseComponent {
       );
   }
 
-  deleteTransactionHttp(transaction: Transaction): Observable<Transaction[]> {
-    const url = `${this.getUrlBase() + this.transactionsUrl}/${transaction.ID}`;
+  deleteTransactionHttp(transactionId: number): Observable<Transaction[]> {
+    const url = `${this.getUrlBase() + this.transactionsUrl}/${transactionId}`;
 
     return this.http
       .delete<Transaction[]>(url, this.httpOptions)
