@@ -1,4 +1,5 @@
 <div>
+	<p *ngIf="game">game id is {{game.ID}}</p>
 	<div class="row-center">
 		<form [formGroup]="transactionForm" (ngSubmit)="makePayment()">
 			<mat-form-field appearance="fill">
