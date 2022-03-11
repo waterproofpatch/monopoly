@@ -64,7 +64,16 @@ func players(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
 		if gameId == "" {
-			log.Printf("All players, no gameId specified!\n")
+			vars := mux.Vars(r)
+			id, ok := vars["id"]
+			if ok {
+				log.Printf("Single player, ID %v", id)
+				var player Player
+				db.Find(&player, "ID = ?", id)
+				json.NewEncoder(w).Encode(player)
+				return
+			}
+			log.Printf("All players, no gameId nor playerId specified!\n")
 			var players []Player
 			db.Find(&players)
 			json.NewEncoder(w).Encode(players)

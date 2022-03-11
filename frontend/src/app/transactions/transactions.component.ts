@@ -20,13 +20,13 @@ export class TransactionsComponent extends BaseComponent implements OnInit {
   fromPlayerId$ = new BehaviorSubject<number>(0);
   toPlayerId$ = new BehaviorSubject<number>(0);
 
-  fromPlayerImgUrl$: Observable<string> = this.toPlayerId$.pipe(
+  fromPlayerImgUrl$: Observable<string> = this.fromPlayerId$.pipe(
     exhaustMap((playerId) =>
       this.playerService.getPlayerByIdHttp(playerId).pipe(map((x) => x.img))
     ),
     takeUntil(this.destroy$)
   );
-  toPlayerImgUrl$: Observable<string> = this.fromPlayerId$.pipe(
+  toPlayerImgUrl$: Observable<string> = this.toPlayerId$.pipe(
     exhaustMap((playerId) =>
       this.playerService.getPlayerByIdHttp(playerId).pipe(map((x) => x.img))
     ),
