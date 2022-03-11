@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
 
@@ -33,6 +33,21 @@ export class PlayersComponent extends BaseComponent implements OnInit {
     console.log('I am constructing!');
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    for (const propname in changes) {
+      console.log('Propname changed: ' + propname);
+      console.log('Propname changed to: ' + changes[propname]);
+      if (propname === 'game') {
+        console.log(
+          'game changed to: ' +
+            changes[propname].currentValue.ID +
+            ' from ' +
+            changes[propname].previousValue
+        );
+        this.getPlayersForGame(changes[propname].currentValue.ID);
+      }
+    }
+  }
   ngOnInit(): void {
     if (!this.game) {
       this.dialogService.displayErrorDialog(
@@ -40,13 +55,16 @@ export class PlayersComponent extends BaseComponent implements OnInit {
       );
       return;
     }
+    console.log('I am done init for game ' + this.game.ID);
+  }
+
+  getPlayersForGame(gameId: number) {
     this.playerService
-      .getPlayersHttp(this.game.ID)
+      .getPlayersHttp(gameId)
       .subscribe((x) => (this.players = x));
     this.transactionService
-      .getTransactionsHttp(this.game.ID)
+      .getTransactionsHttp(gameId)
       .subscribe((x) => (this.transactions = x));
-    console.log('I am done init for game ' + this.game.ID);
   }
 
   nonHumanPlayers(): Player[] {
