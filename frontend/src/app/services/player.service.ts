@@ -61,14 +61,17 @@ export class PlayerService extends BaseComponent {
       );
   }
 
-  getPlayerByIdHttp(id: number) {
-    const url = `${
-      (this.getUrlBase() + this.playersUrl, this.httpOptions)
-    }/${id}`;
+  getPlayerByIdHttp(playerId: number) {
+    console.log('Get player ' + playerId);
     return this.http
-      .get<Player>(url)
+      .get<Player>(
+        this.getUrlBase() + this.playersUrl + '/' + playerId,
+        this.httpOptions
+      )
       .pipe(
-        catchError(this.dialogService.handleError<Player>(`getPlayer id=${id}`))
+        catchError(
+          this.dialogService.handleError<Player>(`getPlayer id=${playerId}`)
+        )
       );
   }
 
