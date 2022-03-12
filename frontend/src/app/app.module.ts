@@ -25,6 +25,7 @@ import {
 } from './services/dialog-service/dialog.service';
 import { AnimatedDigitComponent } from './animated/animated-digit.component';
 import { BaseComponent } from './base/base/base.component';
+import { TransactionComponent } from './transaction/transaction.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -37,6 +38,7 @@ import { BaseComponent } from './base/base/base.component';
     AnimatedDigitComponent,
     BaseComponent,
     TransactionsComponent,
+    TransactionComponent,
   ],
   imports: [
     HttpClientModule,
