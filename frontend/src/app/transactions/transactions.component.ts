@@ -17,22 +17,6 @@ export class TransactionsComponent extends BaseComponent implements OnInit {
   @Input() game?: Game; // from game-board
   transactions: Transaction[] = [];
 
-  fromPlayerId$ = new BehaviorSubject<number>(0);
-  toPlayerId$ = new BehaviorSubject<number>(0);
-
-  fromPlayerImgUrl$: Observable<string> = this.fromPlayerId$.pipe(
-    exhaustMap((playerId) =>
-      this.playerService.getPlayerByIdHttp(playerId).pipe(map((x) => x.img))
-    ),
-    takeUntil(this.destroy$)
-  );
-  toPlayerImgUrl$: Observable<string> = this.toPlayerId$.pipe(
-    exhaustMap((playerId) =>
-      this.playerService.getPlayerByIdHttp(playerId).pipe(map((x) => x.img))
-    ),
-    takeUntil(this.destroy$)
-  );
-
   constructor(
     private transactionService: TransactionService,
     private dialogService: DialogService,
@@ -62,19 +46,5 @@ export class TransactionsComponent extends BaseComponent implements OnInit {
     this.transactionService.getTransactionsHttp(gameId).subscribe((x) => {
       this.transactions = x;
     });
-  }
-
-  setupFromPlayerId(playerId: number): void {
-    this.fromPlayerId$.next(playerId);
-  }
-  setupToPlayerId(playerId: number): void {
-    this.toPlayerId$.next(playerId);
-  }
-
-  undoTransaction(transactionId: number): void {
-    this.transactionService
-      .deleteTransactionHttp(transactionId)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((_) => this.dialogService.log('Deleted transaction.'));
   }
 }
