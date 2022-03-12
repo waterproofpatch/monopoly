@@ -3,7 +3,6 @@
 
 	<button *ngFor="let game of games" (click)="resumeGame(game.ID)" mat-raised-button color="primary">Resume "{{game.name}}"</button>
 </div>
-<p *ngIf="selectedGame">selected game is {{selectedGame.ID}}</p>
 
 <app-players *ngIf="selectedGame" [game]="selectedGame"></app-players>
 <app-transactions *ngIf="selectedGame" [game]="selectedGame"></app-transactions>

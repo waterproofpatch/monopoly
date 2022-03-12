@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { takeUntil } from 'rxjs/operators';
-import { from, of, Observable } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
+import { from, of, Observable, pipe } from 'rxjs';
 
 import { Game, Player, Transaction } from '../types';
 import { DialogService } from '../services/dialog-service/dialog.service';
@@ -21,7 +21,7 @@ export class GameBoardComponent extends BaseComponent implements OnInit {
   constructor(
     private dialogService: DialogService,
     public transactionService: TransactionService,
-    private gamesServices: GameService,
+    private gameService: GameService,
     public playerService: PlayerService
   ) {
     super();
@@ -29,20 +29,20 @@ export class GameBoardComponent extends BaseComponent implements OnInit {
   }
 
   newGame(): void {
-    // this.dialogService
-    //   .displayNewGameDialog()
-    //   .afterClosed()
-    //   .pipe(takeUntil(this.destroy$))
-    //   .subscribe((name) => {
-    //     this.gamesServices.newGame(name);
-    //   });
-    this.gamesServices
-      .newGameHttp('New Game!!!')
-      .subscribe((x) => this.games.push(x));
+    this.dialogService
+      .displayNewGameDialog()
+      .afterClosed()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((name) => {
+        this.gameService
+          .newGameHttp(name)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((_) => this.getGames());
+      });
   }
 
   getGames(): void {
-    this.gamesServices
+    this.gameService
       .getGamesHttp()
       .pipe(takeUntil(this.destroy$))
       .subscribe((x) => (this.games = x));
