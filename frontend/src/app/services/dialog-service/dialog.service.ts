@@ -11,8 +11,8 @@ import {
 import { TransactionService } from '../../services/transaction.service';
 import { PlayerService } from '../../services/player.service';
 import { Transaction } from '../../types';
-import { BaseComponent } from 'src/app/base/base/base.component';
 import { FormControl, FormGroup } from '@angular/forms';
+import { BaseService } from 'src/app/base.service';
 
 export interface ErrorDialogData {
   errorMsg: string;
@@ -29,7 +29,7 @@ export interface NewGameDialogData {}
 @Injectable({
   providedIn: 'root',
 })
-export class DialogService extends BaseComponent {
+export class DialogService extends BaseService {
   constructor(private dialog: MatDialog) {
     super();
   }
@@ -156,7 +156,7 @@ export class ErrorDialog {
   templateUrl: './piece-select-dialog.html',
   styleUrls: ['./piece-select-dialog.css'],
 })
-export class PieceSelectDialog extends BaseComponent {
+export class PieceSelectDialog extends BaseService {
   constructor(
     private transactionService: TransactionService,
     private dialogService: DialogService,

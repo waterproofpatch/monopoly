@@ -1,32 +1,20 @@
 import { Injectable } from '@angular/core';
-import { takeUntil } from 'rxjs/operators';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
-import { BaseComponent } from '../base/base/base.component';
 import { Player, ChangePlayerRequest } from '../types';
 import { DialogService } from './dialog-service/dialog.service';
-import { environment } from '../../environments/environment'; // Change this to your file location
+import { BaseService } from '../base.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class PlayerService extends BaseComponent {
-  playersUrl = '/api/players';
-  httpOptions = {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-    }),
-  };
+export class PlayerService extends BaseService {
+  apiUrl = '/api/players';
 
   constructor(private http: HttpClient, private dialogService: DialogService) {
     super();
-  }
-
-  getUrlBase(): string {
-    return environment.apiUrlBase;
   }
 
   changePlayersHttp(first: Player, second: Player): Observable<Player[]> {
@@ -35,11 +23,7 @@ export class PlayerService extends BaseComponent {
       second: second,
     };
     return this.http
-      .put<Player[]>(
-        this.getUrlBase() + this.playersUrl,
-        request,
-        this.httpOptions
-      )
+      .put<Player[]>(this.getUrlBase() + this.apiUrl, request, this.httpOptions)
       .pipe(
         catchError(
           this.dialogService.handleError<Player[]>('changePlayersHttp', [])
@@ -51,7 +35,7 @@ export class PlayerService extends BaseComponent {
   getPlayersHttp(gameId: number): Observable<Player[]> {
     return this.http
       .get<Player[]>(
-        this.getUrlBase() + this.playersUrl + '?gameId=' + gameId,
+        this.getUrlBase() + this.apiUrl + '?gameId=' + gameId,
         this.httpOptions
       )
       .pipe(
@@ -65,7 +49,7 @@ export class PlayerService extends BaseComponent {
     console.log('Get player ' + playerId);
     return this.http
       .get<Player>(
-        this.getUrlBase() + this.playersUrl + '/' + playerId,
+        this.getUrlBase() + this.apiUrl + '/' + playerId,
         this.httpOptions
       )
       .pipe(
@@ -78,24 +62,20 @@ export class PlayerService extends BaseComponent {
   /** PUT: update the hero on the server */
   updatePlayerHttp(player: Player): Observable<any> {
     return this.http
-      .put(this.getUrlBase() + this.playersUrl, player, this.httpOptions)
+      .put(this.getUrlBase() + this.apiUrl, player, this.httpOptions)
       .pipe(catchError(this.dialogService.handleError<any>('updatePlayer')));
   }
 
   /** POST: add a new player to the server */
   addPlayerHttp(player: Player): Observable<Player> {
     return this.http
-      .post<Player>(
-        this.getUrlBase() + this.playersUrl,
-        player,
-        this.httpOptions
-      )
+      .post<Player>(this.getUrlBase() + this.apiUrl, player, this.httpOptions)
       .pipe(catchError(this.dialogService.handleError<Player>('addPlayer')));
   }
 
   /** DELETE: delete the player from the server (by setting their inGame to false!) */
   deletePlayerHttp(player: Player): Observable<Player[]> {
-    const url = `${this.getUrlBase() + this.playersUrl}/${player.ID}`;
+    const url = `${this.getUrlBase() + this.apiUrl}/${player.ID}`;
 
     return this.http
       .delete<Player[]>(url, this.httpOptions)
