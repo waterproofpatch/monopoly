@@ -1,38 +1,26 @@
 import { Injectable } from '@angular/core';
-import { takeUntil } from 'rxjs/operators';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { catchError, tap } from 'rxjs/operators';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { catchError } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
-import { BaseComponent } from '../base/base/base.component';
 import { Transaction } from '../types';
 import { DialogService } from './dialog-service/dialog.service';
-import { environment } from '../../environments/environment'; // Change this to your file location
+import { BaseService } from '../base.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class TransactionService extends BaseComponent {
-  transactionsUrl = '/api/transactions';
-  httpOptions = {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-    }),
-  };
+export class TransactionService extends BaseService {
+  apiUrl = '/api/transactions';
 
   constructor(private http: HttpClient, private dialogService: DialogService) {
     super();
   }
 
-  getUrlBase(): string {
-    return environment.apiUrlBase;
-  }
-
   getTransactionsHttp(gameId: number): Observable<Transaction[]> {
     return this.http
       .get<Transaction[]>(
-        this.getUrlBase() + this.transactionsUrl + '?gameId=' + gameId,
+        this.getUrlBase() + this.apiUrl + '?gameId=' + gameId,
         this.httpOptions
       )
       .pipe(
@@ -43,7 +31,7 @@ export class TransactionService extends BaseComponent {
   }
 
   deleteTransactionHttp(transactionId: number): Observable<Transaction[]> {
-    const url = `${this.getUrlBase() + this.transactionsUrl}/${transactionId}`;
+    const url = `${this.getUrlBase() + this.apiUrl}/${transactionId}`;
 
     return this.http
       .delete<Transaction[]>(url, this.httpOptions)
@@ -57,7 +45,7 @@ export class TransactionService extends BaseComponent {
   addTransactionHttp(transaction: Transaction): Observable<Transaction[]> {
     return this.http
       .post<Transaction[]>(
-        this.getUrlBase() + this.transactionsUrl,
+        this.getUrlBase() + this.apiUrl,
         transaction,
         this.httpOptions
       )
