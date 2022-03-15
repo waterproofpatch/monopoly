@@ -14,32 +14,12 @@ import { PlayerService } from '../services/player.service';
   styleUrls: ['./transactions.component.css'],
 })
 export class TransactionsComponent extends BaseComponent implements OnInit {
-  @Input() game?: Game; // from game-board
-  transactions: Transaction[] = [];
-  transactionsObserver = {
-    next: (transactions: Transaction[]) => {
-      this.transactions = transactions;
-    },
-    error: (err: Error) => console.log('observer got error ' + err),
-    complete: () => console.log('observer is complete'),
-  };
+  @Input() game?: Game | undefined | null; // from game-board
 
-  constructor(private transactionService: TransactionService) {
+  constructor(public transactionService: TransactionService) {
     super();
-    this.transactionService.transactions$.subscribe(this.transactionsObserver);
   }
 
   ngOnInit(): void {}
-  ngOnChanges(changes: SimpleChanges) {
-    for (const propname in changes) {
-      if (propname === 'game') {
-        console.log('New game!');
-        this.getTransactionsForGame(changes[propname].currentValue.ID);
-      }
-    }
-  }
-
-  getTransactionsForGame(gameId: number) {
-    this.transactionService.updateTransactionsForGame(gameId);
-  }
+  ngOnChanges(changes: SimpleChanges) {}
 }

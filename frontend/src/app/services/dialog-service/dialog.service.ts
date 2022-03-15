@@ -168,6 +168,7 @@ export class PieceSelectDialog extends BaseService {
   }
 
   passGo(): void {
+    this.dialogRef.close();
     const bank: Player[] = this.data.players.filter((x) => x.name == 'Bank');
 
     let t: Transaction = {
@@ -178,12 +179,7 @@ export class PieceSelectDialog extends BaseService {
       timestamp: new Date().toISOString(),
       GameID: this.data.player.GameID,
     };
-    this.transactionService
-      .addTransactionHttp(t)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((_) => {
-        this.dialogRef.close();
-      });
+    this.transactionService.addTransaction(t);
   }
 
   collectFreeParking(): void {
@@ -205,31 +201,17 @@ export class PieceSelectDialog extends BaseService {
       timestamp: new Date().toISOString(),
       GameID: this.data.player.GameID,
     };
-    this.transactionService
-      .addTransactionHttp(t)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe();
+    this.transactionService.addTransaction(t);
   }
 
   remove(): void {
-    this.playerService
-      .deletePlayerHttp(this.data.player)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((_) => this.dialogService.displayLogDialog('Removed player!'));
     this.dialogRef.close();
+    this.playerService.deletePlayer(this.data.player);
   }
 
   selectPlayer(newPlayer: Player, oldPlayer: Player) {
-    console.log(
-      'player selected: ' + newPlayer.name + ' from ' + oldPlayer.name
-    );
-    this.playerService
-      .changePlayersHttp(oldPlayer, newPlayer)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((_) => {
-        this.dialogService.displayLogDialog('Changed players!');
-        this.dialogRef.close();
-      });
+    this.dialogRef.close();
+    this.playerService.changePlayer(oldPlayer, newPlayer);
   }
 
   onOkClick(): void {

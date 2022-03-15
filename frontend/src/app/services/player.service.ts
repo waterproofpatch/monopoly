@@ -1,86 +1,50 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 
-import { Player, ChangePlayerRequest } from '../types';
-import { DialogService } from './dialog-service/dialog.service';
-import { BaseService } from '../base.service';
+import { BaseComponent } from '../base/base/base.component';
+import { PlayersApiService } from '../players-api.service';
+import { Player } from '../types';
 
 @Injectable({
   providedIn: 'root',
 })
-export class PlayerService extends BaseService {
-  apiUrl = '/api/players';
+export class PlayerService extends BaseComponent {
+  players$ = new BehaviorSubject<Player[]>([]);
 
-  constructor(private http: HttpClient, private dialogService: DialogService) {
+  constructor(private playersApi: PlayersApiService) {
     super();
   }
 
-  changePlayersHttp(first: Player, second: Player): Observable<Player[]> {
-    let request: ChangePlayerRequest = {
-      first: first,
-      second: second,
-    };
-    return this.http
-      .put<Player[]>(this.getUrlBase() + this.apiUrl, request, this.httpOptions)
-      .pipe(
-        catchError(
-          this.dialogService.handleError<Player[]>('changePlayersHttp', [])
-        )
-      );
+  getHumanPlayers(): Observable<Player[]> {
+    return this.players$.pipe(map((players) => players.filter((x) => x.human)));
+  }
+  getNonHumanPlayers(): Observable<Player[]> {
+    return this.players$.pipe(
+      map((players) => players.filter((x) => !x.human))
+    );
+  }
+  getInGamePlayers(): Observable<Player[]> {
+    return this.players$.pipe(
+      map((players) => players.filter((x) => x.inGame))
+    );
   }
 
-  /** GET players from the server */
-  getPlayersHttp(gameId: number): Observable<Player[]> {
-    return this.http
-      .get<Player[]>(
-        this.getUrlBase() + this.apiUrl + '?gameId=' + gameId,
-        this.httpOptions
-      )
-      .pipe(
-        catchError(
-          this.dialogService.handleError<Player[]>('getPlayersHttp', [])
-        )
-      );
+  getPlayersForGame(gameId: number) {
+    this.playersApi
+      .getPlayersHttp(gameId)
+      .subscribe((x) => this.players$.next(x));
   }
 
-  getPlayerByIdHttp(playerId: number) {
-    console.log('Get player ' + playerId);
-    return this.http
-      .get<Player>(
-        this.getUrlBase() + this.apiUrl + '/' + playerId,
-        this.httpOptions
-      )
-      .pipe(
-        catchError(
-          this.dialogService.handleError<Player>(`getPlayer id=${playerId}`)
-        )
-      );
+  deletePlayer(player: Player) {
+    this.playersApi
+      .deletePlayerHttp(player)
+      .subscribe((x) => this.players$.next(x));
   }
 
-  /** PUT: update the hero on the server */
-  updatePlayerHttp(player: Player): Observable<any> {
-    return this.http
-      .put(this.getUrlBase() + this.apiUrl, player, this.httpOptions)
-      .pipe(catchError(this.dialogService.handleError<any>('updatePlayer')));
-  }
-
-  /** POST: add a new player to the server */
-  addPlayerHttp(player: Player): Observable<Player> {
-    return this.http
-      .post<Player>(this.getUrlBase() + this.apiUrl, player, this.httpOptions)
-      .pipe(catchError(this.dialogService.handleError<Player>('addPlayer')));
-  }
-
-  /** DELETE: delete the player from the server (by setting their inGame to false!) */
-  deletePlayerHttp(player: Player): Observable<Player[]> {
-    const url = `${this.getUrlBase() + this.apiUrl}/${player.ID}`;
-
-    return this.http
-      .delete<Player[]>(url, this.httpOptions)
-      .pipe(
-        catchError(this.dialogService.handleError<Player[]>('deletePlayer'))
-      );
+  changePlayer(oldPlayer: Player, newPlayer: Player) {
+    this.playersApi
+      .changePlayersHttp(oldPlayer, newPlayer)
+      .subscribe((x) => this.players$.next(x));
   }
 }

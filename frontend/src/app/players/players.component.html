@@ -4,7 +4,7 @@
 			<mat-form-field appearance="fill">
 				<mat-label>From</mat-label>
 				<mat-select formControlName="fromPlayerName">
-				<mat-option *ngFor="let p of inGamePlayers()" value="{{p.name}}">{{p.name}}</mat-option>
+				<mat-option *ngFor="let p of playerService.getInGamePlayers() | async" value="{{p.name}}">{{p.name}}</mat-option>
 				</mat-select>
 			</mat-form-field>
 			<mat-form-field appearance="fill">
@@ -14,7 +14,7 @@
 			<mat-form-field appearance="fill">
 				<mat-label>To</mat-label>
 				<mat-select formControlName="toPlayerName">
-				<mat-option *ngFor="let p of inGamePlayers()" value="{{p.name}}">{{p.name}}</mat-option>
+				<mat-option *ngFor="let p of playerService.getInGamePlayers() | async" value="{{p.name}}">{{p.name}}</mat-option>
 				</mat-select>
 			</mat-form-field>
 			<button mat-raised-button color="primary">Pay</button>
@@ -22,7 +22,7 @@
 	</div>
 	<mat-divider></mat-divider>
 	<div class="row-center">
-		<div *ngFor="let player of nonHumanPlayers()">
+		<div *ngFor="let player of playerService.getNonHumanPlayers() | async">
 			<div class="player-row">
 				<div *ngIf="player" class="card-container">
 					<div (click)="openPieceSelectDialog(player)" class="card card-large" tabindex="0">
@@ -37,7 +37,7 @@
 	</div>
 	<mat-divider></mat-divider>
 	<div class="row-center">
-		<div *ngFor="let player of humanPlayers()">
+		<div *ngFor="let player of playerService.getHumanPlayers() | async">
 			<div class="player-row">
 				<div *ngIf="player" class="card-container">
 					<div (click)="openPieceSelectDialog(player)" class="card card-large" tabindex="0">
