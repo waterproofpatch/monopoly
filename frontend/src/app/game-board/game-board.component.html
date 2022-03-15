@@ -3,6 +3,6 @@
 
 	<button *ngFor="let game of gameService.games$ | async" (click)="gameService.resumeGame(game.ID)" mat-raised-button color="primary">Resume "{{game.name}}"</button>
 </div>
-<p>{{gameService.getSelectedGame() | async | json}} is selected.</p>
+<!-- <p>{{gameService.getSelectedGame() | async | json}} is selected.</p> -->
 <app-players [game]="gameService.getSelectedGame() | async"></app-players>
 <app-transactions [game]="gameService.getSelectedGame() | async"></app-transactions>

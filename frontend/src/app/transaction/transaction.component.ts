@@ -27,8 +27,11 @@ export class TransactionComponent extends BaseComponent implements OnInit {
     super();
   }
 
-  undoTransaction(transactionId: number): void {
-    this.transactionService.deleteTransaction(transactionId);
+  undoTransaction(): void {
+    if (!this.transaction) {
+      return;
+    }
+    this.transactionService.deleteTransaction(this.transaction);
   }
 
   ngOnInit(): void {}

@@ -76,11 +76,11 @@ export class PlayersComponent extends BaseComponent implements OnInit {
   }
 
   findPlayerByName(name: string): Player | null {
-    // for (let p of this.players) {
-    //   if (p.name == name) {
-    //     return p;
-    //   }
-    // }
+    for (let p of this.playersCache) {
+      if (p.name == name) {
+        return p;
+      }
+    }
     return null;
   }
 
@@ -94,8 +94,6 @@ export class PlayersComponent extends BaseComponent implements OnInit {
       .displayPieceSelectDialog(player, this.playersCache)
       .afterClosed()
       .pipe(takeUntil(this.destroy$))
-      .subscribe((_) => {
-        this.getPlayersForGame(id);
-      });
+      .subscribe((_) => {});
   }
 }
