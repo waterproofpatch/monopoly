@@ -41,10 +41,13 @@ export class TransactionsApiService extends BaseService {
       );
   }
 
-  addTransactionHttp(transaction: Transaction): Observable<Transaction[]> {
+  addTransactionHttp(
+    transaction: Transaction,
+    gameId: number
+  ): Observable<Transaction[]> {
     return this.http
       .post<Transaction[]>(
-        this.getUrlBase() + this.apiUrl,
+        this.getUrlBase() + this.apiUrl + '?gameId=' + gameId,
         transaction,
         this.httpOptions
       )

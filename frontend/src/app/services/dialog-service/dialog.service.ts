@@ -178,7 +178,7 @@ export class PieceSelectDialog extends BaseService {
       timestamp: new Date().toISOString(),
       GameID: this.data.player.GameID,
     };
-    this.transactionService.addTransaction(t);
+    this.transactionService.addTransaction(t, this.data.player.GameID);
     this.dialogRef.close();
   }
 
@@ -201,7 +201,7 @@ export class PieceSelectDialog extends BaseService {
       timestamp: new Date().toISOString(),
       GameID: this.data.player.GameID,
     };
-    this.transactionService.addTransaction(t);
+    this.transactionService.addTransaction(t, this.data.player.GameID);
   }
 
   remove(): void {
