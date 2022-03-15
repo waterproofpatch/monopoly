@@ -30,6 +30,13 @@ export class PlayerService extends BaseComponent {
     );
   }
 
+  getPlayerImgUrl(playerId: number): Observable<string> {
+    return this.players$.pipe(
+      map((players) => players.find((x) => x.ID == playerId)),
+      map((x) => x?.img ?? 'DEFAULT')
+    );
+  }
+
   getPlayersForGame(gameId: number) {
     this.playersApi
       .getPlayersHttp(gameId)
