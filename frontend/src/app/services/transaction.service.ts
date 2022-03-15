@@ -20,21 +20,24 @@ export class TransactionService extends BaseComponent {
     this.transactions$.next(transactions);
   }
 
-  addTransaction(transaction: Transaction) {
+  addTransaction(transaction: Transaction, gameId: number) {
     this.transactionsApi
-      .addTransactionHttp(transaction)
+      .addTransactionHttp(transaction, gameId)
+      .pipe(takeUntil(this.destroy$))
       .subscribe((x) => this.setTransactions(x));
   }
 
   getTransactionsForGame(gameId: number) {
     this.transactionsApi
       .getTransactionsHttp(gameId)
+      .pipe(takeUntil(this.destroy$))
       .subscribe((x) => this.setTransactions(x));
   }
 
   updateTransactionsForGame(gameId: number) {
     this.transactionsApi
       .getTransactionsHttp(gameId)
+      .pipe(takeUntil(this.destroy$))
       .subscribe((x) => this.setTransactions(x));
   }
 

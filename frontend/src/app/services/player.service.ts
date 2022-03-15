@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { takeUntil, map } from 'rxjs/operators';
 
 import { BaseComponent } from '../base/base/base.component';
 import { PlayersApiService } from '../players-api.service';
@@ -40,18 +40,21 @@ export class PlayerService extends BaseComponent {
   getPlayersForGame(gameId: number) {
     this.playersApi
       .getPlayersHttp(gameId)
+      .pipe(takeUntil(this.destroy$))
       .subscribe((x) => this.players$.next(x));
   }
 
   deletePlayer(player: Player) {
     this.playersApi
       .deletePlayerHttp(player)
+      .pipe(takeUntil(this.destroy$))
       .subscribe((x) => this.players$.next(x));
   }
 
   changePlayer(oldPlayer: Player, newPlayer: Player) {
     this.playersApi
       .changePlayersHttp(oldPlayer, newPlayer)
+      .pipe(takeUntil(this.destroy$))
       .subscribe((x) => this.players$.next(x));
   }
 }

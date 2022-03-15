@@ -72,7 +72,7 @@ export class PlayersComponent extends BaseComponent implements OnInit {
       amount: this.transactionForm.controls.amount.value,
       GameID: fromPlayer.GameID,
     };
-    this.transactionService.addTransaction(t);
+    this.transactionService.addTransaction(t, fromPlayer.GameID);
   }
 
   findPlayerByName(name: string): Player | null {
