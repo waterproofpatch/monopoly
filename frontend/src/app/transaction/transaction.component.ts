@@ -20,7 +20,7 @@ export class TransactionComponent extends BaseComponent implements OnInit {
   fromPlayerImgUrl: string = '';
 
   constructor(
-    private playerService: PlayerService,
+    public playerService: PlayerService,
     private transactionService: TransactionService,
     private dialogService: DialogService
   ) {
@@ -31,25 +31,5 @@ export class TransactionComponent extends BaseComponent implements OnInit {
     this.transactionService.deleteTransaction(transactionId);
   }
 
-  ngOnInit(): void {
-    if (!this.transaction) {
-      return;
-    }
-    this.playerService.players$.subscribe((x) => {
-      if (!this.transaction) {
-        return;
-      }
-      this.toPlayerImgUrl = x.filter(
-        (x) => x.ID == this.transaction?.toPlayerId
-      )[0].img;
-    });
-    this.playerService.players$.subscribe((x) => {
-      if (!this.transaction) {
-        return;
-      }
-      this.fromPlayerImgUrl = x.filter(
-        (x) => x.ID == this.transaction?.fromPlayerId
-      )[0].img;
-    });
-  }
+  ngOnInit(): void {}
 }
