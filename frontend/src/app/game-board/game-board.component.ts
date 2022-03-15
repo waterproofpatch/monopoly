@@ -15,17 +15,14 @@ import { BaseComponent } from '../base/base/base.component';
   styleUrls: ['./game-board.component.css'],
 })
 export class GameBoardComponent extends BaseComponent implements OnInit {
-  games: Game[] = [];
-  selectedGame?: Game;
-
   constructor(
     private dialogService: DialogService,
     public transactionService: TransactionService,
-    private gameService: GameService,
+    public gameService: GameService,
     public playerService: PlayerService
   ) {
     super();
-    this.getGames();
+    this.gameService.getGames();
   }
 
   newGame(): void {
@@ -34,23 +31,8 @@ export class GameBoardComponent extends BaseComponent implements OnInit {
       .afterClosed()
       .pipe(takeUntil(this.destroy$))
       .subscribe((name) => {
-        this.gameService
-          .newGameHttp(name)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe((_) => this.getGames());
+        this.gameService.newGame(name);
       });
-  }
-
-  getGames(): void {
-    this.gameService
-      .getGamesHttp()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((x) => (this.games = x));
-  }
-
-  resumeGame(gameId: number): void {
-    console.log('Resuming game ' + gameId);
-    this.selectedGame = this.games.filter((x) => x.ID == gameId)[0];
   }
 
   ngOnInit(): void {}

@@ -16,21 +16,8 @@ import { DialogService } from '../services/dialog-service/dialog.service';
 export class TransactionComponent extends BaseComponent implements OnInit {
   @Input() transaction?: Transaction;
 
-  fromPlayerImgUrl$ = new BehaviorSubject<number>(0);
-  toPlayerImgUrl$ = new BehaviorSubject<number>(0);
-
-  getFromPlayerImgUrl$: Observable<string> = this.fromPlayerImgUrl$.pipe(
-    exhaustMap((playerId) =>
-      this.playerService.getPlayerByIdHttp(playerId).pipe(map((x) => x.img))
-    ),
-    takeUntil(this.destroy$)
-  );
-  getToPlayerImgUrl$: Observable<string> = this.toPlayerImgUrl$.pipe(
-    exhaustMap((playerId) =>
-      this.playerService.getPlayerByIdHttp(playerId).pipe(map((x) => x.img))
-    ),
-    takeUntil(this.destroy$)
-  );
+  toPlayerImgUrl: string = '';
+  fromPlayerImgUrl: string = '';
 
   constructor(
     private playerService: PlayerService,
@@ -38,20 +25,31 @@ export class TransactionComponent extends BaseComponent implements OnInit {
     private dialogService: DialogService
   ) {
     super();
+    this.playerService.players$.subscribe((x) => {
+      if (!this.transaction) {
+        return;
+      }
+      this.toPlayerImgUrl = x.filter(
+        (x) => x.ID == this.transaction?.toPlayerId
+      )[0].img;
+    });
+    this.playerService.players$.subscribe((x) => {
+      if (!this.transaction) {
+        return;
+      }
+      this.fromPlayerImgUrl = x.filter(
+        (x) => x.ID == this.transaction?.fromPlayerId
+      )[0].img;
+    });
   }
 
   undoTransaction(transactionId: number): void {
-    this.transactionService
-      .deleteTransactionHttp(transactionId)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((_) => this.dialogService.log('Deleted transaction.'));
+    this.transactionService.deleteTransaction(transactionId);
   }
 
   ngOnInit(): void {
     if (!this.transaction) {
       return;
     }
-    this.fromPlayerImgUrl$.next(this.transaction.fromPlayerId);
-    this.toPlayerImgUrl$.next(this.transaction.toPlayerId);
   }
 }

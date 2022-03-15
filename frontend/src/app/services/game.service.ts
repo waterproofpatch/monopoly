@@ -1,60 +1,45 @@
 import { Injectable } from '@angular/core';
-import { takeUntil } from 'rxjs/operators';
-import { HttpClient } from '@angular/common/http';
-import { Subject, Observable } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { tap, map } from 'rxjs/operators';
 
 import { Game } from '../types';
-import { DialogService } from './dialog-service/dialog.service';
+import { BaseComponent } from '../base/base/base.component';
+import { GamesApiService } from '../games-api.service';
 import { PlayerService } from './player.service';
 import { TransactionService } from './transaction.service';
-import { BaseService } from '../base.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class GameService extends BaseService {
-  apiUrl = '/api/games';
-
-  private gameSource = new Subject<Game>();
-  gameObservable = this.gameSource.asObservable();
+export class GameService extends BaseComponent {
+  games$ = new BehaviorSubject<Game[]>([]);
+  selectedGameId: number = 0;
 
   constructor(
-    private http: HttpClient,
-    private dialogService: DialogService,
+    private gamesApi: GamesApiService,
     private playerService: PlayerService,
     private transactionService: TransactionService
   ) {
     super();
   }
 
-  getGamesHttp(): Observable<Game[]> {
-    return this.http
-      .get<Game[]>(this.getUrlBase() + this.apiUrl, this.httpOptions)
-      .pipe(
-        tap((games) => {},
-        catchError(this.dialogService.handleError<Game[]>('getGamesHttp')))
-      );
+  newGame(gameName: string) {
+    this.gamesApi.newGameHttp(gameName).subscribe((_) => this.getGames());
   }
 
-  newGameHttp(name: string): Observable<Game> {
-    return this.http
-      .post<Game>(
-        this.getUrlBase() + this.apiUrl,
-        { name: name },
-        this.httpOptions
-      )
-      .pipe(
-        tap((game) => {
-          this.playerService
-            .getPlayersHttp(game.ID)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe();
-          this.transactionService
-            .getTransactionsHttp(game.ID)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe();
-        }, catchError(this.dialogService.handleError<Game>('newGameHttp')))
-      );
+  getGames() {
+    this.gamesApi.getGamesHttp().subscribe((x) => this.games$.next(x));
+  }
+
+  getSelectedGame(): Observable<Game | undefined> {
+    return this.games$.pipe(
+      map((games) => games.find((x) => x.ID == this.selectedGameId))
+    );
+  }
+
+  resumeGame(gameId: number) {
+    this.selectedGameId = gameId;
+    this.playerService.getPlayersForGame(gameId);
+    this.transactionService.getTransactionsForGame(gameId);
   }
 }

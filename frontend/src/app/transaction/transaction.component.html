@@ -1,8 +1,8 @@
 <mat-card *ngIf="transaction">
 	<mat-card-title>
-		<img src="../assets/{{getFromPlayerImgUrl$ | async}}.jpg" width=30px height=30px> 
+		<img src="../assets/{{fromPlayerImgUrl}}.jpg" width=30px height=30px> 
 		paid 
-		<img src="../assets/{{getToPlayerImgUrl$| async}}.jpg" width=30px height=30px></mat-card-title>
+		<img src="../assets/{{toPlayerImgUrl}}.jpg" width=30px height=30px></mat-card-title>
 	<mat-card-subtitle>{{transaction.timestamp}}</mat-card-subtitle>
 	<mat-card-content>{{transaction.amount | currency}}</mat-card-content>
 	<mat-card-actions align="end">

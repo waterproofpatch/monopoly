@@ -7,6 +7,7 @@ import { DialogService } from '../services/dialog-service/dialog.service';
 import { TransactionService } from '../services/transaction.service';
 import { BaseComponent } from 'src/app/base/base/base.component';
 import { PlayerService } from '../services/player.service';
+import { pipe } from 'rxjs';
 
 @Component({
   selector: 'app-players',
@@ -14,8 +15,7 @@ import { PlayerService } from '../services/player.service';
   styleUrls: ['./players.component.css'],
 })
 export class PlayersComponent extends BaseComponent implements OnInit {
-  @Input() game?: Game; // from game-board
-  players: Player[] = [];
+  @Input() game?: Game | undefined | null; // from game-board
 
   transactionForm = new FormGroup({
     fromPlayerName: new FormControl(''),
@@ -26,48 +26,17 @@ export class PlayersComponent extends BaseComponent implements OnInit {
   constructor(
     private dialogService: DialogService,
     public transactionService: TransactionService,
-    private playerService: PlayerService
+    public playerService: PlayerService
   ) {
     super();
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    for (const propname in changes) {
-      console.log('Propname changed: ' + propname);
-      console.log('Propname changed to: ' + changes[propname]);
-      if (propname === 'game') {
-        console.log(
-          'game changed to: ' +
-            changes[propname].currentValue.ID +
-            ' from ' +
-            changes[propname].previousValue
-        );
-        this.getPlayersForGame(changes[propname].currentValue.ID);
-      }
-    }
-  }
   ngOnInit(): void {}
 
+  ngOnChanges(changes: SimpleChanges) {}
+
   getPlayersForGame(gameId: number) {
-    this.playerService
-      .getPlayersHttp(gameId)
-      .subscribe((x) => (this.players = x));
-  }
-
-  nonHumanPlayers(): Player[] {
-    return this.filteredPlayers(false);
-  }
-
-  humanPlayers(): Player[] {
-    return this.filteredPlayers(true);
-  }
-
-  inGamePlayers(): Player[] {
-    return this.players?.filter((x) => x.inGame);
-  }
-
-  private filteredPlayers(human: boolean) {
-    return this.players?.filter((x) => x.human == human && x.inGame);
+    this.playerService.getPlayersForGame(gameId);
   }
 
   makePayment(): void {
@@ -100,29 +69,26 @@ export class PlayersComponent extends BaseComponent implements OnInit {
       amount: this.transactionForm.controls.amount.value,
       GameID: fromPlayer.GameID,
     };
-    this.transactionService
-      .addTransactionHttp(t)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe();
+    this.transactionService.addTransaction(t);
   }
 
   findPlayerByName(name: string): Player | null {
-    for (let p of this.players) {
-      if (p.name == name) {
-        return p;
-      }
-    }
+    // for (let p of this.players) {
+    //   if (p.name == name) {
+    //     return p;
+    //   }
+    // }
     return null;
   }
 
   openPieceSelectDialog(player: Player): void {
-    if (!this.players || !this.game || this.game == undefined) {
+    if (!this.game || this.game == undefined) {
       this.dialogService.displayErrorDialog('Player is not set!');
       return;
     }
     let id = this.game.ID;
     this.dialogService
-      .displayPieceSelectDialog(player, this.players)
+      .displayPieceSelectDialog(player, [])
       .afterClosed()
       .pipe(takeUntil(this.destroy$))
       .subscribe((_) => {
