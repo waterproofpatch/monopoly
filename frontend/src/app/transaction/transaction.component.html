@@ -6,6 +6,6 @@
 	<mat-card-subtitle>{{transaction.timestamp}}</mat-card-subtitle>
 	<mat-card-content>{{transaction.amount | currency}}</mat-card-content>
 	<mat-card-actions align="end">
-	<button (click)="undoTransaction(transaction.ID)" mat-raised-button>Undo</button>
+	<button (click)="undoTransaction()" mat-raised-button>Undo</button>
 	</mat-card-actions>
 </mat-card>
