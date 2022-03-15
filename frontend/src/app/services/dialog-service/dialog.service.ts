@@ -168,7 +168,6 @@ export class PieceSelectDialog extends BaseService {
   }
 
   passGo(): void {
-    this.dialogRef.close();
     const bank: Player[] = this.data.players.filter((x) => x.name == 'Bank');
 
     let t: Transaction = {
@@ -180,6 +179,7 @@ export class PieceSelectDialog extends BaseService {
       GameID: this.data.player.GameID,
     };
     this.transactionService.addTransaction(t);
+    this.dialogRef.close();
   }
 
   collectFreeParking(): void {

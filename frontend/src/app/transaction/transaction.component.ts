@@ -25,6 +25,16 @@ export class TransactionComponent extends BaseComponent implements OnInit {
     private dialogService: DialogService
   ) {
     super();
+  }
+
+  undoTransaction(transactionId: number): void {
+    this.transactionService.deleteTransaction(transactionId);
+  }
+
+  ngOnInit(): void {
+    if (!this.transaction) {
+      return;
+    }
     this.playerService.players$.subscribe((x) => {
       if (!this.transaction) {
         return;
@@ -41,15 +51,5 @@ export class TransactionComponent extends BaseComponent implements OnInit {
         (x) => x.ID == this.transaction?.fromPlayerId
       )[0].img;
     });
-  }
-
-  undoTransaction(transactionId: number): void {
-    this.transactionService.deleteTransaction(transactionId);
-  }
-
-  ngOnInit(): void {
-    if (!this.transaction) {
-      return;
-    }
   }
 }

@@ -16,6 +16,7 @@ import { pipe } from 'rxjs';
 })
 export class PlayersComponent extends BaseComponent implements OnInit {
   @Input() game?: Game | undefined | null; // from game-board
+  playersCache: Player[] = [];
 
   transactionForm = new FormGroup({
     fromPlayerName: new FormControl(''),
@@ -31,7 +32,9 @@ export class PlayersComponent extends BaseComponent implements OnInit {
     super();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.playerService.players$.subscribe((x) => this.playersCache.push(...x));
+  }
 
   ngOnChanges(changes: SimpleChanges) {}
 
@@ -88,7 +91,7 @@ export class PlayersComponent extends BaseComponent implements OnInit {
     }
     let id = this.game.ID;
     this.dialogService
-      .displayPieceSelectDialog(player, [])
+      .displayPieceSelectDialog(player, this.playersCache)
       .afterClosed()
       .pipe(takeUntil(this.destroy$))
       .subscribe((_) => {
