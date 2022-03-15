@@ -166,14 +166,13 @@ func transactions(w http.ResponseWriter, r *http.Request) {
 		if gameId == "" {
 			writeError(w, "Missing gameId!")
 			return
-		} else {
-			var transactions []Transaction
-			var game Game
-			db.Find(&game, "ID = ?", gameId)
-			db.Model(&game).Association("Transactions").Find(&transactions)
-			json.NewEncoder(w).Encode(transactions)
-			return
 		}
+		var transactions []Transaction
+		var game Game
+		db.Find(&game, "ID = ?", gameId)
+		db.Model(&game).Order("ID").Association("Transactions").Find(&transactions)
+		json.NewEncoder(w).Encode(transactions)
+		return
 	case "DELETE":
 		log.Printf("DELETE transactions")
 		vars := mux.Vars(r)
@@ -185,12 +184,20 @@ func transactions(w http.ResponseWriter, r *http.Request) {
 		db.First(&transaction, id)
 		processTransaction(w, transaction, true)
 		db.Delete(&Transaction{}, id)
+
+		var transactions []Transaction
+		var game Game
+		db.Find(&game, "ID = ?", transaction.GameID)
+		db.Model(&game).Order("ID").Association("Transactions").Find(&transactions)
+		json.NewEncoder(w).Encode(transactions)
+		return
 	case "POST":
 		gameId := r.FormValue("gameId")
 		if gameId == "" {
 			writeError(w, "Missing gameId!")
 			return
 		}
+
 		var transaction Transaction
 		err := json.NewDecoder(r.Body).Decode(&transaction)
 		if err != nil {
@@ -204,7 +211,7 @@ func transactions(w http.ResponseWriter, r *http.Request) {
 		var transactions []Transaction
 		var game Game
 		db.Find(&game, "ID = ?", gameId)
-		db.Model(&game).Association("Transactions").Find(&transactions)
+		db.Model(&game).Order("ID").Association("Transactions").Find(&transactions)
 		json.NewEncoder(w).Encode(transactions)
 		return
 	}
@@ -226,6 +233,6 @@ func initViews(router *mux.Router) {
 	router.HandleFunc("/api/players/{id:[0-9]+}", players).Methods("DELETE", "OPTIONS", "GET")
 
 	router.HandleFunc("/api/transactions", transactions).Methods("POST", "GET", "OPTIONS").Queries("gameId", "[0-9]*")
-	router.HandleFunc("/api/transactions", transactions).Methods("POST", "GET", "OPTIONS")
+	router.HandleFunc("/api/transactions", transactions).Methods("POST", "DELETE", "GET", "OPTIONS")
 	router.HandleFunc("/api/transactions/{id:[0-9]+}", transactions).Methods("DELETE", "OPTIONS")
 }
