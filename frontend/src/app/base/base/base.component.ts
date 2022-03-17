@@ -10,7 +10,6 @@ export class BaseComponent implements OnDestroy {
   }
 
   public ngOnDestroy() {
-    console.log('Destroying base component subject');
     this._subject.next();
     this._subject.complete();
   }

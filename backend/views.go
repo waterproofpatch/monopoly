@@ -172,6 +172,7 @@ func transactions(w http.ResponseWriter, r *http.Request) {
 		db.Find(&game, "ID = ?", gameId)
 		db.Model(&game).Order("ID").Association("Transactions").Find(&transactions)
 		json.NewEncoder(w).Encode(transactions)
+		log.Printf("Returning transactions for game %v", gameId)
 		return
 	case "DELETE":
 		log.Printf("DELETE transactions")

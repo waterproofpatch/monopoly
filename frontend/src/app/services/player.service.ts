@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { takeUntil, map } from 'rxjs/operators';
+import { takeUntil, map, switchMap } from 'rxjs/operators';
 
 import { BaseComponent } from '../base/base/base.component';
 import { PlayersApiService } from '../players-api.service';
@@ -33,7 +33,7 @@ export class PlayerService extends BaseComponent {
   getPlayerImgUrl(playerId: number): Observable<string> {
     return this.players$.pipe(
       map((players) => players.find((x) => x.ID == playerId)),
-      map((x) => x?.img ?? 'DEFAULT')
+      map((x) => x?.img ?? 'DEFAULT_' + playerId)
     );
   }
 

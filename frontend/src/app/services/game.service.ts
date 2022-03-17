@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
 
 import { Game } from '../types';
@@ -38,8 +38,9 @@ export class GameService extends BaseComponent {
   }
 
   resumeGame(gameId: number) {
+    console.log('Selected gameId is ' + gameId);
     this.selectedGameId = gameId;
-    this.playerService.getPlayersForGame(gameId);
+    // this.playerService.getPlayersForGame(gameId);
     this.transactionService.getTransactionsForGame(gameId);
   }
 }
