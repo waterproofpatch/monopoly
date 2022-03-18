@@ -21,7 +21,11 @@ export class PlayersApiService extends BaseService {
       second: second,
     };
     return this.http
-      .put<Player[]>(this.getUrlBase() + this.apiUrl, request, this.httpOptions)
+      .put<Player[]>(
+        this.getUrlBase() + this.apiUrl + '?gameId=' + first.GameID,
+        request,
+        this.httpOptions
+      )
       .pipe(
         catchError(
           this.dialogService.handleError<Player[]>('changePlayersHttp', [])

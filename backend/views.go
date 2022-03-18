@@ -110,6 +110,14 @@ func players(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Affected %d rows", results.RowsAffected)
 		results = db.Model(&req.Second).Updates(Player{Name: firstName, Img: firstImg})
 		log.Printf("Affected %d rows", results.RowsAffected)
+		var players []Player
+		var game Game
+		db.Find(&game, "ID = ?", gameId)
+		db.Model(&game).Order("ID").Association("Players").Find(&players)
+		log.Printf("Game ID is %v\n", game.ID)
+
+		json.NewEncoder(w).Encode(players)
+		return
 	}
 
 	var players []Player
@@ -229,7 +237,7 @@ func initViews(router *mux.Router) {
 	router.HandleFunc("/api/games", games).Methods("GET", "POST", "OPTIONS")
 	router.HandleFunc("/api/games/{id:[0-9]+}", games).Methods("GET", "POST", "OPTIONS")
 
-	router.HandleFunc("/api/players", players).Methods("GET", "OPTIONS").Queries("gameId", "[0-9]*")
+	router.HandleFunc("/api/players", players).Methods("GET", "PUT", "OPTIONS").Queries("gameId", "[0-9]*")
 	router.HandleFunc("/api/players", players).Methods("GET", "PUT", "OPTIONS")
 	router.HandleFunc("/api/players/{id:[0-9]+}", players).Methods("DELETE", "OPTIONS", "GET")
 
