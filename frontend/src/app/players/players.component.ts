@@ -9,6 +9,7 @@ import { BaseComponent } from 'src/app/base/base/base.component';
 import { PlayerService } from '../services/player.service';
 import { pipe } from 'rxjs';
 import * as _ from 'lodash';
+import { GameService } from '../services/game.service';
 
 @Component({
   selector: 'app-players',
@@ -28,7 +29,8 @@ export class PlayersComponent extends BaseComponent implements OnInit {
   constructor(
     private dialogService: DialogService,
     public transactionService: TransactionService,
-    public playerService: PlayerService
+    public playerService: PlayerService,
+    public gameService: GameService
   ) {
     super();
   }
@@ -63,7 +65,6 @@ export class PlayersComponent extends BaseComponent implements OnInit {
             );
             existingPlayer.human = newPlayer.human;
             existingPlayer.money = newPlayer.money;
-            console.log('newPlayer.InGame: ' + newPlayer.inGame);
             existingPlayer.inGame = newPlayer.inGame;
             existingPlayer.img = newPlayer.img;
             existingPlayer.name = newPlayer.name;
@@ -122,11 +123,6 @@ export class PlayersComponent extends BaseComponent implements OnInit {
   }
 
   openPieceSelectDialog(player: Player): void {
-    if (!this.game || this.game == undefined) {
-      this.dialogService.displayErrorDialog('Player is not set!');
-      return;
-    }
-    let id = this.game.ID;
     this.dialogService
       .displayPieceSelectDialog(player, this.playersCache)
       .afterClosed()
