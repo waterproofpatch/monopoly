@@ -93,9 +93,17 @@ func players(w http.ResponseWriter, r *http.Request) {
 		log.Printf("DELETE players")
 		vars := mux.Vars(r)
 		id := vars["id"]
-		log.Printf("DELETE id %v", id)
+		log.Printf("InGame for playerId id %v", id)
 		results := db.Model(&Player{}).Where("id=?", id).Update("InGame", false)
 		log.Printf("Affected %d rows", results.RowsAffected)
+		var players []Player
+		var game Game
+		db.Find(&game, "ID = ?", gameId)
+		db.Model(&game).Order("ID").Association("Players").Find(&players)
+		log.Printf("Game ID is %v\n", game.ID)
+
+		json.NewEncoder(w).Encode(players)
+		return
 	case "PUT":
 		var req ChangePlayerRequest
 		err := json.NewDecoder(r.Body).Decode(&req)
