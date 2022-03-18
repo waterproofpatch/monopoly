@@ -40,7 +40,6 @@ export class GameService extends BaseComponent {
   resumeGame(gameId: number) {
     console.log('Selected gameId is ' + gameId);
     this.selectedGameId = gameId;
-    // this.playerService.getPlayersForGame(gameId);
     this.transactionService.getTransactionsForGame(gameId);
   }
 }
