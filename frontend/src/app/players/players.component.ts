@@ -78,12 +78,8 @@ export class PlayersComponent extends BaseComponent implements OnInit {
     if (changes['game']) {
       console.log('GAME CHANGED');
       this.playersCache = [];
-      this.getPlayersForGame(changes['game'].currentValue);
+      this.playerService.getPlayersForGame(changes['game'].currentValue);
     }
-  }
-
-  getPlayersForGame(gameId: number) {
-    this.playerService.getPlayersForGame(gameId);
   }
 
   makePayment(): void {
