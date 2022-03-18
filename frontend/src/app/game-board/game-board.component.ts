@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { take, takeUntil } from 'rxjs/operators';
-import { from, of, Observable, pipe } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
-import { Game, Player, Transaction } from '../types';
 import { DialogService } from '../services/dialog-service/dialog.service';
 import { TransactionService } from '../services/transaction.service';
 import { PlayerService } from '../services/player.service';

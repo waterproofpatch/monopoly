@@ -1,12 +1,7 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
-import { map, takeUntil, exhaustMap } from 'rxjs/operators';
-import { of, Observable, BehaviorSubject } from 'rxjs';
 
 import { TransactionService } from '../services/transaction.service';
-import { Game, Transaction, Player } from '../types';
 import { BaseComponent } from 'src/app/base/base/base.component';
-import { DialogService } from '../services/dialog-service/dialog.service';
-import { PlayerService } from '../services/player.service';
 
 @Component({
   selector: 'app-transactions',

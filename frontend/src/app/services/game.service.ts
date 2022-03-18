@@ -1,12 +1,9 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { tap, map } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
 
 import { Game } from '../types';
 import { BaseComponent } from '../base/base/base.component';
 import { GamesApiService } from '../games-api.service';
-import { PlayerService } from './player.service';
-import { TransactionService } from './transaction.service';
 
 @Injectable({
   providedIn: 'root',

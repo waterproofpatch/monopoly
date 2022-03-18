@@ -2,12 +2,11 @@ import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
 
-import { Player, Transaction, Game } from '../types';
+import { Player, Transaction } from '../types';
 import { DialogService } from '../services/dialog-service/dialog.service';
 import { TransactionService } from '../services/transaction.service';
 import { BaseComponent } from 'src/app/base/base/base.component';
 import { PlayerService } from '../services/player.service';
-import { pipe } from 'rxjs';
 import * as _ from 'lodash';
 import { GameService } from '../services/game.service';
 
