@@ -1,4 +1,4 @@
-<div>
+<div *ngIf="game">
 	<div class="row-center">
 		<form [formGroup]="transactionForm" (ngSubmit)="makePayment()">
 			<mat-form-field appearance="fill">
