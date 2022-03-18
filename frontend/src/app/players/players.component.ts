@@ -8,6 +8,7 @@ import { TransactionService } from '../services/transaction.service';
 import { BaseComponent } from 'src/app/base/base/base.component';
 import { PlayerService } from '../services/player.service';
 import { pipe } from 'rxjs';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-players',
@@ -32,8 +33,43 @@ export class PlayersComponent extends BaseComponent implements OnInit {
     super();
   }
 
+  getHumanPlayers(): Player[] {
+    return this.playersCache.filter((x) => x.human);
+  }
+  getNonHumanPlayers(): Player[] {
+    return this.playersCache.filter((x) => !x.human);
+  }
+  getInGamePlayers(): Player[] {
+    return this.playersCache.filter((x) => x.inGame);
+  }
+
   ngOnInit(): void {
-    this.playerService.players$.subscribe((x) => this.playersCache.push(...x));
+    this.playerService.players$.subscribe((x) => {
+      if (this.playersCache.length != x.length) {
+        this.playersCache.push(...x);
+        return;
+      }
+      for (let newPlayer of x) {
+        let existingPlayer = this.playersCache.find(
+          (x) => x.ID == newPlayer.ID
+        );
+        if (existingPlayer) {
+          if (!_.isEqual(existingPlayer, newPlayer)) {
+            console.log(
+              'Player ID ' +
+                existingPlayer.ID +
+                ' is not equal to ' +
+                newPlayer.ID
+            );
+            existingPlayer.human = newPlayer.human;
+            existingPlayer.money = newPlayer.money;
+            existingPlayer.inGame = newPlayer.inGame;
+            existingPlayer.img = newPlayer.img;
+            existingPlayer.name = newPlayer.name;
+          }
+        }
+      }
+    });
   }
 
   ngOnChanges(changes: SimpleChanges) {}
