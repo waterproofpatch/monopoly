@@ -76,7 +76,9 @@ export class PlayersApiService extends BaseService {
 
   /** DELETE: delete the player from the server (by setting their inGame to false!) */
   deletePlayerHttp(player: Player): Observable<Player[]> {
-    const url = `${this.getUrlBase() + this.apiUrl}/${player.ID}`;
+    const url = `${this.getUrlBase() + this.apiUrl}/${player.ID}?gameId=${
+      player.GameID
+    }`;
 
     return this.http
       .delete<Player[]>(url, this.httpOptions)

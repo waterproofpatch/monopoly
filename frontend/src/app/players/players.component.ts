@@ -34,10 +34,10 @@ export class PlayersComponent extends BaseComponent implements OnInit {
   }
 
   getHumanPlayers(): Player[] {
-    return this.playersCache.filter((x) => x.human);
+    return this.playersCache.filter((x) => x.human && x.inGame);
   }
   getNonHumanPlayers(): Player[] {
-    return this.playersCache.filter((x) => !x.human);
+    return this.playersCache.filter((x) => !x.human && x.inGame);
   }
   getInGamePlayers(): Player[] {
     return this.playersCache.filter((x) => x.inGame);
@@ -63,6 +63,7 @@ export class PlayersComponent extends BaseComponent implements OnInit {
             );
             existingPlayer.human = newPlayer.human;
             existingPlayer.money = newPlayer.money;
+            console.log('newPlayer.InGame: ' + newPlayer.inGame);
             existingPlayer.inGame = newPlayer.inGame;
             existingPlayer.img = newPlayer.img;
             existingPlayer.name = newPlayer.name;
