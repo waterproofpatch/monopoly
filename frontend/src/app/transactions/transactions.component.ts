@@ -14,12 +14,19 @@ import { PlayerService } from '../services/player.service';
   styleUrls: ['./transactions.component.css'],
 })
 export class TransactionsComponent extends BaseComponent implements OnInit {
-  @Input() game?: Game | undefined | null; // from game-board
+  @Input() gameId?: number | null; // from game-board
 
   constructor(public transactionService: TransactionService) {
     super();
   }
 
   ngOnInit(): void {}
-  ngOnChanges(changes: SimpleChanges) {}
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['gameId']) {
+      console.log('TRANSACTIONS: GAME CHANGED');
+      this.transactionService.getTransactionsForGame(
+        changes['gameId'].currentValue
+      );
+    }
+  }
 }

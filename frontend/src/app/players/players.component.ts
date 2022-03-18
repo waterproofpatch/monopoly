@@ -17,7 +17,7 @@ import { GameService } from '../services/game.service';
   styleUrls: ['./players.component.css'],
 })
 export class PlayersComponent extends BaseComponent implements OnInit {
-  @Input() game?: Game | undefined | null; // from game-board
+  @Input() gameId?: number | null; // from game-board
   playersCache: Player[] = [];
 
   transactionForm = new FormGroup({
@@ -75,10 +75,10 @@ export class PlayersComponent extends BaseComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['game']) {
-      console.log('GAME CHANGED');
+    if (changes['gameId']) {
+      console.log('PLAYERS: GAME CHANGED');
       this.playersCache = [];
-      this.playerService.getPlayersForGame(changes['game'].currentValue);
+      this.playerService.getPlayersForGame(changes['gameId'].currentValue);
     }
   }
 
