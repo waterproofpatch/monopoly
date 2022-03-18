@@ -16,20 +16,6 @@ export class PlayerService extends BaseComponent {
     super();
   }
 
-  getHumanPlayers(): Observable<Player[]> {
-    return this.players$.pipe(map((players) => players.filter((x) => x.human)));
-  }
-  getNonHumanPlayers(): Observable<Player[]> {
-    return this.players$.pipe(
-      map((players) => players.filter((x) => !x.human))
-    );
-  }
-  getInGamePlayers(): Observable<Player[]> {
-    return this.players$.pipe(
-      map((players) => players.filter((x) => x.inGame))
-    );
-  }
-
   getPlayerImgUrl(playerId: number): Observable<string> {
     return this.players$.pipe(
       map((players) => players.find((x) => x.ID == playerId)),
