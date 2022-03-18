@@ -13,33 +13,26 @@ import { TransactionService } from './transaction.service';
 })
 export class GameService extends BaseComponent {
   games$ = new BehaviorSubject<Game[]>([]);
-  selectedGameId: number = 0;
+  selectedGameId$ = new BehaviorSubject<number>(0);
 
-  constructor(
-    private gamesApi: GamesApiService,
-    private playerService: PlayerService,
-    private transactionService: TransactionService
-  ) {
+  constructor(private gamesApi: GamesApiService) {
     super();
+    this.getGames();
   }
 
   newGame(gameName: string) {
-    this.gamesApi.newGameHttp(gameName).subscribe((_) => this.getGames());
+    this.gamesApi.newGameHttp(gameName).subscribe((x) => {
+      this.selectedGameId$.next(x.ID);
+      this.getGames();
+    });
   }
 
   getGames() {
     this.gamesApi.getGamesHttp().subscribe((x) => this.games$.next(x));
   }
 
-  getSelectedGame(): Observable<Game | undefined> {
-    return this.games$.pipe(
-      map((games) => games.find((x) => x.ID == this.selectedGameId))
-    );
-  }
-
   resumeGame(gameId: number) {
     console.log('Selected gameId is ' + gameId);
-    this.selectedGameId = gameId;
-    this.transactionService.getTransactionsForGame(gameId);
+    this.selectedGameId$.next(gameId);
   }
 }

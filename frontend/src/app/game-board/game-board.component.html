@@ -2,5 +2,5 @@
 	<button (click)="newGame()" mat-raised-button color="primary">New Game</button>
 	<button *ngFor="let game of gameService.games$ | async" (click)="gameService.resumeGame(game.ID)" mat-raised-button color="primary">Resume game {{game.ID}} - "{{game.name}}"</button>
 </div>
-<app-players [game]="gameService.getSelectedGame() | async"></app-players>
-<app-transactions [game]="gameService.getSelectedGame() | async"></app-transactions>
+<app-players [gameId]="gameService.selectedGameId$ | async"></app-players>
+<app-transactions [gameId]="gameService.selectedGameId$ | async"></app-transactions>
