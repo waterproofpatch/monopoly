@@ -7,7 +7,6 @@ import { DialogService } from '../services/dialog-service/dialog.service';
 import { TransactionService } from '../services/transaction.service';
 import { BaseComponent } from 'src/app/base/base/base.component';
 import { PlayerService } from '../services/player.service';
-import * as _ from 'lodash';
 import { GameService } from '../services/game.service';
 
 @Component({
@@ -17,7 +16,6 @@ import { GameService } from '../services/game.service';
 })
 export class PlayersComponent extends BaseComponent implements OnInit {
   @Input() gameId?: number | null; // from game-board
-  playersCache: Player[] = [];
 
   transactionForm = new FormGroup({
     fromPlayerName: new FormControl(''),
@@ -34,49 +32,12 @@ export class PlayersComponent extends BaseComponent implements OnInit {
     super();
   }
 
-  getHumanPlayers(): Player[] {
-    return this.playersCache.filter((x) => x.human && x.inGame);
-  }
-  getNonHumanPlayers(): Player[] {
-    return this.playersCache.filter((x) => !x.human && x.inGame);
-  }
-  getInGamePlayers(): Player[] {
-    return this.playersCache.filter((x) => x.inGame);
-  }
-
-  ngOnInit(): void {
-    this.playerService.players$.subscribe((x) => {
-      if (this.playersCache.length != x.length) {
-        this.playersCache.push(...x);
-        return;
-      }
-      for (let newPlayer of x) {
-        let existingPlayer = this.playersCache.find(
-          (x) => x.ID == newPlayer.ID
-        );
-        if (existingPlayer) {
-          if (!_.isEqual(existingPlayer, newPlayer)) {
-            console.log(
-              'Player ID ' +
-                existingPlayer.ID +
-                ' is not equal to ' +
-                newPlayer.ID
-            );
-            existingPlayer.human = newPlayer.human;
-            existingPlayer.money = newPlayer.money;
-            existingPlayer.inGame = newPlayer.inGame;
-            existingPlayer.img = newPlayer.img;
-            existingPlayer.name = newPlayer.name;
-          }
-        }
-      }
-    });
-  }
+  ngOnInit(): void {}
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['gameId']) {
       console.log('PLAYERS: GAME CHANGED');
-      this.playersCache = [];
+      this.playerService.invalidatePlayersCache();
       this.playerService.getPlayersForGame(changes['gameId'].currentValue);
     }
   }
@@ -90,10 +51,10 @@ export class PlayersComponent extends BaseComponent implements OnInit {
       return;
     }
 
-    let toPlayer: Player | null = this.findPlayerByName(
+    let toPlayer: Player | null = this.playerService.findPlayerByName(
       this.transactionForm.controls.toPlayerName.value
     );
-    let fromPlayer: Player | null = this.findPlayerByName(
+    let fromPlayer: Player | null = this.playerService.findPlayerByName(
       this.transactionForm.controls.fromPlayerName.value
     );
     if (!toPlayer || !fromPlayer) {
@@ -114,18 +75,9 @@ export class PlayersComponent extends BaseComponent implements OnInit {
     this.transactionService.addTransaction(t, fromPlayer.GameID);
   }
 
-  findPlayerByName(name: string): Player | null {
-    for (let p of this.playersCache) {
-      if (p.name == name) {
-        return p;
-      }
-    }
-    return null;
-  }
-
   openPieceSelectDialog(player: Player): void {
     this.dialogService
-      .displayPieceSelectDialog(player, this.playersCache)
+      .displayPieceSelectDialog(player, this.playerService.getPlayersCache())
       .afterClosed()
       .pipe(takeUntil(this.destroy$))
       .subscribe((_) => {});
