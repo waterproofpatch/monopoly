@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { takeUntil, map, switchMap } from 'rxjs/operators';
+import { takeUntil, map } from 'rxjs/operators';
 
 import { BaseComponent } from '../base/base/base.component';
 import { PlayersApiService } from '../players-api.service';
