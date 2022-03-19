@@ -152,6 +152,14 @@ func games(w http.ResponseWriter, r *http.Request) {
 			db.First(&game, "id = ?", id)
 			json.NewEncoder(w).Encode(game)
 		}
+	case "DELETE":
+		id, Ok := mux.Vars(r)["id"]
+		if !Ok {
+			writeError(w, "Missing gameId!")
+			return
+		}
+		log.Printf("Deleting game %v", id)
+		writeError(w, "Not implemented!")
 	case "PUT": // modify a game, look for Players and Transactions
 	case "POST": // start a new game
 		// create a new game given a name
