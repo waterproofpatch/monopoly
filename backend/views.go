@@ -135,25 +135,24 @@ func players(w http.ResponseWriter, r *http.Request) {
 
 func games(w http.ResponseWriter, r *http.Request) {
 	db := getDb()
+	gameId, hasGameId := mux.Vars(r)["id"]
 
 	switch r.Method {
 	case "GET": // get a specific game that was already existing
-		id, Ok := mux.Vars(r)["id"]
-		if Ok {
+		if hasGameId {
 			var game Game
-			log.Printf("Game %v!", id)
-			db.First(&game, "id = ?", id)
+			log.Printf("Game %v!", gameId)
+			db.First(&game, "id = ?", gameId)
 			json.NewEncoder(w).Encode(game)
 			return
 		}
 	case "DELETE":
-		id, Ok := mux.Vars(r)["id"]
-		if !Ok {
+		if !hasGameId {
 			writeError(w, "Missing gameId!")
 			return
 		}
-		log.Printf("Deleting game %v", id)
-		db.Delete(&Game{}, id)
+		log.Printf("Deleting game %v", gameId)
+		db.Delete(&Game{}, gameId)
 	case "PUT":
 		writeError(w, "Not implemented!")
 		return
@@ -162,11 +161,10 @@ func games(w http.ResponseWriter, r *http.Request) {
 		var newGameRequest NewGameRequest
 		json.NewDecoder(r.Body).Decode(&newGameRequest)
 
-		id := newGame(newGameRequest.GameName)
+		newGameId := newGame(newGameRequest.GameName)
 
 		var game Game
-		db.First(&game, "id = ?", id)
-		log.Printf("new game ID is %v", id)
+		db.First(&game, "id = ?", newGameId)
 		json.NewEncoder(w).Encode(game)
 		return
 	}
