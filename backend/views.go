@@ -65,54 +65,24 @@ func processTransaction(w http.ResponseWriter, transaction Transaction, reverse 
 }
 
 func players(w http.ResponseWriter, r *http.Request) {
-	log.Printf("%v players", r.Method)
 	db := getDb()
-
-	gameId := r.FormValue("gameId")
+	vars := mux.Vars(r)
+	playerId, hasPlayerId := vars["id"]
 
 	switch r.Method {
 	case "GET":
-		if gameId == "" {
-			vars := mux.Vars(r)
-			id, ok := vars["id"]
-			if ok {
-				log.Printf("Single player, ID %v", id)
-				var player Player
-				db.Find(&player, "ID = ?", id)
-				json.NewEncoder(w).Encode(player)
-				return
-			}
-			log.Printf("All players, no gameId nor playerId specified!\n")
-			var players []Player
-			db.Find(&players)
-			json.NewEncoder(w).Encode(players)
-			return
-		} else {
-			log.Printf("All players, gameId %v!\n", gameId)
-			var players []Player
-			var game Game
-			db.Find(&game, "ID = ?", gameId)
-			db.Model(&game).Order("ID").Association("Players").Find(&players)
-			log.Printf("Game ID is %v\n", game.ID)
-
-			json.NewEncoder(w).Encode(players)
+		if hasPlayerId {
+			var player Player
+			db.Find(&player, "ID = ?", playerId)
+			json.NewEncoder(w).Encode(player)
 			return
 		}
 	case "DELETE":
-		log.Printf("DELETE players")
-		vars := mux.Vars(r)
-		id := vars["id"]
-		log.Printf("InGame for playerId id %v", id)
-		results := db.Model(&Player{}).Where("id=?", id).Update("InGame", false)
-		log.Printf("Affected %d rows", results.RowsAffected)
-		var players []Player
-		var game Game
-		db.Find(&game, "ID = ?", gameId)
-		db.Model(&game).Order("ID").Association("Players").Find(&players)
-		log.Printf("Game ID is %v\n", game.ID)
-
-		json.NewEncoder(w).Encode(players)
-		return
+		if !hasPlayerId {
+			writeError(w, "Missing playerId")
+			return
+		}
+		db.Model(&Player{}).Where("id=?", playerId).Update("InGame", false)
 	case "PUT":
 		var req ChangePlayerRequest
 		err := json.NewDecoder(r.Body).Decode(&req)
@@ -120,25 +90,21 @@ func players(w http.ResponseWriter, r *http.Request) {
 			writeError(w, "Failed decoding change player request!")
 			return
 		}
-		log.Printf("first player ID %v, second player ID %v", req.First, req.Second)
 		firstName := req.First.Name
 		firstImg := req.First.Img
-		results := db.Model(&req.First).Updates(Player{Name: req.Second.Name, Img: req.Second.Img})
-		log.Printf("Affected %d rows", results.RowsAffected)
-		results = db.Model(&req.Second).Updates(Player{Name: firstName, Img: firstImg})
-		log.Printf("Affected %d rows", results.RowsAffected)
-		var players []Player
-		var game Game
-		db.Find(&game, "ID = ?", gameId)
-		db.Model(&game).Order("ID").Association("Players").Find(&players)
-		log.Printf("Game ID is %v\n", game.ID)
-
-		json.NewEncoder(w).Encode(players)
-		return
+		db.Model(&req.First).Updates(Player{Name: req.Second.Name, Img: req.Second.Img})
+		db.Model(&req.Second).Updates(Player{Name: firstName, Img: firstImg})
 	}
 
+	gameId := r.FormValue("gameId")
+	if gameId == "" {
+		writeError(w, "Missing gameId!")
+		return
+	}
 	var players []Player
-	db.Find(&players)
+	var game Game
+	db.Find(&game, "ID = ?", gameId)
+	db.Model(&game).Order("ID").Association("Players").Find(&players)
 	json.NewEncoder(w).Encode(players)
 }
 
@@ -150,7 +116,6 @@ func games(w http.ResponseWriter, r *http.Request) {
 	case "GET": // get a specific game that was already existing
 		if hasGameId {
 			var game Game
-			log.Printf("Game %v!", gameId)
 			db.First(&game, "id = ?", gameId)
 			json.NewEncoder(w).Encode(game)
 			return
@@ -160,7 +125,6 @@ func games(w http.ResponseWriter, r *http.Request) {
 			writeError(w, "Missing gameId!")
 			return
 		}
-		log.Printf("Deleting game %v", gameId)
 		db.Delete(&Game{}, gameId)
 	case "PUT":
 		writeError(w, "Not implemented!")
