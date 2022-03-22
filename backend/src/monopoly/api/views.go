@@ -1,6 +1,7 @@
-package main
+package api
 
 import (
+	"backend/src/monopoly/utils"
 	"encoding/json"
 	"log"
 	"net/http"
@@ -10,8 +11,8 @@ import (
 )
 
 type ChangePlayerRequest struct {
-	First  Player `json:"first"`
-	Second Player `json:"second"`
+	First  utils.Player `json:"first"`
+	Second utils.Player `json:"second"`
 }
 
 type NewGameRequest struct {
@@ -27,19 +28,19 @@ func writeError(w http.ResponseWriter, message string) {
 	json.NewEncoder(w).Encode(&Error{ErrorMessage: message})
 }
 
-func getTransactionsForGame(db *gorm.DB, gameId string) []Transaction {
-	var transactions []Transaction
-	var game Game
+func getTransactionsForGame(db *gorm.DB, gameId string) []utils.Transaction {
+	var transactions []utils.Transaction
+	var game utils.Game
 	db.Find(&game, "ID = ?", gameId)
 	db.Model(&game).Order("ID").Association("Transactions").Find(&transactions)
 	return transactions
 }
 
-func processTransaction(w http.ResponseWriter, transaction Transaction, reverse bool) {
-	db := getDb()
+func processTransaction(w http.ResponseWriter, transaction utils.Transaction, reverse bool) {
+	db := utils.GetDb()
 
-	var fromPlayer Player
-	var toPlayer Player
+	var fromPlayer utils.Player
+	var toPlayer utils.Player
 	db.First(&fromPlayer, "id = ?", transaction.FromPlayerId)
 	db.First(&toPlayer, "id = ?", transaction.ToPlayerId)
 
@@ -65,14 +66,14 @@ func processTransaction(w http.ResponseWriter, transaction Transaction, reverse 
 }
 
 func players(w http.ResponseWriter, r *http.Request) {
-	db := getDb()
+	db := utils.GetDb()
 	vars := mux.Vars(r)
 	playerId, hasPlayerId := vars["id"]
 
 	switch r.Method {
 	case "GET":
 		if hasPlayerId {
-			var player Player
+			var player utils.Player
 			db.Find(&player, "ID = ?", playerId)
 			json.NewEncoder(w).Encode(player)
 			return
@@ -82,7 +83,7 @@ func players(w http.ResponseWriter, r *http.Request) {
 			writeError(w, "Missing playerId")
 			return
 		}
-		db.Model(&Player{}).Where("id=?", playerId).Update("InGame", false)
+		db.Model(&utils.Player{}).Where("id=?", playerId).Update("InGame", false)
 	case "PUT":
 		var req ChangePlayerRequest
 		err := json.NewDecoder(r.Body).Decode(&req)
@@ -92,8 +93,8 @@ func players(w http.ResponseWriter, r *http.Request) {
 		}
 		firstName := req.First.Name
 		firstImg := req.First.Img
-		db.Model(&req.First).Updates(Player{Name: req.Second.Name, Img: req.Second.Img})
-		db.Model(&req.Second).Updates(Player{Name: firstName, Img: firstImg})
+		db.Model(&req.First).Updates(utils.Player{Name: req.Second.Name, Img: req.Second.Img})
+		db.Model(&req.Second).Updates(utils.Player{Name: firstName, Img: firstImg})
 	}
 
 	gameId := r.FormValue("gameId")
@@ -101,21 +102,21 @@ func players(w http.ResponseWriter, r *http.Request) {
 		writeError(w, "Missing gameId!")
 		return
 	}
-	var players []Player
-	var game Game
+	var players []utils.Player
+	var game utils.Game
 	db.Find(&game, "ID = ?", gameId)
 	db.Model(&game).Order("ID").Association("Players").Find(&players)
 	json.NewEncoder(w).Encode(players)
 }
 
 func games(w http.ResponseWriter, r *http.Request) {
-	db := getDb()
+	db := utils.GetDb()
 	gameId, hasGameId := mux.Vars(r)["id"]
 
 	switch r.Method {
 	case "GET": // get a specific game that was already existing
 		if hasGameId {
-			var game Game
+			var game utils.Game
 			db.First(&game, "id = ?", gameId)
 			json.NewEncoder(w).Encode(game)
 			return
@@ -125,7 +126,7 @@ func games(w http.ResponseWriter, r *http.Request) {
 			writeError(w, "Missing gameId!")
 			return
 		}
-		db.Delete(&Game{}, gameId)
+		db.Delete(&utils.Game{}, gameId)
 	case "PUT":
 		writeError(w, "Not implemented!")
 		return
@@ -134,20 +135,20 @@ func games(w http.ResponseWriter, r *http.Request) {
 		var newGameRequest NewGameRequest
 		json.NewDecoder(r.Body).Decode(&newGameRequest)
 
-		newGameId := newGame(newGameRequest.GameName)
+		newGameId := utils.NewGame(newGameRequest.GameName)
 
-		var game Game
+		var game utils.Game
 		db.First(&game, "id = ?", newGameId)
 		json.NewEncoder(w).Encode(game)
 		return
 	}
-	var games []Game
+	var games []utils.Game
 	db.Find(&games)
 	json.NewEncoder(w).Encode(games)
 }
 
 func transactions(w http.ResponseWriter, r *http.Request) {
-	db := getDb()
+	db := utils.GetDb()
 	gameId := r.FormValue("gameId")
 	if gameId == "" {
 		writeError(w, "Missing gameId!")
@@ -164,12 +165,12 @@ func transactions(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		// find, reverse, and then delete the transaction
-		var transaction Transaction
+		var transaction utils.Transaction
 		db.First(&transaction, id)
 		processTransaction(w, transaction, true)
-		db.Delete(&Transaction{}, id)
+		db.Delete(&utils.Transaction{}, id)
 	case "POST":
-		var transaction Transaction
+		var transaction utils.Transaction
 		err := json.NewDecoder(r.Body).Decode(&transaction)
 		if err != nil {
 			writeError(w, "Failed decoding transaction!")
@@ -182,7 +183,7 @@ func transactions(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(getTransactionsForGame(db, gameId))
 }
 
-func initViews(router *mux.Router) {
+func InitViews(router *mux.Router) {
 	router.HandleFunc("/api/games", games).Methods("GET", "POST", "OPTIONS")
 	router.HandleFunc("/api/games/{id:[0-9]+}", games).Methods("DELETE", "GET", "POST", "OPTIONS")
 

@@ -1,4 +1,4 @@
-package main
+package utils
 
 import (
 	"log"
@@ -9,8 +9,8 @@ import (
 
 var gDb *gorm.DB
 
-func newGame(gameName string) uint {
-	db := getDb()
+func NewGame(gameName string) uint {
+	db := GetDb()
 	db.Create(&Game{Name: gameName})
 
 	var game Game
@@ -30,9 +30,9 @@ func newGame(gameName string) uint {
 	return game.ID
 }
 
-func resetDb() {
+func ResetDb() {
 	log.Printf("Resetting db...")
-	db := getDb()
+	db := GetDb()
 	// Migrate the schema
 	db.Migrator().DropTable(&Game{})
 	db.Migrator().DropTable(&Player{})
@@ -41,10 +41,10 @@ func resetDb() {
 	db.AutoMigrate(&Player{})
 	db.AutoMigrate(&Transaction{})
 
-	newGame("Default Game")
+	NewGame("Default Game")
 }
 
-func initDb(dbUrl string) {
+func InitDb(dbUrl string) {
 	database, err := gorm.Open(postgres.Open(dbUrl), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database")
@@ -52,11 +52,11 @@ func initDb(dbUrl string) {
 
 	// Read
 	gDb = database
-	resetDb()
+	ResetDb()
 }
 
 // getDb returns the database object
-func getDb() *gorm.DB {
+func GetDb() *gorm.DB {
 	if gDb == nil {
 		panic("gDb is not initialized!")
 	}
