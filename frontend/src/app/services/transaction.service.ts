@@ -48,7 +48,7 @@ export class TransactionService extends BaseComponent {
 
   deleteTransaction(transaction: Transaction) {
     this.transactionsApi
-      .deleteTransactionHttp(transaction.ID)
+      .deleteTransactionHttp(transaction)
       .pipe(takeUntil(this.destroy$))
       .subscribe((x) => this.setTransactions(x, transaction.GameID));
   }
