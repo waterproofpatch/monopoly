@@ -2,6 +2,8 @@
 package main
 
 import (
+	"backend/src/monopoly/api"
+	"backend/src/monopoly/utils"
 	"fmt"
 	"log"
 	"net/http"
@@ -16,7 +18,7 @@ func startServing(port string) {
 	portStr := fmt.Sprintf("0.0.0.0:%s", port)
 
 	router := mux.NewRouter()
-	initViews(router)
+	api.InitViews(router)
 
 	methods := []string{"GET", "POST", "PUT", "DELETE"}
 	headers := []string{"Content-Type", "Access-Control-Allow-Origin"}
@@ -34,11 +36,11 @@ func startServing(port string) {
 
 // main is the entrypoint to the program.
 func main() {
-	config := getConfig()
+	cfg := utils.GetConfig()
 	// init the database
 	log.Println("Initializing database...")
-	initDb(config.dbUrl)
+	utils.InitDb(cfg.DbUrl)
 
 	log.Println("Starting server...")
-	startServing(config.port)
+	startServing(cfg.Port)
 }

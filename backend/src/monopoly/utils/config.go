@@ -1,13 +1,15 @@
-package main
+package utils
 
-import "os"
+import (
+	"os"
+)
 
 type Config struct {
-	port  string
-	dbUrl string
+	Port  string
+	DbUrl string
 }
 
-func getPortFromEnv() string {
+func GetPortFromEnv() string {
 	port, found := os.LookupEnv("PORT")
 	if !found {
 		panic("Failed finding PORT")
@@ -15,7 +17,7 @@ func getPortFromEnv() string {
 	return port
 }
 
-func getDbUrlFromEnv() string {
+func GetDbUrlFromEnv() string {
 	var found bool
 
 	dburl, found := os.LookupEnv("DATABASE_URL")
@@ -25,10 +27,10 @@ func getDbUrlFromEnv() string {
 	return dburl
 }
 
-func getConfig() *Config {
+func GetConfig() *Config {
 	config := Config{
-		port:  getPortFromEnv(),
-		dbUrl: getDbUrlFromEnv(),
+		Port:  GetPortFromEnv(),
+		DbUrl: GetDbUrlFromEnv(),
 	}
 	return &config
 }
