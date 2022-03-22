@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"gorm.io/gorm"
 )
 
 type ChangePlayerRequest struct {
@@ -24,6 +25,14 @@ type Error struct {
 func writeError(w http.ResponseWriter, message string) {
 	w.WriteHeader(http.StatusBadRequest)
 	json.NewEncoder(w).Encode(&Error{ErrorMessage: message})
+}
+
+func getTransactionsForGame(db *gorm.DB, gameId string) []Transaction {
+	var transactions []Transaction
+	var game Game
+	db.Find(&game, "ID = ?", gameId)
+	db.Model(&game).Order("ID").Association("Transactions").Find(&transactions)
+	return transactions
 }
 
 func processTransaction(w http.ResponseWriter, transaction Transaction, reverse bool) {
@@ -174,49 +183,28 @@ func games(w http.ResponseWriter, r *http.Request) {
 }
 
 func transactions(w http.ResponseWriter, r *http.Request) {
-	log.Printf("%v transactions", r.Method)
-
 	db := getDb()
+	gameId := r.FormValue("gameId")
+	if gameId == "" {
+		writeError(w, "Missing gameId!")
+		return
+	}
 
 	switch r.Method {
 	case "GET":
-		gameId := r.FormValue("gameId")
-		if gameId == "" {
-			writeError(w, "Missing gameId!")
+	case "DELETE":
+		vars := mux.Vars(r)
+		id, hasTransactionId := vars["id"]
+		if !hasTransactionId {
+			writeError(w, "Missing ID!")
 			return
 		}
-		var transactions []Transaction
-		var game Game
-		db.Find(&game, "ID = ?", gameId)
-		db.Model(&game).Order("ID").Association("Transactions").Find(&transactions)
-		json.NewEncoder(w).Encode(transactions)
-		log.Printf("Returning transactions for game %v", gameId)
-		return
-	case "DELETE":
-		log.Printf("DELETE transactions")
-		vars := mux.Vars(r)
-		id := vars["id"]
-		log.Printf("DELETE id %v", id)
-
 		// find, reverse, and then delete the transaction
 		var transaction Transaction
 		db.First(&transaction, id)
 		processTransaction(w, transaction, true)
 		db.Delete(&Transaction{}, id)
-
-		var transactions []Transaction
-		var game Game
-		db.Find(&game, "ID = ?", transaction.GameID)
-		db.Model(&game).Order("ID").Association("Transactions").Find(&transactions)
-		json.NewEncoder(w).Encode(transactions)
-		return
 	case "POST":
-		gameId := r.FormValue("gameId")
-		if gameId == "" {
-			writeError(w, "Missing gameId!")
-			return
-		}
-
 		var transaction Transaction
 		err := json.NewDecoder(r.Body).Decode(&transaction)
 		if err != nil {
@@ -224,23 +212,10 @@ func transactions(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		// create and then process the transaction
-		db.Create(&transaction)
 		processTransaction(w, transaction, false)
-
-		var transactions []Transaction
-		var game Game
-		db.Find(&game, "ID = ?", gameId)
-		db.Model(&game).Order("ID").Association("Transactions").Find(&transactions)
-		json.NewEncoder(w).Encode(transactions)
-		return
+		db.Create(&transaction)
 	}
-
-	// return new set of players and transactions
-	var transactions []Transaction
-
-	db.Find(&transactions)
-
-	json.NewEncoder(w).Encode(transactions)
+	json.NewEncoder(w).Encode(getTransactionsForGame(db, gameId))
 }
 
 func initViews(router *mux.Router) {
