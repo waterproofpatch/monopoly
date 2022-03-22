@@ -159,7 +159,11 @@ func games(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		log.Printf("Deleting game %v", id)
-		writeError(w, "Not implemented!")
+		db.Delete(&Game{}, id)
+		var games []Game
+		db.Find(&games)
+		json.NewEncoder(w).Encode(games)
+		return
 	case "PUT": // modify a game, look for Players and Transactions
 	case "POST": // start a new game
 		// create a new game given a name
@@ -251,7 +255,7 @@ func transactions(w http.ResponseWriter, r *http.Request) {
 
 func initViews(router *mux.Router) {
 	router.HandleFunc("/api/games", games).Methods("GET", "POST", "OPTIONS")
-	router.HandleFunc("/api/games/{id:[0-9]+}", games).Methods("GET", "POST", "OPTIONS")
+	router.HandleFunc("/api/games/{id:[0-9]+}", games).Methods("DELETE", "GET", "POST", "OPTIONS")
 
 	router.HandleFunc("/api/players", players).Methods("GET", "PUT", "OPTIONS").Queries("gameId", "[0-9]*")
 	router.HandleFunc("/api/players", players).Methods("GET", "PUT", "OPTIONS")

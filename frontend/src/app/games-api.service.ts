@@ -26,14 +26,20 @@ export class GamesApiService extends BaseService {
     super();
   }
 
+  deleteGameHttp(game: Game): Observable<Game[]> {
+    const url = `${this.getUrlBase() + this.apiUrl}/${game.ID}`;
+
+    return this.http
+      .delete<Game[]>(url, this.httpOptions)
+      .pipe(catchError(this.dialogService.handleError<Game[]>('deleteGame')));
+  }
+
   getGamesHttp(): Observable<Game[]> {
     return this.http
       .get<Game[]>(this.getUrlBase() + this.apiUrl, this.httpOptions)
-      .pipe(
-        tap((games) => {},
-        catchError(this.dialogService.handleError<Game[]>('getGamesHttp')))
-      );
+      .pipe(catchError(this.dialogService.handleError<Game[]>('getGamesHttp')));
   }
+
   newGameHttp(name: string): Observable<Game> {
     return this.http
       .post<Game>(

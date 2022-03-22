@@ -89,9 +89,13 @@ export class DialogService extends BaseService {
    */
   handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
-      this.displayErrorDialog(
-        `${operation} failed: ${error.error.error_message}`
-      );
+      if (error.error == null) {
+        this.displayErrorDialog('Unknown error - failed: ' + operation);
+      } else {
+        this.displayErrorDialog(
+          `${operation} failed: ${error.error.error_message}`
+        );
+      }
 
       // Let the app keep running by returning an empty result.
       return of(result as T);
