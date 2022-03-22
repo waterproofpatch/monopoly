@@ -135,22 +135,16 @@ func players(w http.ResponseWriter, r *http.Request) {
 
 func games(w http.ResponseWriter, r *http.Request) {
 	db := getDb()
-	log.Printf("%v games", r.Method)
 
 	switch r.Method {
 	case "GET": // get a specific game that was already existing
 		id, Ok := mux.Vars(r)["id"]
-		if !Ok {
-			log.Printf("All games!")
-			// return a list of names for each game in the db
-			var games []Game
-			db.Find(&games)
-			json.NewEncoder(w).Encode(games)
-		} else {
+		if Ok {
 			var game Game
 			log.Printf("Game %v!", id)
 			db.First(&game, "id = ?", id)
 			json.NewEncoder(w).Encode(game)
+			return
 		}
 	case "DELETE":
 		id, Ok := mux.Vars(r)["id"]
@@ -160,27 +154,25 @@ func games(w http.ResponseWriter, r *http.Request) {
 		}
 		log.Printf("Deleting game %v", id)
 		db.Delete(&Game{}, id)
-		var games []Game
-		db.Find(&games)
-		json.NewEncoder(w).Encode(games)
+	case "PUT":
+		writeError(w, "Not implemented!")
 		return
-	case "PUT": // modify a game, look for Players and Transactions
 	case "POST": // start a new game
 		// create a new game given a name
 		var newGameRequest NewGameRequest
-		var game Game
-
 		json.NewDecoder(r.Body).Decode(&newGameRequest)
 
-		log.Printf("Game name is %v", newGameRequest.GameName)
-
 		id := newGame(newGameRequest.GameName)
+
+		var game Game
 		db.First(&game, "id = ?", id)
-
 		log.Printf("new game ID is %v", id)
-
 		json.NewEncoder(w).Encode(game)
+		return
 	}
+	var games []Game
+	db.Find(&games)
+	json.NewEncoder(w).Encode(games)
 }
 
 func transactions(w http.ResponseWriter, r *http.Request) {
