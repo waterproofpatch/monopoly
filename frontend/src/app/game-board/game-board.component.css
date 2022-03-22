@@ -1,11 +1,14 @@
 button {
   margin: 10px;;
 }
+mat-card {
+  margin: 10px;
+}
   .game-header {
     display: flex;
     margin: 82px auto 32px;
     padding: 0 16px;
     max-width: 960px;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
   }

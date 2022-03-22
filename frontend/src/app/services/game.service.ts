@@ -17,6 +17,13 @@ export class GameService extends BaseComponent {
     this.getGames();
   }
 
+  deleteGame(game: Game) {
+    this.gamesApi.deleteGameHttp(game).subscribe((x) => {
+      this.selectedGameId$.next(0);
+      this.games$.next(x);
+    });
+  }
+
   newGame(gameName: string) {
     this.gamesApi.newGameHttp(gameName).subscribe((x) => {
       this.selectedGameId$.next(x.ID);
