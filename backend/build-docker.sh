@@ -1,1 +1,2 @@
-docker build -t monopoly-backend . 
+#/bin/bash
+(cd src && docker build -t monopoly-backend .)
