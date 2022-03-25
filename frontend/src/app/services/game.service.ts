@@ -11,10 +11,17 @@ import { GamesApiService } from '../games-api.service';
 export class GameService extends BaseComponent {
   games$ = new BehaviorSubject<Game[]>([]);
   selectedGameId$ = new BehaviorSubject<number>(0);
+  version$ = new BehaviorSubject<string>('Unknown...');
 
   constructor(private gamesApi: GamesApiService) {
     super();
     this.getGames();
+  }
+
+  getVersion() {
+    this.gamesApi.getVersionHttp().subscribe((x) => {
+      this.version$.next(x.version);
+    });
   }
 
   deleteGame(game: Game) {

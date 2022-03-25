@@ -5,9 +5,7 @@ import { tap, catchError, takeUntil } from 'rxjs/operators';
 
 import { DialogService } from './services/dialog-service/dialog.service';
 import { BaseService } from './base.service';
-import { Game } from './types';
-import { PlayerService } from './services/player.service';
-import { TransactionService } from './services/transaction.service';
+import { Game, Version } from './types';
 import { TransactionsApiService } from './transactions-api.service';
 import { PlayersApiService } from './players-api.service';
 
@@ -32,6 +30,14 @@ export class GamesApiService extends BaseService {
     return this.http
       .delete<Game[]>(url, this.httpOptions)
       .pipe(catchError(this.dialogService.handleError<Game[]>('deleteGame')));
+  }
+
+  getVersionHttp(): Observable<Version> {
+    return this.http
+      .get<Version>(this.getUrlBase() + '/api/version', this.httpOptions)
+      .pipe(
+        catchError(this.dialogService.handleError<Version>('getVersionHttp'))
+      );
   }
 
   getGamesHttp(): Observable<Game[]> {

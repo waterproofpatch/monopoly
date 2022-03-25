@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  monopoliy-backend:
+  monopoly-backend:
     depends_on: 
       - backend-db
     build:

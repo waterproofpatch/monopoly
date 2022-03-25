@@ -17,8 +17,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
-	font-size: xx-large;
+    font-size: xx-large;
     background-color: #1976d2;
     color: white;
     font-weight: 600;
   }
+
+.version {
+  font-size: x-small;
+  margin: 10px;
+}
