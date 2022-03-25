@@ -3,7 +3,7 @@ import { takeUntil } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
 
 import { Transaction } from '../types';
-import { TransactionsApiService } from '../api/transactions-api.service';
+import { TransactionsApiService } from '../apis/transactions-api.service';
 import { BaseComponent } from '../components/base/base.component';
 import { PlayerService } from './player.service';
 
