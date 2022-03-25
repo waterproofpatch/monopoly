@@ -2,12 +2,10 @@ package api
 
 import (
 	"encoding/json"
-	"log"
 	"monopoly/utils"
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"gorm.io/gorm"
 )
 
 type VersionResponse struct {
@@ -20,52 +18,6 @@ type ChangePlayerRequest struct {
 
 type NewGameRequest struct {
 	GameName string `json:"name"`
-}
-
-type Error struct {
-	ErrorMessage string `json:"error_message"`
-}
-
-func writeError(w http.ResponseWriter, message string) {
-	w.WriteHeader(http.StatusBadRequest)
-	json.NewEncoder(w).Encode(&Error{ErrorMessage: message})
-}
-
-func getTransactionsForGame(db *gorm.DB, gameId string) []utils.Transaction {
-	var transactions []utils.Transaction
-	var game utils.Game
-	db.Find(&game, "ID = ?", gameId)
-	db.Model(&game).Order("ID").Association("Transactions").Find(&transactions)
-	return transactions
-}
-
-func processTransaction(w http.ResponseWriter, transaction utils.Transaction, reverse bool) {
-	db := utils.GetDb()
-
-	var fromPlayer utils.Player
-	var toPlayer utils.Player
-	db.First(&fromPlayer, "id = ?", transaction.FromPlayerId)
-	db.First(&toPlayer, "id = ?", transaction.ToPlayerId)
-
-	log.Printf("Processing transaction %v From player: %v, To player: %v", transaction, fromPlayer, toPlayer)
-
-	if reverse {
-		fromPlayer.Money += uint(transaction.Amount)
-		toPlayer.Money -= uint(transaction.Amount)
-	} else {
-		// bank has unlimited money...
-		if fromPlayer.Name != "bank" && fromPlayer.Money < uint(transaction.Amount) {
-			writeError(w, "Not enougn money!")
-			return
-		}
-
-		// update cash
-		fromPlayer.Money -= uint(transaction.Amount)
-		toPlayer.Money += uint(transaction.Amount)
-	}
-
-	db.Save(&fromPlayer)
-	db.Save(&toPlayer)
 }
 
 func players(w http.ResponseWriter, r *http.Request) {
@@ -83,7 +35,7 @@ func players(w http.ResponseWriter, r *http.Request) {
 		}
 	case "DELETE":
 		if !hasPlayerId {
-			writeError(w, "Missing playerId")
+			utils.WriteError(w, "Missing playerId")
 			return
 		}
 		db.Model(&utils.Player{}).Where("id=?", playerId).Update("InGame", false)
@@ -91,7 +43,7 @@ func players(w http.ResponseWriter, r *http.Request) {
 		var req ChangePlayerRequest
 		err := json.NewDecoder(r.Body).Decode(&req)
 		if err != nil {
-			writeError(w, "Failed decoding change player request!")
+			utils.WriteError(w, "Failed decoding change player request!")
 			return
 		}
 		firstName := req.First.Name
@@ -102,7 +54,7 @@ func players(w http.ResponseWriter, r *http.Request) {
 
 	gameId := r.FormValue("gameId")
 	if gameId == "" {
-		writeError(w, "Missing gameId!")
+		utils.WriteError(w, "Missing gameId!")
 		return
 	}
 	var players []utils.Player
@@ -126,12 +78,12 @@ func games(w http.ResponseWriter, r *http.Request) {
 		}
 	case "DELETE":
 		if !hasGameId {
-			writeError(w, "Missing gameId!")
+			utils.WriteError(w, "Missing gameId!")
 			return
 		}
 		db.Delete(&utils.Game{}, gameId)
 	case "PUT":
-		writeError(w, "Not implemented!")
+		utils.WriteError(w, "Not implemented!")
 		return
 	case "POST": // start a new game
 		// create a new game given a name
@@ -154,7 +106,7 @@ func transactions(w http.ResponseWriter, r *http.Request) {
 	db := utils.GetDb()
 	gameId := r.FormValue("gameId")
 	if gameId == "" {
-		writeError(w, "Missing gameId!")
+		utils.WriteError(w, "Missing gameId!")
 		return
 	}
 
@@ -164,26 +116,26 @@ func transactions(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
 		id, hasTransactionId := vars["id"]
 		if !hasTransactionId {
-			writeError(w, "Missing ID!")
+			utils.WriteError(w, "Missing ID!")
 			return
 		}
 		// find, reverse, and then delete the transaction
 		var transaction utils.Transaction
 		db.First(&transaction, id)
-		processTransaction(w, transaction, true)
+		utils.ProcessTransaction(w, transaction, true)
 		db.Delete(&utils.Transaction{}, id)
 	case "POST":
 		var transaction utils.Transaction
 		err := json.NewDecoder(r.Body).Decode(&transaction)
 		if err != nil {
-			writeError(w, "Failed decoding transaction!")
+			utils.WriteError(w, "Failed decoding transaction!")
 			return
 		}
 		// create and then process the transaction
-		processTransaction(w, transaction, false)
+		utils.ProcessTransaction(w, transaction, false)
 		db.Create(&transaction)
 	}
-	json.NewEncoder(w).Encode(getTransactionsForGame(db, gameId))
+	json.NewEncoder(w).Encode(utils.GetTransactionsForGame(db, gameId))
 }
 
 func version(w http.ResponseWriter, r *http.Request) {
