@@ -38,7 +38,7 @@ type NewGameRequest struct {
 
 type LoginRequest struct {
 	Email    string `json:"email"`
-	Password string `json:"email"`
+	Password string `json:"password"`
 }
 
 func login(w http.ResponseWriter, r *http.Request) {
@@ -78,12 +78,14 @@ func login(w http.ResponseWriter, r *http.Request) {
 
 		if err != nil {
 			log.Println(err)
-			http.Error(w, "Login failed!", http.StatusUnauthorized)
+			utils.WriteError(w, "Failed generating a new token")
+			return
 		}
 
 		w.Write(json)
 	} else {
-		http.Error(w, "Login failed!", http.StatusUnauthorized)
+		utils.WriteError(w, "Invalid credentials!")
+		return
 	}
 }
 
