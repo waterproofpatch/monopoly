@@ -50,7 +50,6 @@ func login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Demo - in real case scenario you'd check this against your database
 	if loginRequest.Email == "admin@gmail.com" && loginRequest.Password == "admin123" {
 		claims := JWTData{
 			StandardClaims: jwt.StandardClaims{

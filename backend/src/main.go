@@ -21,7 +21,7 @@ func startServing(port string) {
 	api.InitViews(router)
 
 	methods := []string{"GET", "POST", "PUT", "DELETE"}
-	headers := []string{"Content-Type", "Access-Control-Allow-Origin"}
+	headers := []string{"Content-Type", "Access-Control-Allow-Origin", "Authorization"}
 	srv := &http.Server{
 		// Handler: router,
 		Handler: handlers.CORS(handlers.AllowedMethods(methods), handlers.AllowedHeaders(headers))(router),

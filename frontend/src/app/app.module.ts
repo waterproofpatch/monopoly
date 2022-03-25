@@ -16,7 +16,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { TransactionsComponent } from './components/transactions/transactions.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import {
   PieceSelectDialog,
   ErrorDialog,
@@ -24,9 +24,11 @@ import {
   NewGameDialog,
   LoginDialog,
 } from './services/dialog/dialog.service';
+import { LoginService } from './services/login.service';
 import { AnimatedDigitComponent } from './components/animated/animated-digit.component';
 import { BaseComponent } from './components/base/base.component';
 import { TransactionComponent } from './components/transaction/transaction.component';
+import { AuthInterceptorService } from './services/auth-interceptor.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -58,7 +60,15 @@ import { TransactionComponent } from './components/transaction/transaction.compo
     ReactiveFormsModule,
     BrowserAnimationsModule,
   ],
-  providers: [{ provide: MatDialogRef, useValue: {} }],
+  providers: [
+    LoginService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptorService,
+      multi: true,
+    },
+    { provide: MatDialogRef, useValue: {} },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
