@@ -41,6 +41,7 @@ export class DialogService extends BaseService {
   displayLoginDialog() {
     const dialogRef = this.dialog.open(LoginDialog, {
       width: '350px',
+      height: '500px',
       data: {},
     });
     return dialogRef;
@@ -113,6 +114,7 @@ export class DialogService extends BaseService {
 
 @Component({
   selector: 'login-dialog',
+  styleUrls: ['./login-dialog.css'],
   templateUrl: './login-dialog.html',
 })
 export class LoginDialog {
