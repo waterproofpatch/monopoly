@@ -5,7 +5,7 @@ import { takeUntil } from 'rxjs/operators';
 import { Player, Transaction } from '../../types';
 import { DialogService } from '../../services/dialog-service/dialog.service';
 import { TransactionService } from '../../services/transaction.service';
-import { BaseComponent } from 'src/app/base/base.component';
+import { BaseComponent } from 'src/app/components/base/base.component';
 import { PlayerService } from '../../services/player.service';
 import { GameService } from '../../services/game.service';
 
