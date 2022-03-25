@@ -10,6 +10,9 @@ import (
 	"gorm.io/gorm"
 )
 
+type VersionResponse struct {
+	Version string `json:"version"`
+}
 type ChangePlayerRequest struct {
 	First  utils.Player `json:"first"`
 	Second utils.Player `json:"second"`
@@ -183,6 +186,12 @@ func transactions(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(getTransactionsForGame(db, gameId))
 }
 
+func version(w http.ResponseWriter, r *http.Request) {
+	var version VersionResponse
+	version.Version = "0.0.1"
+	json.NewEncoder(w).Encode(&version)
+}
+
 func InitViews(router *mux.Router) {
 	router.HandleFunc("/api/games", games).Methods("GET", "POST", "OPTIONS")
 	router.HandleFunc("/api/games/{id:[0-9]+}", games).Methods("DELETE", "GET", "POST", "OPTIONS")
@@ -194,4 +203,6 @@ func InitViews(router *mux.Router) {
 	router.HandleFunc("/api/transactions", transactions).Methods("POST", "GET", "OPTIONS").Queries("gameId", "[0-9]*")
 	router.HandleFunc("/api/transactions", transactions).Methods("POST", "DELETE", "GET", "OPTIONS")
 	router.HandleFunc("/api/transactions/{id:[0-9]+}", transactions).Methods("DELETE", "OPTIONS")
+
+	router.HandleFunc("/api/version", version).Methods("GET", "OPTIONS")
 }

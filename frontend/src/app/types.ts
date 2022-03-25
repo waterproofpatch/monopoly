@@ -14,6 +14,10 @@ export interface Game {
   CreatedAt: string;
 }
 
+export interface Version {
+  version: string;
+}
+
 export interface Game {
   players: Player[];
   transactions: Transaction[];
