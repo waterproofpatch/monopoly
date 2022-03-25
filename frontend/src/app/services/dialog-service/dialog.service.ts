@@ -8,8 +8,8 @@ import {
   MatDialogRef,
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
-import { TransactionService } from '../../services/transaction.service';
-import { PlayerService } from '../../services/player.service';
+import { TransactionService } from '../transaction.service';
+import { PlayerService } from '../player.service';
 import { Transaction } from '../../types';
 import { FormControl, FormGroup } from '@angular/forms';
 import { BaseService } from 'src/app/base.service';
