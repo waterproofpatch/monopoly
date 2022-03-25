@@ -1,7 +1,7 @@
 import { HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BaseComponent } from './base/base/base.component';
-import { environment } from '../environments/environment'; // Change this to your file location
+import { BaseComponent } from '../base/base.component';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',

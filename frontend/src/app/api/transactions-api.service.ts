@@ -3,9 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
-import { BaseService } from './base.service';
-import { Transaction } from './types';
-import { DialogService } from './services/dialog-service/dialog.service';
+import { BaseService } from '../services/base.service';
+import { Transaction } from '../types';
+import { DialogService } from '../services/dialog-service/dialog.service';
 
 @Injectable({
   providedIn: 'root',

@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { BaseService } from './base.service';
 
-import { Player, ChangePlayerRequest } from './types';
+import { BaseService } from '../services/base.service';
+import { Player, ChangePlayerRequest } from '../types';
 import { HttpClient } from '@angular/common/http';
-import { DialogService } from './services/dialog-service/dialog.service';
+import { DialogService } from '../services/dialog-service/dialog.service';
 
 @Injectable({
   providedIn: 'root',
