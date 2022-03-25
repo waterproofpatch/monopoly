@@ -1,5 +1,5 @@
-<h1 mat-dialog-title>Login</h1>
-<div mat-dialog-content>
+<h1 mat-dialog-title class="login-form">Login</h1>
+<div mat-dialog-content class="login-form">
   <form [formGroup]="loginForm">
     <mat-form-field appearance="fill">
       <mat-label>Enter your email</mat-label>
@@ -9,13 +9,18 @@
         formControlName="email"
         required
       />
-      <input matInput formControlName="password" required />
       <mat-error *ngIf="loginForm.controls.email.invalid"
         >{{getErrorMessage()}}</mat-error
       >
     </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Enter your password</mat-label>
+      <input matInput formControlName="password" required />
+    </mat-form-field>
   </form>
 </div>
-<div mat-dialog-actions>
-  <button (click)="onOkClick()" mat-button cdkFocusInitial>Ok</button>
+<div mat-dialog-actions class="login-form">
+  <button (click)="onOkClick()" mat-stroked-button color="primary">
+    Login
+  </button>
 </div>
