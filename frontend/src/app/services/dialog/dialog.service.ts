@@ -140,8 +140,9 @@ export class LoginDialog {
       : '';
   }
 
-  onOkClick(): void {
+  onLoginClick(): void {
     this.dialogRef.close();
+    console.log('logging in with email ' + this.loginForm.controls.email.value);
   }
 }
 @Component({
