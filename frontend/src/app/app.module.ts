@@ -24,7 +24,7 @@ import {
   NewGameDialog,
 } from './services/dialog-service/dialog.service';
 import { AnimatedDigitComponent } from './animated/animated-digit.component';
-import { BaseComponent } from './base/base.component';
+import { BaseComponent } from './components/base/base.component';
 import { TransactionComponent } from './components/transaction/transaction.component';
 @NgModule({
   declarations: [

@@ -5,7 +5,7 @@ import { DialogService } from '../../services/dialog-service/dialog.service';
 import { TransactionService } from '../../services/transaction.service';
 import { PlayerService } from '../../services/player.service';
 import { GameService } from '../../services/game.service';
-import { BaseComponent } from '../../base/base.component';
+import { BaseComponent } from '../base/base.component';
 
 @Component({
   selector: 'app-game-board',

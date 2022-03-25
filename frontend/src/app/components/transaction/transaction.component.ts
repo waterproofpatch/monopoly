@@ -2,7 +2,7 @@ import { Input, Component, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { takeUntil, exhaustMap, map } from 'rxjs/operators';
 
-import { BaseComponent } from '../../base/base.component';
+import { BaseComponent } from '../base/base.component';
 import { Transaction, Player } from '../../types';
 import { PlayerService } from '../../services/player.service';
 import { TransactionService } from '../../services/transaction.service';

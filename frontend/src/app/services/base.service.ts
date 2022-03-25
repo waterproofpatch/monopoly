@@ -1,6 +1,6 @@
 import { HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BaseComponent } from '../base/base.component';
+import { BaseComponent } from '../components/base/base.component';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
