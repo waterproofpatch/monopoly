@@ -1,8 +1,11 @@
-deploy: build_docker
+deploy: build-docker
 	./heroku-deploy.sh
 
-build_docker:
+build-docker:
 	./build-docker.sh
 
-build_local:
+build-local:
 	(cd src && go build .)
+
+run-devel: build-docker
+	docker-compose up --build
