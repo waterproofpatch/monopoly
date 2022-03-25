@@ -2,11 +2,27 @@ package api
 
 import (
 	"encoding/json"
+	"log"
 	"monopoly/utils"
 	"net/http"
+	"time"
+
+	jwt "github.com/dgrijalva/jwt-go"
 
 	"github.com/gorilla/mux"
 )
+
+const (
+	PORT   = "1337"
+	SECRET = "42isTheAnswer"
+)
+
+type JWTData struct {
+	// Standard claims are the standard jwt claims from the IETF standard
+	// https://tools.ietf.org/html/rfc7519
+	jwt.StandardClaims
+	CustomClaims map[string]string `json:"custom,omitempty"`
+}
 
 type VersionResponse struct {
 	Version string `json:"version"`
@@ -18,6 +34,57 @@ type ChangePlayerRequest struct {
 
 type NewGameRequest struct {
 	GameName string `json:"name"`
+}
+
+type LoginRequest struct {
+	Email    string `json:"email"`
+	Password string `json:"email"`
+}
+
+func login(w http.ResponseWriter, r *http.Request) {
+
+	var loginRequest LoginRequest
+	err := json.NewDecoder(r.Body).Decode(&loginRequest)
+	if err != nil {
+		utils.WriteError(w, "Invalid request!")
+		return
+	}
+
+	// Demo - in real case scenario you'd check this against your database
+	if loginRequest.Email == "admin@gmail.com" && loginRequest.Password == "admin123" {
+		claims := JWTData{
+			StandardClaims: jwt.StandardClaims{
+				ExpiresAt: time.Now().Add(time.Hour).Unix(),
+			},
+
+			CustomClaims: map[string]string{
+				"userid": "u1",
+			},
+		}
+
+		token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+		tokenString, err := token.SignedString([]byte(SECRET))
+		if err != nil {
+			log.Println(err)
+			utils.WriteError(w, "Failed generating new token!")
+			return
+		}
+
+		json, err := json.Marshal(struct {
+			Token string `json:"token"`
+		}{
+			tokenString,
+		})
+
+		if err != nil {
+			log.Println(err)
+			http.Error(w, "Login failed!", http.StatusUnauthorized)
+		}
+
+		w.Write(json)
+	} else {
+		http.Error(w, "Login failed!", http.StatusUnauthorized)
+	}
 }
 
 func players(w http.ResponseWriter, r *http.Request) {
@@ -157,4 +224,6 @@ func InitViews(router *mux.Router) {
 	router.HandleFunc("/api/transactions/{id:[0-9]+}", transactions).Methods("DELETE", "OPTIONS")
 
 	router.HandleFunc("/api/version", version).Methods("GET", "OPTIONS")
+
+	router.HandleFunc("/api/login", login).Methods("POST", "OPTIONA")
 }

@@ -22,6 +22,7 @@ import {
   ErrorDialog,
   LogDialog,
   NewGameDialog,
+  LoginDialog,
 } from './services/dialog/dialog.service';
 import { AnimatedDigitComponent } from './components/animated/animated-digit.component';
 import { BaseComponent } from './components/base/base.component';
@@ -35,6 +36,7 @@ import { TransactionComponent } from './components/transaction/transaction.compo
     ErrorDialog,
     LogDialog,
     NewGameDialog,
+    LoginDialog,
     AnimatedDigitComponent,
     BaseComponent,
     TransactionsComponent,
