@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  monopoliy-backend:
+    depends_on: 
+      - backend-db
+    build:
+      context: src
+    container_name: monopoly-server
+    hostname: monopoly-server
+    networks:
+      - monopoly-net
+    ports:
+      - 5001:5001
+    environment:
+      - DATABASE_URL=postgres://monopoly:docker@db:5432/monopoly-db
+      - PORT=5001
+    deploy:
+      restart_policy:
+        condition: on-failure
+  backend-db:
+    image: postgres:latest
+    environment:
+      - POSTGRES_PASSWORD=docker
+      - POSTGRES_USER=monopoly
+      - POSTGRES_DB=monopoly-db
+    container_name: backend-db
+    hostname: db
+    networks:
+      - monopoly-net
+    ports:
+      - 5432:5432
+    volumes:
+      - backend-db:/var/lib/postgresql/data
+
+volumes:
+  backend-db:
+
+networks:
+  monopoly-net:
+    driver: bridge
