@@ -3,7 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { takeUntil, map } from 'rxjs/operators';
 import * as _ from 'lodash';
 
-import { BaseComponent } from '../base/base/base.component';
+import { BaseComponent } from '../base/base.component';
 import { PlayersApiService } from '../players-api.service';
 import { Player } from '../types';
 

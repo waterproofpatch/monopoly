@@ -4,7 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 
 import { Transaction } from '../types';
 import { TransactionsApiService } from '../transactions-api.service';
-import { BaseComponent } from '../base/base/base.component';
+import { BaseComponent } from '../base/base.component';
 import { PlayerService } from './player.service';
 
 @Injectable({

@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 
-import { DialogService } from '../services/dialog-service/dialog.service';
-import { TransactionService } from '../services/transaction.service';
-import { PlayerService } from '../services/player.service';
-import { GameService } from '../services/game.service';
-import { BaseComponent } from '../base/base/base.component';
+import { DialogService } from '../../services/dialog-service/dialog.service';
+import { TransactionService } from '../../services/transaction.service';
+import { PlayerService } from '../../services/player.service';
+import { GameService } from '../../services/game.service';
+import { BaseComponent } from '../../base/base.component';
 
 @Component({
   selector: 'app-game-board',

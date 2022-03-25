@@ -4,8 +4,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'; // <-- NgMode
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { PlayersComponent } from './players/players.component';
-import { GameBoardComponent } from './game-board/game-board.component';
+import { PlayersComponent } from './components/players/players.component';
+import { GameBoardComponent } from './components/game-board/game-board.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
@@ -15,7 +15,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { TransactionsComponent } from './transactions/transactions.component';
+import { TransactionsComponent } from './components/transactions/transactions.component';
 import { HttpClientModule } from '@angular/common/http';
 import {
   PieceSelectDialog,
@@ -24,8 +24,8 @@ import {
   NewGameDialog,
 } from './services/dialog-service/dialog.service';
 import { AnimatedDigitComponent } from './animated/animated-digit.component';
-import { BaseComponent } from './base/base/base.component';
-import { TransactionComponent } from './transaction/transaction.component';
+import { BaseComponent } from './base/base.component';
+import { TransactionComponent } from './components/transaction/transaction.component';
 @NgModule({
   declarations: [
     AppComponent,
