@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 import { Game } from '../types';
-import { BaseComponent } from '../base/base/base.component';
+import { BaseComponent } from '../base/base.component';
 import { GamesApiService } from '../games-api.service';
 
 @Injectable({

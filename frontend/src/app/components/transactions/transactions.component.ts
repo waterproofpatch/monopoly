@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 
-import { TransactionService } from '../services/transaction.service';
-import { BaseComponent } from 'src/app/base/base/base.component';
+import { TransactionService } from '../../services/transaction.service';
+import { BaseComponent } from 'src/app/base/base.component';
 
 @Component({
   selector: 'app-transactions',
