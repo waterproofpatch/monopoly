@@ -3,7 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 
 import { Game } from '../types';
 import { BaseComponent } from '../base/base.component';
-import { GamesApiService } from '../games-api.service';
+import { GamesApiService } from '../api/games-api.service';
 
 @Injectable({
   providedIn: 'root',

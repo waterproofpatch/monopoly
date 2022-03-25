@@ -3,9 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap, catchError, takeUntil } from 'rxjs/operators';
 
-import { DialogService } from './services/dialog-service/dialog.service';
-import { BaseService } from './base.service';
-import { Game, Version } from './types';
+import { DialogService } from '../services/dialog-service/dialog.service';
+import { BaseService } from '../services/base.service';
+import { Game, Version } from '../types';
 import { TransactionsApiService } from './transactions-api.service';
 import { PlayersApiService } from './players-api.service';
 

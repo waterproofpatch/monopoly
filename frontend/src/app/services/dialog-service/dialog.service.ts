@@ -12,7 +12,7 @@ import { TransactionService } from '../transaction.service';
 import { PlayerService } from '../player.service';
 import { Transaction } from '../../types';
 import { FormControl, FormGroup } from '@angular/forms';
-import { BaseService } from 'src/app/base.service';
+import { BaseService } from '../base.service';
 
 export interface ErrorDialogData {
   errorMsg: string;
