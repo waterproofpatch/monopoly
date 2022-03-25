@@ -1,16 +1,36 @@
-<div class="game-header">
-	<button (click)="newGame()" mat-raised-button color="primary">New Game</button>
-<mat-card *ngFor="let game of gameService.games$ | async" class="example-card">
-  <mat-card-title>{{game.name}}</mat-card-title>
-  <mat-card-subtitle>{{game.ID}}</mat-card-subtitle>
-  <mat-card-content>
-    <p>Created on {{game.CreatedAt}}</p>
-  </mat-card-content>
-  <mat-card-actions>
-    <button mat-button (click)="gameService.resumeGame(game.ID)">Resume</button>
-    <button mat-button (click)="gameService.deleteGame(game)">Delete</button>
-  </mat-card-actions>
-</mat-card>
+<div class="parent-container">
+  <div class="login-container">
+    <button (click)="login()" mat-raised-button color="primary">Login</button>
+  </div>
+  <div class="login-container">
+    <button (click)="newGame()" mat-raised-button color="primary">
+      New Game
+    </button>
+  </div>
+  <div class="game-header">
+    <mat-card
+      *ngFor="let game of gameService.games$ | async"
+      class="example-card"
+    >
+      <mat-card-title>{{ game.name }}</mat-card-title>
+      <mat-card-subtitle>{{ game.ID }}</mat-card-subtitle>
+      <mat-card-content>
+        <p>Created on {{ game.CreatedAt }}</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button (click)="gameService.resumeGame(game.ID)">
+          Resume
+        </button>
+        <button mat-button (click)="gameService.deleteGame(game)">
+          Delete
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+  <div>
+    <app-players [gameId]="gameService.selectedGameId$ | async"></app-players>
+    <app-transactions
+      [gameId]="gameService.selectedGameId$ | async"
+    ></app-transactions>
+  </div>
 </div>
-<app-players [gameId]="gameService.selectedGameId$ | async"></app-players>
-<app-transactions [gameId]="gameService.selectedGameId$ | async"></app-transactions>
