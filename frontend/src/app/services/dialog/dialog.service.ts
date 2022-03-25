@@ -162,6 +162,15 @@ export class NewGameDialog {
       .beforeClosed()
       .subscribe(() => dialogRef.close(this.newGameForm.controls.name.value));
   }
+  getErrorMessage() {
+    if (this.newGameForm.controls.name.hasError('required')) {
+      return 'You must enter a value';
+    }
+
+    return this.newGameForm.controls.name.hasError('name')
+      ? 'Not a valid email'
+      : '';
+  }
 
   onOkClick(): void {
     this.dialogRef.close();
