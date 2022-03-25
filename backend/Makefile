@@ -7,15 +7,14 @@ build: build-devel
 	./build-docker.sh
 
 build-devel:
-	go build src/monopoly/main.go
+	(cd src && go build .)
 
 start-db:
 	docker run -e POSTGRES_PASSWORD=docker -p 5432:5432 -d postgres
 
 # run the development build
 run-devel:
-# PORT=5001 DATABASE_URL=postgres://postgres:docker@localhost:5432/postgres CERTS_PATH=`pwd`/$(BACKEND_SRC_PATH)/certs/ go run *.go
-	PORT=5001 DATABASE_URL=postgres://postgres:docker@localhost:5432/postgres go run src/monopoly/main.go
+	(cd src && PORT=5001 DATABASE_URL=postgres://postgres:docker@localhost:5432/postgres go run .)
 
 # Generate SSL certificates for the backend.
 certs:

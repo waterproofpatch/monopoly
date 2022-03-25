@@ -45,3 +45,4 @@ testem.log
 Thumbs.db
 backend/test.sqlite
 backend/backend
+tags

@@ -1,1 +1,8 @@
-docker run -e PORT=5001 -e DB_HOST=localhost -e DB_USER=postgres -e DB_PASSWORD=docker -e DB_PORT=5432 -p 5001:5001 monopoly-backend 
+#/bin/bash
+
+
+docker run \
+        -e PORT=5001 \
+		-e DATABASE_URL=postgres://postgres:docker@localhost:5432/postgres \
+        --net=host \
+        -p 5001:5001 monopoly-backend 
