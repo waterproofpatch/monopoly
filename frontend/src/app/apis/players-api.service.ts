@@ -67,7 +67,6 @@ export class PlayersApiService extends BaseService {
       .pipe(catchError(this.dialogService.handleError<any>('updatePlayer')));
   }
 
-  /** POST: add a new player to the server */
   addPlayerHttp(player: Player): Observable<Player> {
     return this.http
       .post<Player>(this.getUrlBase() + this.apiUrl, player, this.httpOptions)

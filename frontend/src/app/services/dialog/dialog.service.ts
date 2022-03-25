@@ -13,6 +13,7 @@ import { TransactionService } from '../transaction.service';
 import { PlayerService } from '../player.service';
 import { Transaction } from '../../types';
 import { BaseService } from '../base.service';
+import { LoginService } from '../login.service';
 
 export interface ErrorDialogData {
   errorMsg: string;
@@ -124,6 +125,7 @@ export class LoginDialog {
   });
 
   constructor(
+    private loginService: LoginService,
     public dialogRef: MatDialogRef<LoginDialog>,
     @Inject(MAT_DIALOG_DATA) public data: LoginDialogData
   ) {
@@ -143,6 +145,10 @@ export class LoginDialog {
   onLoginClick(): void {
     this.dialogRef.close();
     console.log('logging in with email ' + this.loginForm.controls.email.value);
+    this.loginService.login(
+      this.loginForm.controls.email.value,
+      this.loginForm.controls.password.value
+    );
   }
 }
 @Component({
