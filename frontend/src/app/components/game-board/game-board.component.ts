@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 
-import { DialogService } from '../../services/dialog-service/dialog.service';
+import { DialogService } from '../../services/dialog/dialog.service';
 import { TransactionService } from '../../services/transaction.service';
 import { PlayerService } from '../../services/player.service';
 import { GameService } from '../../services/game.service';
