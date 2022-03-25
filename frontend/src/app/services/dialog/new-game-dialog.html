@@ -1,8 +1,13 @@
 <h1 mat-dialog-title>New Game</h1>
 <div mat-dialog-content>
   <form [formGroup]="newGameForm">
-  <label for="name">Name: </label>
-  <input id="name" type="text" formControlName="name">
+    <mat-form-field appearance="fill">
+      <mat-label>Game Name</mat-label>
+      <input matInput placeholder="My Game" formControlName="name" required />
+      <mat-error *ngIf="newGameForm.controls.name.invalid"
+        >{{getErrorMessage()}}</mat-error
+      >
+    </mat-form-field>
   </form>
 </div>
 <div mat-dialog-actions>
