@@ -23,7 +23,7 @@ import {
   LogDialog,
   NewGameDialog,
 } from './services/dialog/dialog.service';
-import { AnimatedDigitComponent } from './animated/animated-digit.component';
+import { AnimatedDigitComponent } from './components/animated/animated-digit.component';
 import { BaseComponent } from './components/base/base.component';
 import { TransactionComponent } from './components/transaction/transaction.component';
 @NgModule({
