@@ -218,7 +218,7 @@ func InitViews(router *mux.Router) {
 	router.HandleFunc("/api/transactions", transactions).Methods("POST", "DELETE", "GET", "OPTIONS")
 	router.HandleFunc("/api/transactions/{id:[0-9]+}", transactions).Methods("DELETE", "OPTIONS")
 
-	router.HandleFunc("/api/version", version).Methods("GET", "OPTIONS")
+	router.HandleFunc("/api/version", utils.Logger(version, "version")).Methods("GET", "OPTIONS")
 
 	router.HandleFunc("/api/login", login).Methods("POST", "OPTIONA")
 }
