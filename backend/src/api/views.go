@@ -12,18 +12,6 @@ import (
 	"github.com/gorilla/mux"
 )
 
-const (
-	PORT   = "1337"
-	SECRET = "42isTheAnswer"
-)
-
-type JWTData struct {
-	// Standard claims are the standard jwt claims from the IETF standard
-	// https://tools.ietf.org/html/rfc7519
-	jwt.StandardClaims
-	CustomClaims map[string]string `json:"custom,omitempty"`
-}
-
 type VersionResponse struct {
 	Version string `json:"version"`
 }
@@ -51,7 +39,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if loginRequest.Email == "admin@gmail.com" && loginRequest.Password == "admin123" {
-		claims := JWTData{
+		claims := utils.JWTData{
 			StandardClaims: jwt.StandardClaims{
 				ExpiresAt: time.Now().Add(time.Hour).Unix(),
 			},
@@ -62,7 +50,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 		}
 
 		token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-		tokenString, err := token.SignedString([]byte(SECRET))
+		tokenString, err := token.SignedString([]byte(utils.SECRET))
 		if err != nil {
 			log.Println(err)
 			utils.WriteError(w, "Failed generating new token!")
@@ -133,7 +121,13 @@ func players(w http.ResponseWriter, r *http.Request) {
 }
 
 func games(w http.ResponseWriter, r *http.Request) {
+	if !utils.IsAuthorized(w, r) {
+		utils.WriteError(w, "Request failed!")
+		return
+	}
+
 	db := utils.GetDb()
+
 	gameId, hasGameId := mux.Vars(r)["id"]
 
 	switch r.Method {
