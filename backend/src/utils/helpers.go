@@ -27,8 +27,8 @@ type Error struct {
 	ErrorMessage string `json:"error_message"`
 }
 
-func WriteError(w http.ResponseWriter, message string) {
-	w.WriteHeader(http.StatusBadRequest)
+func WriteError(w http.ResponseWriter, message string, status int) {
+	w.WriteHeader(status)
 	json.NewEncoder(w).Encode(&Error{ErrorMessage: message})
 }
 
@@ -56,7 +56,7 @@ func ProcessTransaction(w http.ResponseWriter, transaction Transaction, reverse 
 	} else {
 		// bank has unlimited money...
 		if fromPlayer.Name != "bank" && fromPlayer.Money < uint(transaction.Amount) {
-			WriteError(w, "Not enougn money!")
+			WriteError(w, "Not enougn money!", http.StatusBadRequest)
 			return
 		}
 

@@ -34,7 +34,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 	var loginRequest LoginRequest
 	err := json.NewDecoder(r.Body).Decode(&loginRequest)
 	if err != nil {
-		utils.WriteError(w, "Invalid request!")
+		utils.WriteError(w, "Invalid request!", http.StatusBadRequest)
 		return
 	}
 
@@ -53,7 +53,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 		tokenString, err := token.SignedString([]byte(utils.SECRET))
 		if err != nil {
 			log.Println(err)
-			utils.WriteError(w, "Failed generating new token!")
+			utils.WriteError(w, "Failed generating new token!", http.StatusInternalServerError)
 			return
 		}
 
@@ -65,13 +65,13 @@ func login(w http.ResponseWriter, r *http.Request) {
 
 		if err != nil {
 			log.Println(err)
-			utils.WriteError(w, "Failed generating a new token")
+			utils.WriteError(w, "Failed generating a new token", http.StatusInternalServerError)
 			return
 		}
 
 		w.Write(json)
 	} else {
-		utils.WriteError(w, "Invalid credentials!")
+		utils.WriteError(w, "Invalid credentials!", http.StatusUnauthorized)
 		return
 	}
 }
@@ -91,7 +91,7 @@ func players(w http.ResponseWriter, r *http.Request) {
 		}
 	case "DELETE":
 		if !hasPlayerId {
-			utils.WriteError(w, "Missing playerId")
+			utils.WriteError(w, "Missing playerId", http.StatusBadRequest)
 			return
 		}
 		db.Model(&utils.Player{}).Where("id=?", playerId).Update("InGame", false)
@@ -99,7 +99,7 @@ func players(w http.ResponseWriter, r *http.Request) {
 		var req ChangePlayerRequest
 		err := json.NewDecoder(r.Body).Decode(&req)
 		if err != nil {
-			utils.WriteError(w, "Failed decoding change player request!")
+			utils.WriteError(w, "Failed decoding change player request!", http.StatusBadRequest)
 			return
 		}
 		firstName := req.First.Name
@@ -110,7 +110,7 @@ func players(w http.ResponseWriter, r *http.Request) {
 
 	gameId := r.FormValue("gameId")
 	if gameId == "" {
-		utils.WriteError(w, "Missing gameId!")
+		utils.WriteError(w, "Missing gameId!", http.StatusBadRequest)
 		return
 	}
 	var players []utils.Player
@@ -121,10 +121,6 @@ func players(w http.ResponseWriter, r *http.Request) {
 }
 
 func games(w http.ResponseWriter, r *http.Request) {
-	if !utils.IsAuthorized(w, r) {
-		utils.WriteError(w, "Request failed!")
-		return
-	}
 
 	db := utils.GetDb()
 
@@ -140,12 +136,12 @@ func games(w http.ResponseWriter, r *http.Request) {
 		}
 	case "DELETE":
 		if !hasGameId {
-			utils.WriteError(w, "Missing gameId!")
+			utils.WriteError(w, "Missing gameId!", http.StatusBadRequest)
 			return
 		}
 		db.Delete(&utils.Game{}, gameId)
 	case "PUT":
-		utils.WriteError(w, "Not implemented!")
+		utils.WriteError(w, "Not implemented!", http.StatusNotImplemented)
 		return
 	case "POST": // start a new game
 		// create a new game given a name
@@ -168,7 +164,7 @@ func transactions(w http.ResponseWriter, r *http.Request) {
 	db := utils.GetDb()
 	gameId := r.FormValue("gameId")
 	if gameId == "" {
-		utils.WriteError(w, "Missing gameId!")
+		utils.WriteError(w, "Missing gameId!", http.StatusBadRequest)
 		return
 	}
 
@@ -178,7 +174,7 @@ func transactions(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
 		id, hasTransactionId := vars["id"]
 		if !hasTransactionId {
-			utils.WriteError(w, "Missing ID!")
+			utils.WriteError(w, "Missing ID!", http.StatusBadRequest)
 			return
 		}
 		// find, reverse, and then delete the transaction
@@ -190,7 +186,7 @@ func transactions(w http.ResponseWriter, r *http.Request) {
 		var transaction utils.Transaction
 		err := json.NewDecoder(r.Body).Decode(&transaction)
 		if err != nil {
-			utils.WriteError(w, "Failed decoding transaction!")
+			utils.WriteError(w, "Failed decoding transaction!", http.StatusBadRequest)
 			return
 		}
 		// create and then process the transaction
@@ -207,7 +203,7 @@ func version(w http.ResponseWriter, r *http.Request) {
 }
 
 func InitViews(router *mux.Router) {
-	router.HandleFunc("/api/games", games).Methods("GET", "POST", "OPTIONS")
+	router.HandleFunc("/api/games", utils.Authenticated(games, "games")).Methods("GET", "POST", "OPTIONS")
 	router.HandleFunc("/api/games/{id:[0-9]+}", games).Methods("DELETE", "GET", "POST", "OPTIONS")
 
 	router.HandleFunc("/api/players", players).Methods("GET", "PUT", "OPTIONS").Queries("gameId", "[0-9]*")
