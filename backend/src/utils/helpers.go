@@ -2,11 +2,26 @@ package utils
 
 import (
 	"encoding/json"
+	"errors"
 	"log"
 	"net/http"
+	"strings"
 
+	"github.com/dgrijalva/jwt-go"
 	"gorm.io/gorm"
 )
+
+const (
+	PORT   = "1337"
+	SECRET = "42isTheAnswer"
+)
+
+type JWTData struct {
+	// Standard claims are the standard jwt claims from the IETF standard
+	// https://tools.ietf.org/html/rfc7519
+	jwt.StandardClaims
+	CustomClaims map[string]string `json:"custom,omitempty"`
+}
 
 type Error struct {
 	ErrorMessage string `json:"error_message"`
@@ -52,4 +67,33 @@ func ProcessTransaction(w http.ResponseWriter, transaction Transaction, reverse 
 
 	db.Save(&fromPlayer)
 	db.Save(&toPlayer)
+}
+
+func IsAuthorized(w http.ResponseWriter, r *http.Request) bool {
+	authToken := r.Header.Get("Authorization")
+	authArr := strings.Split(authToken, " ")
+
+	if len(authArr) != 2 {
+		log.Println("Authentication header is invalid: " + authToken)
+		return false
+	}
+
+	jwtToken := authArr[1]
+
+	_, err := jwt.ParseWithClaims(jwtToken, &JWTData{}, func(token *jwt.Token) (interface{}, error) {
+		if jwt.SigningMethodHS256 != token.Method {
+			return nil, errors.New("Invalid signing algorithm")
+		}
+		return []byte(SECRET), nil
+	})
+
+	if err != nil {
+		log.Println(err)
+		return false
+	}
+
+	// data := claims.Claims.(*JWTData)
+
+	// userID := data.CustomClaims["userid"]
+	return true
 }
