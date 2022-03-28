@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { tap, catchError, takeUntil } from 'rxjs/operators';
+import { tap, takeUntil } from 'rxjs/operators';
 
 import { DialogService } from '../services/dialog/dialog.service';
 import { BaseService } from '../services/base.service';
@@ -27,23 +27,21 @@ export class GamesApiService extends BaseService {
   deleteGameHttp(game: Game): Observable<Game[]> {
     const url = `${this.getUrlBase() + this.apiUrl}/${game.ID}`;
 
-    return this.http
-      .delete<Game[]>(url, this.httpOptions)
-      .pipe(catchError(this.dialogService.handleError<Game[]>('deleteGame')));
+    return this.http.delete<Game[]>(url, this.httpOptions);
   }
 
   getVersionHttp(): Observable<Version> {
-    return this.http
-      .get<Version>(this.getUrlBase() + '/api/version', this.httpOptions)
-      .pipe(
-        catchError(this.dialogService.handleError<Version>('getVersionHttp'))
-      );
+    return this.http.get<Version>(
+      this.getUrlBase() + '/api/version',
+      this.httpOptions
+    );
   }
 
   getGamesHttp(): Observable<Game[]> {
-    return this.http
-      .get<Game[]>(this.getUrlBase() + this.apiUrl, this.httpOptions)
-      .pipe(catchError(this.dialogService.handleError<Game[]>('getGamesHttp')));
+    return this.http.get<Game[]>(
+      this.getUrlBase() + this.apiUrl,
+      this.httpOptions
+    );
   }
 
   newGameHttp(name: string): Observable<Game> {
@@ -63,7 +61,7 @@ export class GamesApiService extends BaseService {
             .getTransactionsHttp(game.ID)
             .pipe(takeUntil(this.destroy$))
             .subscribe();
-        }, catchError(this.dialogService.handleError<Game>('newGameHttp')))
+        })
       );
   }
 }
