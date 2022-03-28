@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 import { BaseService } from '../services/base.service';
@@ -17,16 +16,10 @@ export class TransactionsApiService extends BaseService {
   }
 
   getTransactionsHttp(gameId: number): Observable<Transaction[]> {
-    return this.http
-      .get<Transaction[]>(
-        this.getUrlBase() + this.apiUrl + '?gameId=' + gameId,
-        this.httpOptions
-      )
-      .pipe(
-        catchError(
-          this.dialogService.handleError<Transaction[]>('getTransactionsHttp')
-        )
-      );
+    return this.http.get<Transaction[]>(
+      this.getUrlBase() + this.apiUrl + '?gameId=' + gameId,
+      this.httpOptions
+    );
   }
 
   deleteTransactionHttp(transaction: Transaction): Observable<Transaction[]> {
@@ -34,29 +27,17 @@ export class TransactionsApiService extends BaseService {
       transaction.GameID
     }`;
 
-    return this.http
-      .delete<Transaction[]>(url, this.httpOptions)
-      .pipe(
-        catchError(
-          this.dialogService.handleError<Transaction[]>('deleteTransactionHttp')
-        )
-      );
+    return this.http.delete<Transaction[]>(url, this.httpOptions);
   }
 
   addTransactionHttp(
     transaction: Transaction,
     gameId: number
   ): Observable<Transaction[]> {
-    return this.http
-      .post<Transaction[]>(
-        this.getUrlBase() + this.apiUrl + '?gameId=' + gameId,
-        transaction,
-        this.httpOptions
-      )
-      .pipe(
-        catchError(
-          this.dialogService.handleError<Transaction[]>('addTransactionHttp')
-        )
-      );
+    return this.http.post<Transaction[]>(
+      this.getUrlBase() + this.apiUrl + '?gameId=' + gameId,
+      transaction,
+      this.httpOptions
+    );
   }
 }
