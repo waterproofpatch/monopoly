@@ -28,6 +28,7 @@ type Error struct {
 }
 
 func WriteError(w http.ResponseWriter, message string, status int) {
+	w.Header().Set("content-type", "application/json")
 	w.WriteHeader(status)
 	json.NewEncoder(w).Encode(&Error{ErrorMessage: message})
 }

@@ -31,15 +31,21 @@ export class AuthInterceptorService implements HttpInterceptor {
             switch (error.status) {
               case 400:
                 this.dialogService.displayErrorDialog(
-                  'Bad request: ' + error.error
+                  'Bad request: ' + error.error.error_message
                 );
                 break;
               case 401: //login
-                this.dialogService.displayErrorDialog('Must login!');
+                this.dialogService.displayErrorDialog(
+                  'Not authorized: ' + error.error.error_message
+                );
                 break;
               case 403: //forbidden
                 this.dialogService.displayErrorDialog('Unauthorized!');
                 break;
+              default:
+                this.dialogService.displayErrorDialog(
+                  'Unknown error ' + error.status
+                );
             }
           }
         } else {
