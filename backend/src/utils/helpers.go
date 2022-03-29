@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/dgrijalva/jwt-go"
 	"gorm.io/gorm"
@@ -39,6 +40,25 @@ func GetTransactionsForGame(db *gorm.DB, gameId string) []Transaction {
 	db.Find(&game, "ID = ?", gameId)
 	db.Model(&game).Order("ID").Association("Transactions").Find(&transactions)
 	return transactions
+}
+
+func GetJwtToken() (string, error) {
+	claims := JWTData{
+		StandardClaims: jwt.StandardClaims{
+			ExpiresAt: time.Now().Add(time.Hour).Unix(),
+		},
+
+		CustomClaims: map[string]string{
+			"userid": "u1",
+		},
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	tokenString, err := token.SignedString([]byte(SECRET))
+	if err != nil {
+		return "", errors.New("Failed generating token!")
+	}
+	return tokenString, nil
 }
 
 func ProcessTransaction(w http.ResponseWriter, transaction Transaction, reverse bool) {

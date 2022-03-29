@@ -27,6 +27,7 @@ export interface PieceSelectDialogData {
 }
 export interface NewGameDialogData {}
 export interface LoginDialogData {}
+export interface RegisterDialogData {}
 
 @Injectable({
   providedIn: 'root',
@@ -38,6 +39,14 @@ export class DialogService extends BaseService {
 
   log(msg: any) {
     console.log(new Date() + ': ' + JSON.stringify(msg));
+  }
+  displayRegisterDialog() {
+    const dialogRef = this.dialog.open(RegisterDialog, {
+      width: '350px',
+      height: '500px',
+      data: {},
+    });
+    return dialogRef;
   }
   displayLoginDialog() {
     const dialogRef = this.dialog.open(LoginDialog, {
@@ -110,6 +119,46 @@ export class DialogService extends BaseService {
       // Let the app keep running by returning an empty result.
       return of(result as T);
     };
+  }
+}
+@Component({
+  selector: 'register-dialog',
+  styleUrls: ['./register-dialog.css'],
+  templateUrl: './register-dialog.html',
+})
+export class RegisterDialog {
+  registerForm = new FormGroup({
+    email: new FormControl('', [Validators.required, Validators.email]),
+    password: new FormControl(''),
+  });
+
+  constructor(
+    private loginService: LoginService,
+    public dialogRef: MatDialogRef<RegisterDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: RegisterDialogData
+  ) {
+    dialogRef.beforeClosed().subscribe();
+  }
+
+  getErrorMessage() {
+    if (this.registerForm.controls.email.hasError('required')) {
+      return 'You must enter a value';
+    }
+
+    return this.registerForm.controls.email.hasError('email')
+      ? 'Not a valid email'
+      : '';
+  }
+
+  onRegisterClick(): void {
+    this.dialogRef.close();
+    console.log(
+      'registering with email ' + this.registerForm.controls.email.value
+    );
+    this.loginService.register(
+      this.registerForm.controls.email.value,
+      this.registerForm.controls.password.value
+    );
   }
 }
 

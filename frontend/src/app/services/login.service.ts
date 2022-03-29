@@ -23,6 +23,13 @@ export class LoginService extends BaseService {
     localStorage.removeItem(this.TOKEN_KEY);
   }
 
+  register(email: string, password: string) {
+    this.loginApi.registerHtp(email, password).subscribe((x) => {
+      console.log('Setting token to ' + x.token);
+      localStorage.setItem(this.TOKEN_KEY, x.token);
+    });
+  }
+
   login(email: string, password: string) {
     this.loginApi.loginHttp(email, password).subscribe((x) => {
       console.log('Setting token to ' + x.token);
