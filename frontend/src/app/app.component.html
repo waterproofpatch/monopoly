@@ -1,11 +1,65 @@
-<div class="toolbar" role="banner">
+<!-- <div class="toolbar" role="banner">
   Monopoly-Banker
   <div class="version">Version [{{ gameService.version$ | async }}]</div>
-</div>
+</div> -->
+<mat-toolbar>
+  <button
+    mat-icon-button
+    class="example-icon"
+    aria-label="Navigation"
+    [matMenuTriggerFor]="menu"
+  >
+    <mat-icon>menu</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu">
+    <button
+      *ngIf="authenticationService.isAuthenticated"
+      mat-menu-item
+      (click)="newGame()"
+    >
+      <span>New Game</span>
+    </button>
+    <button
+      *ngIf="authenticationService.isAuthenticated"
+      mat-menu-item
+      (click)="authenticationService.logout()"
+    >
+      <span>Logout</span>
+    </button>
+    <button
+      *ngIf="!authenticationService.isAuthenticated"
+      mat-menu-item
+      (click)="login()"
+    >
+      <span>Login</span>
+    </button>
+    <button
+      *ngIf="!authenticationService.isAuthenticated"
+      mat-menu-item
+      (click)="register()"
+    >
+      <span>Register</span>
+    </button>
+  </mat-menu>
+  <span>Monopoly Banker - [{{ gameService.version$ | async }}]</span>
+  <span class="example-spacer"></span>
+  <button
+    mat-icon-button
+    class="example-icon favorite-icon"
+    aria-label="Example icon-button with heart icon"
+  >
+    <mat-icon>favorite</mat-icon>
+  </button>
+  <button
+    mat-icon-button
+    class="example-icon"
+    aria-label="Example icon-button with share icon"
+  >
+    <mat-icon>share</mat-icon>
+  </button>
+</mat-toolbar>
 <router-outlet></router-outlet>
 
 <!-- <div class="content" role="main">
   <app-game-board></app-game-board>
 </div> -->
-
-<router-outlet></router-outlet>

@@ -11,6 +11,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCardModule } from '@angular/material/card';
@@ -31,8 +33,10 @@ import { AnimatedDigitComponent } from './components/animated/animated-digit.com
 import { BaseComponent } from './components/base/base.component';
 import { TransactionComponent } from './components/transaction/transaction.component';
 import { AuthInterceptorService } from './services/auth-interceptor.service';
+import { AuthenticationComponent } from './components/authentication/authentication.component';
 const routes: Routes = [
   { path: 'home', component: GameBoardComponent },
+  { path: 'authentication', component: AuthenticationComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
 ];
 @NgModule({
@@ -50,10 +54,13 @@ const routes: Routes = [
     BaseComponent,
     TransactionsComponent,
     TransactionComponent,
+    AuthenticationComponent,
   ],
   imports: [
     HttpClientModule,
     MatMenuModule,
+    MatToolbarModule,
+    MatIconModule,
     MatDividerModule,
     MatCardModule,
     MatDialogModule,
