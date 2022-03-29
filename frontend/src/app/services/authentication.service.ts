@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { LoginApiService } from '../apis/login-api.service';
+import { AuthenticationApiService } from '../apis/authentication-api.service';
 import { BaseService } from './base.service';
 
 @Injectable({
@@ -7,7 +7,7 @@ import { BaseService } from './base.service';
 })
 export class AuthenticationService extends BaseService {
   TOKEN_KEY = 'token';
-  constructor(private loginApi: LoginApiService) {
+  constructor(private loginApi: AuthenticationApiService) {
     super();
   }
 
