@@ -11,7 +11,6 @@ import { BaseComponent } from '../base/base.component';
 export class GameBoardComponent extends BaseComponent implements OnInit {
   constructor(public gameService: GameService) {
     super();
-    this.gameService.getGames();
   }
 
   ngOnInit(): void {}

@@ -33,10 +33,8 @@ import { AnimatedDigitComponent } from './components/animated/animated-digit.com
 import { BaseComponent } from './components/base/base.component';
 import { TransactionComponent } from './components/transaction/transaction.component';
 import { AuthInterceptorService } from './services/auth-interceptor.service';
-import { AuthenticationComponent } from './components/authentication/authentication.component';
 const routes: Routes = [
   { path: 'home', component: GameBoardComponent },
-  { path: 'authentication', component: AuthenticationComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
 ];
 @NgModule({
@@ -54,7 +52,6 @@ const routes: Routes = [
     BaseComponent,
     TransactionsComponent,
     TransactionComponent,
-    AuthenticationComponent,
   ],
   imports: [
     HttpClientModule,
