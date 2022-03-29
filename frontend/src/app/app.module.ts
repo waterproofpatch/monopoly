@@ -33,6 +33,7 @@ import { AnimatedDigitComponent } from './components/animated/animated-digit.com
 import { BaseComponent } from './components/base/base.component';
 import { TransactionComponent } from './components/transaction/transaction.component';
 import { AuthInterceptorService } from './services/auth-interceptor.service';
+import { NavbarComponent } from './components/navbar/navbar.component';
 const routes: Routes = [
   { path: 'home', component: GameBoardComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -52,6 +53,7 @@ const routes: Routes = [
     BaseComponent,
     TransactionsComponent,
     TransactionComponent,
+    NavbarComponent,
   ],
   imports: [
     HttpClientModule,
