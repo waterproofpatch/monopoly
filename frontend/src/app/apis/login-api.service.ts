@@ -13,6 +13,18 @@ export class LoginApiService extends BaseService {
     super();
   }
 
+  registerHtp(email: string, password: string): Observable<any> {
+    const data = {
+      email: email,
+      password: password,
+    };
+    return this.http.post(
+      this.getUrlBase() + '/api/register',
+      data,
+      this.httpOptions
+    );
+  }
+
   loginHttp(email: string, password: string): Observable<any> {
     const data = {
       email: email,

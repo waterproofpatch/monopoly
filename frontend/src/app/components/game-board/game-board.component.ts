@@ -27,6 +27,10 @@ export class GameBoardComponent extends BaseComponent implements OnInit {
     this.dialogService.displayLoginDialog();
   }
 
+  register(): void {
+    this.dialogService.displayRegisterDialog();
+  }
+
   newGame(): void {
     this.dialogService
       .displayNewGameDialog()

@@ -23,6 +23,7 @@ import {
   LogDialog,
   NewGameDialog,
   LoginDialog,
+  RegisterDialog,
 } from './services/dialog/dialog.service';
 import { LoginService } from './services/login.service';
 import { AnimatedDigitComponent } from './components/animated/animated-digit.component';
@@ -39,6 +40,7 @@ import { AuthInterceptorService } from './services/auth-interceptor.service';
     LogDialog,
     NewGameDialog,
     LoginDialog,
+    RegisterDialog,
     AnimatedDigitComponent,
     BaseComponent,
     TransactionsComponent,

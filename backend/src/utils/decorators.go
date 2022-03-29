@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func Logger(inner func(http.ResponseWriter, *http.Request), name string) func(http.ResponseWriter, *http.Request) {
+func LogRequest(inner func(http.ResponseWriter, *http.Request), name string) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
 
@@ -22,7 +22,7 @@ func Logger(inner func(http.ResponseWriter, *http.Request), name string) func(ht
 	}
 }
 
-func Authenticated(inner func(http.ResponseWriter, *http.Request), name string) func(http.ResponseWriter, *http.Request) {
+func Authentication(inner func(http.ResponseWriter, *http.Request), name string) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
 

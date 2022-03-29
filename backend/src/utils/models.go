@@ -2,6 +2,12 @@ package utils
 
 import "gorm.io/gorm"
 
+type User struct {
+	gorm.Model
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
 // Item is a model for an Item.
 type Player struct {
 	gorm.Model

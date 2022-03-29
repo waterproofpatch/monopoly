@@ -34,9 +34,11 @@ func ResetDb() {
 	log.Printf("Resetting db...")
 	db := GetDb()
 	// Migrate the schema
+	db.Migrator().DropTable(&User{})
 	db.Migrator().DropTable(&Game{})
 	db.Migrator().DropTable(&Player{})
 	db.Migrator().DropTable(&Transaction{})
+	db.AutoMigrate(&User{})
 	db.AutoMigrate(&Game{})
 	db.AutoMigrate(&Player{})
 	db.AutoMigrate(&Transaction{})

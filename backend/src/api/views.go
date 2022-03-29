@@ -5,9 +5,6 @@ import (
 	"log"
 	"monopoly/utils"
 	"net/http"
-	"time"
-
-	jwt "github.com/dgrijalva/jwt-go"
 
 	"github.com/gorilla/mux"
 )
@@ -29,8 +26,57 @@ type LoginRequest struct {
 	Password string `json:"password"`
 }
 
-func login(w http.ResponseWriter, r *http.Request) {
+type RegisterRequest struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
 
+func register(w http.ResponseWriter, r *http.Request) {
+	var registerRequest RegisterRequest
+	err := json.NewDecoder(r.Body).Decode(&registerRequest)
+	if err != nil {
+		utils.WriteError(w, "Invalid request!", http.StatusBadRequest)
+		return
+	}
+	if len(registerRequest.Email) == 0 {
+		utils.WriteError(w, "Invalid email!", http.StatusBadRequest)
+		return
+	}
+	if len(registerRequest.Password) == 0 {
+		utils.WriteError(w, "Invalid password!", http.StatusBadRequest)
+		return
+	}
+
+	db := utils.GetDb()
+	var user utils.User
+	result := db.First(&user, "email = ?", registerRequest.Email)
+	if result.Error == nil {
+		utils.WriteError(w, "Email taken", http.StatusBadRequest)
+		return
+	}
+	db.Create(&utils.User{Email: registerRequest.Email, Password: registerRequest.Password})
+	tokenString, err := utils.GetJwtToken()
+	if err != nil {
+		utils.WriteError(w, "Faled getting token string!", http.StatusInternalServerError)
+		return
+	}
+	json, err := json.Marshal(struct {
+		Token string `json:"token"`
+	}{
+		tokenString,
+	})
+
+	if err != nil {
+		log.Println(err)
+		utils.WriteError(w, "Failed generating a new token", http.StatusInternalServerError)
+		return
+	}
+
+	w.Write(json)
+
+}
+func login(w http.ResponseWriter, r *http.Request) {
+	db := utils.GetDb()
 	var loginRequest LoginRequest
 	err := json.NewDecoder(r.Body).Decode(&loginRequest)
 	if err != nil {
@@ -38,22 +84,17 @@ func login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if loginRequest.Email == "admin@gmail.com" && loginRequest.Password == "admin123" {
-		claims := utils.JWTData{
-			StandardClaims: jwt.StandardClaims{
-				ExpiresAt: time.Now().Add(time.Hour).Unix(),
-			},
+	var user utils.User
+	result := db.First(&user, "email = ?", loginRequest.Email)
+	if result.Error != nil {
+		utils.WriteError(w, "Invalid credentials!", http.StatusUnauthorized)
+		return
+	}
 
-			CustomClaims: map[string]string{
-				"userid": "u1",
-			},
-		}
-
-		token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-		tokenString, err := token.SignedString([]byte(utils.SECRET))
+	if loginRequest.Password == user.Password {
+		tokenString, err := utils.GetJwtToken()
 		if err != nil {
-			log.Println(err)
-			utils.WriteError(w, "Failed generating new token!", http.StatusInternalServerError)
+			utils.WriteError(w, "Faled getting token string!", http.StatusInternalServerError)
 			return
 		}
 
@@ -72,7 +113,6 @@ func login(w http.ResponseWriter, r *http.Request) {
 		w.Write(json)
 	} else {
 		utils.WriteError(w, "Invalid credentials!", http.StatusUnauthorized)
-		return
 	}
 }
 
@@ -203,7 +243,7 @@ func version(w http.ResponseWriter, r *http.Request) {
 }
 
 func InitViews(router *mux.Router) {
-	router.HandleFunc("/api/games", utils.Authenticated(games, "games")).Methods("GET", "POST", "OPTIONS")
+	router.HandleFunc("/api/games", utils.Authentication(games, "games")).Methods("GET", "POST", "OPTIONS")
 	router.HandleFunc("/api/games/{id:[0-9]+}", games).Methods("DELETE", "GET", "POST", "OPTIONS")
 
 	router.HandleFunc("/api/players", players).Methods("GET", "PUT", "OPTIONS").Queries("gameId", "[0-9]*")
@@ -214,7 +254,8 @@ func InitViews(router *mux.Router) {
 	router.HandleFunc("/api/transactions", transactions).Methods("POST", "DELETE", "GET", "OPTIONS")
 	router.HandleFunc("/api/transactions/{id:[0-9]+}", transactions).Methods("DELETE", "OPTIONS")
 
-	router.HandleFunc("/api/version", utils.Logger(version, "version")).Methods("GET", "OPTIONS")
+	router.HandleFunc("/api/version", utils.LogRequest(version, "version")).Methods("GET", "OPTIONS")
 
-	router.HandleFunc("/api/login", login).Methods("POST", "OPTIONA")
+	router.HandleFunc("/api/login", login).Methods("POST", "OPTIONS")
+	router.HandleFunc("/api/register", register).Methods("POST", "OPTIONS")
 }
