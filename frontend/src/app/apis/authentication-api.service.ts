@@ -7,8 +7,9 @@ import { BaseService } from '../services/base.service';
 @Injectable({
   providedIn: 'root',
 })
-export class LoginApiService extends BaseService {
-  apiUrl = '/api/login';
+export class AuthenticationApiService extends BaseService {
+  loginApiUrl = '/api/login';
+  registerApiUrl = '/api/register';
   constructor(private http: HttpClient) {
     super();
   }
@@ -19,7 +20,7 @@ export class LoginApiService extends BaseService {
       password: password,
     };
     return this.http.post(
-      this.getUrlBase() + '/api/register',
+      this.getUrlBase() + this.registerApiUrl,
       data,
       this.httpOptions
     );
@@ -32,7 +33,7 @@ export class LoginApiService extends BaseService {
     };
 
     return this.http.post(
-      this.getUrlBase() + this.apiUrl,
+      this.getUrlBase() + this.loginApiUrl,
       data,
       this.httpOptions
     );
