@@ -6,6 +6,7 @@ import { TransactionService } from '../../services/transaction.service';
 import { PlayerService } from '../../services/player.service';
 import { GameService } from '../../services/game.service';
 import { BaseComponent } from '../base/base.component';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 
 @Component({
   selector: 'app-game-board',
@@ -15,6 +16,7 @@ import { BaseComponent } from '../base/base.component';
 export class GameBoardComponent extends BaseComponent implements OnInit {
   constructor(
     private dialogService: DialogService,
+    public authenticationService: AuthenticationService,
     public transactionService: TransactionService,
     public gameService: GameService,
     public playerService: PlayerService
