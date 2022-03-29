@@ -2,7 +2,7 @@ import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { Injectable, Injector } from '@angular/core';
 import { HttpInterceptor, HttpErrorResponse } from '@angular/common/http';
-import { LoginService } from './login.service';
+import { AuthenticationService } from './authentication.service';
 import { DialogService } from './dialog/dialog.service';
 
 @Injectable()
@@ -13,7 +13,7 @@ export class AuthInterceptorService implements HttpInterceptor {
   ) {}
 
   intercept(req: any, next: any) {
-    const loginService = this.injector.get(LoginService);
+    const loginService = this.injector.get(AuthenticationService);
     const authRequest = req.clone({
       headers: req.headers.append(
         'Authorization',

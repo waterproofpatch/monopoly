@@ -5,7 +5,7 @@ import { BaseService } from './base.service';
 @Injectable({
   providedIn: 'root',
 })
-export class LoginService extends BaseService {
+export class AuthenticationService extends BaseService {
   TOKEN_KEY = 'token';
   constructor(private loginApi: LoginApiService) {
     super();

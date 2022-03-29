@@ -13,7 +13,7 @@ import { TransactionService } from '../transaction.service';
 import { PlayerService } from '../player.service';
 import { Transaction } from '../../types';
 import { BaseService } from '../base.service';
-import { LoginService } from '../login.service';
+import { AuthenticationService } from '../authentication.service';
 
 export interface ErrorDialogData {
   errorMsg: string;
@@ -133,7 +133,7 @@ export class RegisterDialog {
   });
 
   constructor(
-    private loginService: LoginService,
+    private loginService: AuthenticationService,
     public dialogRef: MatDialogRef<RegisterDialog>,
     @Inject(MAT_DIALOG_DATA) public data: RegisterDialogData
   ) {
@@ -174,7 +174,7 @@ export class LoginDialog {
   });
 
   constructor(
-    private loginService: LoginService,
+    private loginService: AuthenticationService,
     public dialogRef: MatDialogRef<LoginDialog>,
     @Inject(MAT_DIALOG_DATA) public data: LoginDialogData
   ) {
