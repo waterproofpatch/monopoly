@@ -9,7 +9,7 @@
       Login
     </button>
     <button
-      *nfIg="!authenticationService.isAuthenticated"
+      *ngIf="!authenticationService.isAuthenticated"
       (click)="register()"
       mat-raised-button
       color="primary"
