@@ -15,7 +15,6 @@ export class GameService extends BaseComponent {
 
   constructor(private gamesApi: GamesApiService) {
     super();
-    this.getGames();
   }
 
   getVersion() {
