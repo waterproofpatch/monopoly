@@ -25,7 +25,7 @@ import {
   LoginDialog,
   RegisterDialog,
 } from './services/dialog/dialog.service';
-import { LoginService } from './services/login.service';
+import { AuthenticationService } from './services/authentication.service';
 import { AnimatedDigitComponent } from './components/animated/animated-digit.component';
 import { BaseComponent } from './components/base/base.component';
 import { TransactionComponent } from './components/transaction/transaction.component';
@@ -63,7 +63,7 @@ import { AuthInterceptorService } from './services/auth-interceptor.service';
     BrowserAnimationsModule,
   ],
   providers: [
-    LoginService,
+    AuthenticationService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptorService,
