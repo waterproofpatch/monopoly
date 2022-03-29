@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'; // <-- NgModel lives here
+import { RouterModule, Routes } from '@angular/router';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -30,6 +31,10 @@ import { AnimatedDigitComponent } from './components/animated/animated-digit.com
 import { BaseComponent } from './components/base/base.component';
 import { TransactionComponent } from './components/transaction/transaction.component';
 import { AuthInterceptorService } from './services/auth-interceptor.service';
+const routes: Routes = [
+  { path: 'home', component: GameBoardComponent },
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
+];
 @NgModule({
   declarations: [
     AppComponent,
@@ -61,6 +66,7 @@ import { AuthInterceptorService } from './services/auth-interceptor.service';
     AppRoutingModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
+    RouterModule.forRoot(routes),
   ],
   providers: [
     AuthenticationService,
