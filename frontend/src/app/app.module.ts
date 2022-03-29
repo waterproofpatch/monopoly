@@ -34,10 +34,6 @@ import { BaseComponent } from './components/base/base.component';
 import { TransactionComponent } from './components/transaction/transaction.component';
 import { AuthInterceptorService } from './services/auth-interceptor.service';
 import { NavbarComponent } from './components/navbar/navbar.component';
-const routes: Routes = [
-  { path: 'home', component: GameBoardComponent },
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
-];
 @NgModule({
   declarations: [
     AppComponent,
@@ -72,7 +68,6 @@ const routes: Routes = [
     AppRoutingModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    RouterModule.forRoot(routes),
   ],
   providers: [
     AuthenticationService,
