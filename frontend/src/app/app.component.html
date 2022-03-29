@@ -1,8 +1,4 @@
-<!-- <div class="toolbar" role="banner">
-  Monopoly-Banker
-  <div class="version">Version [{{ gameService.version$ | async }}]</div>
-</div> -->
-<mat-toolbar>
+<mat-toolbar class="toolbar">
   <button
     mat-icon-button
     class="example-icon"
@@ -41,8 +37,9 @@
       <span>Register</span>
     </button>
   </mat-menu>
-  <span>Monopoly Banker - [{{ gameService.version$ | async }}]</span>
+  <span>Monopoly Banker</span>
   <span class="example-spacer"></span>
+  <span>Version {{ gameService.version$ | async }}</span>
   <button
     mat-icon-button
     class="example-icon favorite-icon"
