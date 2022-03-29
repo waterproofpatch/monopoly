@@ -1,38 +1,4 @@
 <div class="parent-container">
-  <div class="login-container">
-    <button
-      *ngIf="!authenticationService.isAuthenticated"
-      (click)="login()"
-      mat-raised-button
-      color="primary"
-    >
-      Login
-    </button>
-    <button
-      *ngIf="!authenticationService.isAuthenticated"
-      (click)="register()"
-      mat-raised-button
-      color="primary"
-    >
-      Register
-    </button>
-    <button
-      *ngIf="authenticationService.isAuthenticated"
-      (click)="newGame()"
-      mat-raised-button
-      color="primary"
-    >
-      New Game
-    </button>
-    <button
-      *ngIf="authenticationService.isAuthenticated"
-      (click)="authenticationService.logout()"
-      mat-raised-button
-      color="primary"
-    >
-      Logout
-    </button>
-  </div>
   <div class="game-header">
     <mat-card
       *ngFor="let game of gameService.games$ | async"
