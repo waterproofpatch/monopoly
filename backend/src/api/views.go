@@ -54,7 +54,12 @@ func register(w http.ResponseWriter, r *http.Request) {
 		utils.WriteError(w, "Email taken", http.StatusBadRequest)
 		return
 	}
-	db.Create(&utils.User{Email: registerRequest.Email, Password: registerRequest.Password})
+	hashedPassword, err := utils.HashPassword(registerRequest.Password)
+	if err != nil {
+		utils.WriteError(w, "Failed hashing password", http.StatusInternalServerError)
+		return
+	}
+	db.Create(&utils.User{Email: registerRequest.Email, Password: hashedPassword})
 	tokenString, err := utils.GetJwtToken()
 	if err != nil {
 		utils.WriteError(w, "Faled getting token string!", http.StatusInternalServerError)
@@ -91,7 +96,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if loginRequest.Password == user.Password {
+	if utils.DoPasswordsMatch(user.Password, loginRequest.Password) {
 		tokenString, err := utils.GetJwtToken()
 		if err != nil {
 			utils.WriteError(w, "Faled getting token string!", http.StatusInternalServerError)
