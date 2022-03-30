@@ -80,6 +80,6 @@ export class PlayersComponent extends BaseComponent implements OnInit {
       .displayPieceSelectDialog(player, this.playerService.getPlayersCache())
       .afterClosed()
       .pipe(takeUntil(this.destroy$))
-      .subscribe((_) => {});
+      .subscribe(() => {});
   }
 }

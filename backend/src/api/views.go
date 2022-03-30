@@ -249,15 +249,15 @@ func version(w http.ResponseWriter, r *http.Request) {
 
 func InitViews(router *mux.Router) {
 	router.HandleFunc("/api/games", utils.Authentication(games, "games")).Methods("GET", "POST", "OPTIONS")
-	router.HandleFunc("/api/games/{id:[0-9]+}", games).Methods("DELETE", "GET", "POST", "OPTIONS")
+	router.HandleFunc("/api/games/{id:[0-9]+}", utils.Authentication(games, "games")).Methods("DELETE", "GET", "POST", "OPTIONS")
 
-	router.HandleFunc("/api/players", players).Methods("GET", "PUT", "OPTIONS").Queries("gameId", "[0-9]*")
-	router.HandleFunc("/api/players", players).Methods("GET", "PUT", "OPTIONS")
-	router.HandleFunc("/api/players/{id:[0-9]+}", players).Methods("DELETE", "OPTIONS", "GET")
+	router.HandleFunc("/api/players", utils.Authentication(players, "players")).Methods("GET", "PUT", "OPTIONS").Queries("gameId", "[0-9]*")
+	router.HandleFunc("/api/players", utils.Authentication(players, "players")).Methods("GET", "PUT", "OPTIONS")
+	router.HandleFunc("/api/players/{id:[0-9]+}", utils.Authentication(players, "players")).Methods("DELETE", "OPTIONS", "GET")
 
-	router.HandleFunc("/api/transactions", transactions).Methods("POST", "GET", "OPTIONS").Queries("gameId", "[0-9]*")
-	router.HandleFunc("/api/transactions", transactions).Methods("POST", "DELETE", "GET", "OPTIONS")
-	router.HandleFunc("/api/transactions/{id:[0-9]+}", transactions).Methods("DELETE", "OPTIONS")
+	router.HandleFunc("/api/transactions", utils.Authentication(transactions, "transactions")).Methods("POST", "GET", "OPTIONS").Queries("gameId", "[0-9]*")
+	router.HandleFunc("/api/transactions", utils.Authentication(transactions, "transactions")).Methods("POST", "DELETE", "GET", "OPTIONS")
+	router.HandleFunc("/api/transactions/{id:[0-9]+}", utils.Authentication(transactions, "transactions")).Methods("DELETE", "OPTIONS")
 
 	router.HandleFunc("/api/version", utils.LogRequest(version, "version")).Methods("GET", "OPTIONS")
 

@@ -1,5 +1,5 @@
 import { Observable, of } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { finalize, takeUntil } from 'rxjs/operators';
 import { Inject, Component, Injectable } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
@@ -33,6 +33,7 @@ export interface RegisterDialogData {}
   providedIn: 'root',
 })
 export class DialogService extends BaseService {
+  dialogRef: any = undefined;
   constructor(private dialog: MatDialog) {
     super();
   }
@@ -40,65 +41,74 @@ export class DialogService extends BaseService {
   log(msg: any) {
     console.log(new Date() + ': ' + JSON.stringify(msg));
   }
+
   displayRegisterDialog() {
-    const dialogRef = this.dialog.open(RegisterDialog, {
+    this.dialogRef = this.dialog.open(RegisterDialog, {
       width: '350px',
       height: '500px',
       data: {},
     });
-    return dialogRef;
+    this.dialogRef.afterClosed().pipe(takeUntil(this.destroy$)),
+      finalize(() => (this.dialogRef = undefined));
+    return this.dialogRef;
   }
+
   displayLoginDialog() {
-    const dialogRef = this.dialog.open(LoginDialog, {
+    if (this.dialogRef) {
+      console.log('Not re-opening dialog, already one up!');
+      return;
+    }
+    console.log('Popping dialog for login...');
+    this.dialogRef = this.dialog.open(LoginDialog, {
       width: '350px',
       height: '500px',
       data: {},
     });
-    return dialogRef;
+    this.dialogRef.afterClosed().pipe(takeUntil(this.destroy$)),
+      finalize(() => (this.dialogRef = undefined));
+    return this.dialogRef;
   }
 
   displayNewGameDialog() {
-    const dialogRef = this.dialog.open(NewGameDialog, {
+    this.dialogRef = this.dialog.open(NewGameDialog, {
       width: '350px',
       data: {},
     });
-    return dialogRef;
+    this.dialogRef.afterClosed().pipe(takeUntil(this.destroy$)),
+      finalize(() => (this.dialogRef = undefined));
+    return this.dialogRef;
   }
 
   displayPieceSelectDialog(player: Player, players: Player[]) {
-    const dialogRef = this.dialog.open(PieceSelectDialog, {
+    this.dialogRef = this.dialog.open(PieceSelectDialog, {
       width: '350px',
       data: { player: player, players: players },
     });
-    return dialogRef;
+
+    this.dialogRef.afterClosed().pipe(takeUntil(this.destroy$)),
+      finalize(() => (this.dialogRef = undefined));
+
+    return this.dialogRef;
   }
 
   displayErrorDialog(errorMsg: string): void {
-    const dialogRef = this.dialog.open(ErrorDialog, {
+    this.dialogRef = this.dialog.open(ErrorDialog, {
       width: '250px',
       data: { errorMsg: errorMsg },
     });
 
-    dialogRef
-      .afterClosed()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((result) => {
-        console.log('The dialog was closed');
-      });
+    this.dialogRef.afterClosed().pipe(takeUntil(this.destroy$)),
+      finalize(() => (this.dialogRef = undefined));
   }
 
   displayLogDialog(logMsg: string): void {
-    const dialogRef = this.dialog.open(LogDialog, {
+    this.dialogRef = this.dialog.open(LogDialog, {
       width: '250px',
       data: { logMsg: logMsg },
     });
 
-    dialogRef
-      .afterClosed()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((result) => {
-        console.log('The dialog was closed');
-      });
+    this.dialogRef.afterClosed().pipe(takeUntil(this.destroy$)),
+      finalize(() => (this.dialogRef = undefined));
   }
   /**
    * Handle Http operation that failed.
