@@ -6,7 +6,7 @@ import { BaseComponent } from '../base/base.component';
 import { Transaction, Player } from '../../types';
 import { PlayerService } from '../../services/player.service';
 import { TransactionService } from '../../services/transaction.service';
-import { DialogService } from '../../services/dialog/dialog.service';
+import { DialogService } from '../../services/dialog.service';
 
 @Component({
   selector: 'app-transaction',

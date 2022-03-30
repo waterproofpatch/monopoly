@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap, takeUntil } from 'rxjs/operators';
 
-import { DialogService } from '../services/dialog/dialog.service';
+import { DialogService } from '../services/dialog.service';
 import { BaseService } from '../services/base.service';
 import { Game, Version } from '../types';
 import { TransactionsApiService } from './transactions-api.service';

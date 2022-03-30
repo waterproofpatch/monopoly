@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AuthenticationApiService } from '../apis/authentication-api.service';
 import { BaseService } from './base.service';
 import { Router } from '@angular/router';
-import { DialogService } from './dialog/dialog.service';
+import { DialogService } from './dialog.service';
 
 @Injectable({
   providedIn: 'root',

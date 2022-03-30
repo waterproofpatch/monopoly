@@ -3,8 +3,8 @@ import { finalize, takeUntil } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Player } from '../../types';
-import { BaseService } from '../base.service';
+import { Player } from '../types';
+import { BaseService } from './base.service';
 import { RegisterDialogComponent } from 'src/app/components/register-dialog/register-dialog.component';
 import { LoginDialogComponent } from 'src/app/components/login-dialog/login-dialog.component';
 import { NewGameDialogComponent } from 'src/app/components/new-game-dialog/new-game-dialog.component';

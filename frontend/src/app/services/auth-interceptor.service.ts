@@ -3,7 +3,7 @@ import { throwError } from 'rxjs';
 import { Injectable, Injector } from '@angular/core';
 import { HttpInterceptor, HttpErrorResponse } from '@angular/common/http';
 import { AuthenticationService } from './authentication.service';
-import { DialogService } from './dialog/dialog.service';
+import { DialogService } from './dialog.service';
 import { Router } from '@angular/router';
 
 @Injectable()
