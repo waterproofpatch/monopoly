@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { AuthenticationService } from 'src/app/services/authentication.service';
+import { DialogService } from 'src/app/services/dialog.service';
 
 export interface LoginDialogData {}
 
@@ -17,8 +18,11 @@ export class LoginDialogComponent implements OnInit {
     password: new FormControl(''),
   });
 
+  loginFailed = false;
+
   constructor(
-    private loginService: AuthenticationService,
+    private authenticationService: AuthenticationService,
+    private dialogService: DialogService,
     public dialogRef: MatDialogRef<LoginDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: LoginDialogData
   ) {
@@ -37,10 +41,22 @@ export class LoginDialogComponent implements OnInit {
       : '';
   }
 
-  onLoginClick(): void {
+  closeAndPopRegistration() {
     this.dialogRef.close();
+    this.dialogService.displayRegisterDialog();
+  }
+
+  onLoginClick(): void {
+    this.authenticationService.loggedIn$.subscribe((x) => {
+      if (x) {
+        this.dialogRef.close();
+        this.loginFailed = false;
+      } else {
+        this.loginFailed = true;
+      }
+    });
     console.log('logging in with email ' + this.loginForm.controls.email.value);
-    this.loginService.login(
+    this.authenticationService.login(
       this.loginForm.controls.email.value,
       this.loginForm.controls.password.value
     );
