@@ -12,7 +12,7 @@ import { BaseComponent } from '../base/base.component';
 export class GameBoardComponent extends BaseComponent implements OnInit {
   constructor(
     public gameService: GameService,
-    private authenticationService: AuthenticationService
+    public authenticationService: AuthenticationService
   ) {
     super();
     if (authenticationService.isAuthenticated) {
