@@ -1,4 +1,10 @@
 <h1 mat-dialog-title class="login-form">Login</h1>
+<div class="error" *ngIf="loginFailed">
+  <p>Login failed.</p>
+  <button mat-stroked-button (click)="closeAndPopRegistration()">
+    Create account
+  </button>
+</div>
 <div mat-dialog-content class="login-form">
   <form [formGroup]="loginForm">
     <mat-form-field appearance="fill">

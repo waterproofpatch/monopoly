@@ -4,14 +4,12 @@ import { Injectable, Injector } from '@angular/core';
 import { HttpInterceptor, HttpErrorResponse } from '@angular/common/http';
 import { AuthenticationService } from './authentication.service';
 import { DialogService } from './dialog.service';
-import { Router } from '@angular/router';
 
 @Injectable()
 export class AuthInterceptorService implements HttpInterceptor {
   constructor(
     private injector: Injector,
-    private dialogService: DialogService,
-    private router: Router
+    private dialogService: DialogService
   ) {}
 
   intercept(req: any, next: any) {
