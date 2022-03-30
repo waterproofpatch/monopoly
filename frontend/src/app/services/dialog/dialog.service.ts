@@ -1,33 +1,18 @@
 import { Observable, of } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
-import { Inject, Component, Injectable } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import {
-  MatDialog,
-  MatDialogRef,
-  MAT_DIALOG_DATA,
-} from '@angular/material/dialog';
+import { Injectable } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 
 import { Player } from '../../types';
-import { TransactionService } from '../transaction.service';
-import { PlayerService } from '../player.service';
-import { Transaction } from '../../types';
 import { BaseService } from '../base.service';
-import { AuthenticationService } from '../authentication.service';
 import { RegisterDialogComponent } from 'src/app/components/register-dialog/register-dialog.component';
+import { LoginDialogComponent } from 'src/app/components/login-dialog/login-dialog.component';
+import { NewGameDialogComponent } from 'src/app/components/new-game-dialog/new-game-dialog.component';
+import { LogDialogComponent } from 'src/app/components/log-dialog/log-dialog.component';
+import { ErrorDialogComponent } from 'src/app/components/error-dialog/error-dialog.component';
+import { PieceSelectDialogComponent } from 'src/app/components/piece-select-dialog/piece-select-dialog.component';
 
-export interface ErrorDialogData {
-  errorMsg: string;
-}
-export interface LogDialogData {
-  logMsg: string;
-}
-export interface PieceSelectDialogData {
-  player: Player;
-  players: Player[];
-}
 export interface NewGameDialogData {}
-export interface LoginDialogData {}
 
 @Injectable({
   providedIn: 'root',
@@ -59,7 +44,7 @@ export class DialogService extends BaseService {
       return;
     }
     console.log('Popping dialog for login...');
-    this.dialogRef = this.dialog.open(LoginDialog, {
+    this.dialogRef = this.dialog.open(LoginDialogComponent, {
       width: '350px',
       height: '500px',
       data: {},
@@ -70,7 +55,7 @@ export class DialogService extends BaseService {
   }
 
   displayNewGameDialog() {
-    this.dialogRef = this.dialog.open(NewGameDialog, {
+    this.dialogRef = this.dialog.open(NewGameDialogComponent, {
       width: '350px',
       data: {},
     });
@@ -80,7 +65,7 @@ export class DialogService extends BaseService {
   }
 
   displayPieceSelectDialog(player: Player, players: Player[]) {
-    this.dialogRef = this.dialog.open(PieceSelectDialog, {
+    this.dialogRef = this.dialog.open(PieceSelectDialogComponent, {
       width: '350px',
       data: { player: player, players: players },
     });
@@ -92,7 +77,7 @@ export class DialogService extends BaseService {
   }
 
   displayErrorDialog(errorMsg: string): void {
-    this.dialogRef = this.dialog.open(ErrorDialog, {
+    this.dialogRef = this.dialog.open(ErrorDialogComponent, {
       width: '250px',
       data: { errorMsg: errorMsg },
     });
@@ -102,7 +87,7 @@ export class DialogService extends BaseService {
   }
 
   displayLogDialog(logMsg: string): void {
-    this.dialogRef = this.dialog.open(LogDialog, {
+    this.dialogRef = this.dialog.open(LogDialogComponent, {
       width: '250px',
       data: { logMsg: logMsg },
     });
@@ -129,172 +114,5 @@ export class DialogService extends BaseService {
       // Let the app keep running by returning an empty result.
       return of(result as T);
     };
-  }
-}
-
-@Component({
-  selector: 'login-dialog',
-  styleUrls: ['./login-dialog.css'],
-  templateUrl: './login-dialog.html',
-})
-export class LoginDialog {
-  loginForm = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl(''),
-  });
-
-  constructor(
-    private loginService: AuthenticationService,
-    public dialogRef: MatDialogRef<LoginDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: LoginDialogData
-  ) {
-    dialogRef.beforeClosed().subscribe();
-  }
-
-  getErrorMessage() {
-    if (this.loginForm.controls.email.hasError('required')) {
-      return 'You must enter a value';
-    }
-
-    return this.loginForm.controls.email.hasError('email')
-      ? 'Not a valid email'
-      : '';
-  }
-
-  onLoginClick(): void {
-    this.dialogRef.close();
-    console.log('logging in with email ' + this.loginForm.controls.email.value);
-    this.loginService.login(
-      this.loginForm.controls.email.value,
-      this.loginForm.controls.password.value
-    );
-  }
-}
-@Component({
-  selector: 'new-game-dialog',
-  templateUrl: './new-game-dialog.html',
-})
-export class NewGameDialog {
-  newGameForm = new FormGroup({
-    name: new FormControl(''),
-  });
-
-  constructor(
-    public dialogRef: MatDialogRef<NewGameDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: NewGameDialogData
-  ) {
-    dialogRef
-      .beforeClosed()
-      .subscribe(() => dialogRef.close(this.newGameForm.controls.name.value));
-  }
-  getErrorMessage() {
-    if (this.newGameForm.controls.name.hasError('required')) {
-      return 'You must enter a value';
-    }
-
-    return this.newGameForm.controls.name.hasError('name')
-      ? 'Not a valid email'
-      : '';
-  }
-
-  onOkClick(): void {
-    this.dialogRef.close();
-  }
-}
-@Component({
-  selector: 'log-dialog',
-  templateUrl: './log-dialog.html',
-})
-export class LogDialog {
-  constructor(
-    public dialogRef: MatDialogRef<LogDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: LogDialogData
-  ) {}
-
-  onOkClick(): void {
-    this.dialogRef.close();
-  }
-}
-
-@Component({
-  selector: 'error-dialog',
-  templateUrl: './error-dialog.html',
-})
-export class ErrorDialog {
-  constructor(
-    public dialogRef: MatDialogRef<ErrorDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: ErrorDialogData
-  ) {}
-
-  onOkClick(): void {
-    this.dialogRef.close();
-  }
-}
-
-@Component({
-  selector: 'piece-select-dialog',
-  templateUrl: './piece-select-dialog.html',
-  styleUrls: ['./piece-select-dialog.css'],
-})
-export class PieceSelectDialog extends BaseService {
-  constructor(
-    private transactionService: TransactionService,
-    private dialogService: DialogService,
-    private playerService: PlayerService,
-    public dialogRef: MatDialogRef<PieceSelectDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: PieceSelectDialogData
-  ) {
-    super();
-  }
-
-  passGo(): void {
-    const bank: Player[] = this.data.players.filter((x) => x.name == 'Bank');
-
-    let t: Transaction = {
-      ID: 0, // filled in by server
-      toPlayerId: this.data.player.ID,
-      fromPlayerId: bank[0].ID,
-      amount: 200,
-      timestamp: new Date().toISOString(),
-      GameID: this.data.player.GameID,
-    };
-    this.transactionService.addTransaction(t, this.data.player.GameID);
-    this.dialogRef.close();
-  }
-
-  collectFreeParking(): void {
-    this.dialogRef.close();
-    const freeParking: Player[] = this.data.players.filter(
-      (x) => x.name == 'Free Parking'
-    );
-
-    if (freeParking[0].money == 0) {
-      this.dialogService.displayErrorDialog('No money in free parking!');
-      return;
-    }
-
-    let t: Transaction = {
-      ID: 0, // filled in by server
-      toPlayerId: this.data.player.ID,
-      fromPlayerId: freeParking[0].ID,
-      amount: freeParking[0].money,
-      timestamp: new Date().toISOString(),
-      GameID: this.data.player.GameID,
-    };
-    this.transactionService.addTransaction(t, this.data.player.GameID);
-  }
-
-  remove(): void {
-    this.dialogRef.close();
-    this.playerService.deletePlayer(this.data.player);
-  }
-
-  selectPlayer(newPlayer: Player, oldPlayer: Player) {
-    this.dialogRef.close();
-    this.playerService.changePlayer(oldPlayer, newPlayer);
-  }
-
-  onOkClick(): void {
-    this.dialogRef.close();
   }
 }
