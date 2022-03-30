@@ -1,4 +1,4 @@
-<div class="parent-container">
+<div *ngIf="authenticationService.isAuthenticated" class="parent-container">
   <div class="game-header">
     <mat-card
       *ngFor="let game of gameService.games$ | async"
@@ -25,4 +25,7 @@
       [gameId]="gameService.selectedGameId$ | async"
     ></app-transactions>
   </div>
+</div>
+<div *ngIf="!authenticationService.isAuthenticated" class="parent-container">
+  Login or Register to start playing!
 </div>
