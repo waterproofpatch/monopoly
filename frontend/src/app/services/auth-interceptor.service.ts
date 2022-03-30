@@ -4,12 +4,14 @@ import { Injectable, Injector } from '@angular/core';
 import { HttpInterceptor, HttpErrorResponse } from '@angular/common/http';
 import { AuthenticationService } from './authentication.service';
 import { DialogService } from './dialog/dialog.service';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class AuthInterceptorService implements HttpInterceptor {
   constructor(
     private injector: Injector,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private router: Router
   ) {}
 
   intercept(req: any, next: any) {
@@ -35,9 +37,7 @@ export class AuthInterceptorService implements HttpInterceptor {
                 );
                 break;
               case 401: //login
-                this.dialogService.displayErrorDialog(
-                  'Not authorized: ' + error.error.error_message
-                );
+                this.dialogService.displayLoginDialog();
                 break;
               case 403: //forbidden
                 this.dialogService.displayErrorDialog('Unauthorized!');

@@ -25,7 +25,7 @@ export class NavbarComponent extends BaseComponent implements OnInit {
       .displayNewGameDialog()
       .afterClosed()
       .pipe(takeUntil(this.destroy$))
-      .subscribe((name) => {
+      .subscribe((name: string) => {
         this.gameService.newGame(name);
       });
   }
