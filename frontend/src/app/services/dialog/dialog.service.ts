@@ -14,6 +14,7 @@ import { PlayerService } from '../player.service';
 import { Transaction } from '../../types';
 import { BaseService } from '../base.service';
 import { AuthenticationService } from '../authentication.service';
+import { RegisterDialogComponent } from 'src/app/components/register-dialog/register-dialog.component';
 
 export interface ErrorDialogData {
   errorMsg: string;
@@ -27,7 +28,6 @@ export interface PieceSelectDialogData {
 }
 export interface NewGameDialogData {}
 export interface LoginDialogData {}
-export interface RegisterDialogData {}
 
 @Injectable({
   providedIn: 'root',
@@ -43,7 +43,7 @@ export class DialogService extends BaseService {
   }
 
   displayRegisterDialog() {
-    this.dialogRef = this.dialog.open(RegisterDialog, {
+    this.dialogRef = this.dialog.open(RegisterDialogComponent, {
       width: '350px',
       height: '500px',
       data: {},
@@ -129,46 +129,6 @@ export class DialogService extends BaseService {
       // Let the app keep running by returning an empty result.
       return of(result as T);
     };
-  }
-}
-@Component({
-  selector: 'register-dialog',
-  styleUrls: ['./register-dialog.css'],
-  templateUrl: './register-dialog.html',
-})
-export class RegisterDialog {
-  registerForm = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl(''),
-  });
-
-  constructor(
-    private loginService: AuthenticationService,
-    public dialogRef: MatDialogRef<RegisterDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: RegisterDialogData
-  ) {
-    dialogRef.beforeClosed().subscribe();
-  }
-
-  getErrorMessage() {
-    if (this.registerForm.controls.email.hasError('required')) {
-      return 'You must enter a value';
-    }
-
-    return this.registerForm.controls.email.hasError('email')
-      ? 'Not a valid email'
-      : '';
-  }
-
-  onRegisterClick(): void {
-    this.dialogRef.close();
-    console.log(
-      'registering with email ' + this.registerForm.controls.email.value
-    );
-    this.loginService.register(
-      this.registerForm.controls.email.value,
-      this.registerForm.controls.password.value
-    );
   }
 }
 

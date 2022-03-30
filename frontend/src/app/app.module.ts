@@ -26,7 +26,6 @@ import {
   LogDialog,
   NewGameDialog,
   LoginDialog,
-  RegisterDialog,
 } from './services/dialog/dialog.service';
 import { AuthenticationService } from './services/authentication.service';
 import { AnimatedDigitComponent } from './components/animated/animated-digit.component';
@@ -34,6 +33,7 @@ import { BaseComponent } from './components/base/base.component';
 import { TransactionComponent } from './components/transaction/transaction.component';
 import { AuthInterceptorService } from './services/auth-interceptor.service';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { RegisterDialogComponent } from './components/register-dialog/register-dialog.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -44,12 +44,12 @@ import { NavbarComponent } from './components/navbar/navbar.component';
     LogDialog,
     NewGameDialog,
     LoginDialog,
-    RegisterDialog,
     AnimatedDigitComponent,
     BaseComponent,
     TransactionsComponent,
     TransactionComponent,
     NavbarComponent,
+    RegisterDialogComponent,
   ],
   imports: [
     HttpClientModule,
