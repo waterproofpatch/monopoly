@@ -1,1 +1,29 @@
-<p>player-select-dialog works!</p>
+<h1 mat-dialog-title>
+  {{ data.player.name }} - {{ data.player.money | currency }}
+</h1>
+<div mat-dialog-content>
+  <mat-label>Change Piece:</mat-label>
+  <button class="piece-select" mat-raised-button [matMenuTriggerFor]="menu">
+    {{ data.player.name }}
+  </button>
+  <mat-menu #menu="matMenu">
+    <button
+      mat-menu-item
+      *ngFor="let player of data.players"
+      (click)="selectPlayer(player, data.player)"
+    >
+      {{ player.name }}
+    </button>
+  </mat-menu>
+  <mat-divider></mat-divider>
+  <div class="button-panel">
+    <button (click)="passGo()" mat-raised-button>Pass Go</button>
+    <button (click)="collectFreeParking()" mat-raised-button>
+      Collect Free Parking
+    </button>
+    <button (click)="remove()" mat-raised-button>Remove</button>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button (click)="onOkClick()" color="primary">Ok</button>
+</div>
