@@ -4,7 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TransactionService } from 'src/app/services/transaction.service';
 import { PlayerService } from 'src/app/services/player.service';
 import { Transaction, Player } from '../../types';
-import { DialogService } from 'src/app/services/dialog/dialog.service';
+import { DialogService } from 'src/app/services/dialog.service';
 
 export interface PieceSelectDialogData {
   player: Player;

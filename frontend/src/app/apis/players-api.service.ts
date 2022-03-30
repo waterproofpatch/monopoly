@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { BaseService } from '../services/base.service';
 import { Player, ChangePlayerRequest } from '../types';
 import { HttpClient } from '@angular/common/http';
-import { DialogService } from '../services/dialog/dialog.service';
+import { DialogService } from '../services/dialog.service';
 
 @Injectable({
   providedIn: 'root',

@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 import { BaseService } from '../services/base.service';
 import { Transaction } from '../types';
-import { DialogService } from '../services/dialog/dialog.service';
+import { DialogService } from '../services/dialog.service';
 
 @Injectable({
   providedIn: 'root',

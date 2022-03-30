@@ -3,7 +3,7 @@ import { takeUntil } from 'rxjs/operators';
 
 import { GameService } from '../../services/game.service';
 import { AuthenticationService } from '../../services/authentication.service';
-import { DialogService } from '../../services/dialog/dialog.service';
+import { DialogService } from '../../services/dialog.service';
 import { BaseComponent } from '../../components/base/base.component';
 
 @Component({
