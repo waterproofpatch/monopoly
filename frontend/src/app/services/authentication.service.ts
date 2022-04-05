@@ -53,6 +53,7 @@ export class AuthenticationService extends BaseService {
       .subscribe((x) => {
         console.log('Setting token to ' + x.token);
         localStorage.setItem(this.TOKEN_KEY, x.token);
+        this.error$.next(''); // send a benign event so observers can close modals
         this.router.navigateByUrl('/');
       });
   }
@@ -73,6 +74,7 @@ export class AuthenticationService extends BaseService {
       .subscribe((x) => {
         console.log('Setting token to ' + x.token);
         localStorage.setItem(this.TOKEN_KEY, x.token);
+        this.error$.next(''); // send a benign event so observers can close modals
         this.router.navigateByUrl('/');
       });
   }
