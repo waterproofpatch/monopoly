@@ -2,15 +2,18 @@ import { Injectable } from '@angular/core';
 import { AuthenticationApiService } from '../apis/authentication-api.service';
 import { BaseService } from './base.service';
 import { Router } from '@angular/router';
+import { BehaviorSubject, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+
 import { DialogService } from './dialog.service';
-import { BehaviorSubject } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthenticationService extends BaseService {
   TOKEN_KEY = 'token';
-  loggedIn$ = new BehaviorSubject<boolean>(false);
+  error$ = new BehaviorSubject<string>('');
 
   constructor(
     private loginApi: AuthenticationApiService,
@@ -31,25 +34,41 @@ export class AuthenticationService extends BaseService {
   logout() {
     localStorage.removeItem(this.TOKEN_KEY);
     this.dialogService.displayLogDialog('Logged out successfully.');
-    this.loggedIn$.next(false);
     this.router.navigateByUrl('/');
   }
 
   register(email: string, password: string) {
-    this.loginApi.registerHtp(email, password).subscribe((x) => {
-      console.log('Setting token to ' + x.token);
-      localStorage.setItem(this.TOKEN_KEY, x.token);
-      this.loggedIn$.next(true);
-      this.router.navigateByUrl('/');
-    });
+    this.loginApi.registerHtp(email, password).subscribe(
+      (x) => {
+        console.log('Setting token to ' + x.token);
+        localStorage.setItem(this.TOKEN_KEY, x.token);
+        this.router.navigateByUrl('/');
+      },
+      (err) => {
+        console.log('got an error registering');
+        this.error$.next(err);
+      }
+    );
   }
 
   login(email: string, password: string) {
-    this.loginApi.loginHttp(email, password).subscribe((x) => {
-      console.log('Setting token to ' + x.token);
-      localStorage.setItem(this.TOKEN_KEY, x.token);
-      this.loggedIn$.next(true);
-      this.router.navigateByUrl('/');
-    });
+    this.loginApi
+      .loginHttp(email, password)
+      .pipe(
+        catchError((error: any) => {
+          if (error instanceof HttpErrorResponse) {
+            console.log('httperrorresponse from login');
+            this.error$.next(error.error.error_message);
+          } else {
+            this.error$.next('Unexpected error');
+          }
+          return throwError(error);
+        })
+      )
+      .subscribe((x) => {
+        console.log('Setting token to ' + x.token);
+        localStorage.setItem(this.TOKEN_KEY, x.token);
+        this.router.navigateByUrl('/');
+      });
   }
 }
