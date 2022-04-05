@@ -18,7 +18,7 @@ export class LoginDialogComponent implements OnInit {
     password: new FormControl(''),
   });
 
-  loginFailed = false;
+  error: string = '';
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -42,17 +42,19 @@ export class LoginDialogComponent implements OnInit {
   }
 
   closeAndPopRegistration() {
+    console.log('closing and popping registration');
     this.dialogRef.close();
     this.dialogService.displayRegisterDialog();
   }
 
   onLoginClick(): void {
-    this.authenticationService.loggedIn$.subscribe((x) => {
-      if (x) {
-        this.dialogRef.close();
-        this.loginFailed = false;
+    this.authenticationService.error$.subscribe((error: string) => {
+      if (error.length > 0) {
+        this.error = error;
       } else {
-        this.loginFailed = true;
+        console.log('Closing dialog: ' + error);
+        this.dialogRef.close();
+        this.error = '';
       }
     });
     console.log('logging in with email ' + this.loginForm.controls.email.value);
