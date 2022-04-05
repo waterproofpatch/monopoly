@@ -48,6 +48,7 @@ export class LoginDialogComponent implements OnInit {
   }
 
   onLoginClick(): void {
+    this.error = '';
     this.authenticationService.error$.subscribe((error: string) => {
       if (error.length > 0) {
         this.error = error;

@@ -40,7 +40,9 @@ export class RegisterDialogComponent implements OnInit {
   }
 
   onRegisterClick(): void {
+    this.error = '';
     this.authenticationService.error$.subscribe((error: string) => {
+      console.log('Got event ' + error);
       if (error.length > 0) {
         this.error = error;
       } else {
