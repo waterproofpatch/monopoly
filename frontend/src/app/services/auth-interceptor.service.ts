@@ -35,6 +35,7 @@ export class AuthInterceptorService implements HttpInterceptor {
                 );
                 break;
               case 401: //login
+                console.log('401 received');
                 // this.dialogService.displayLoginDialog();
                 break;
               case 403: //forbidden
