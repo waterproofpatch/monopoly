@@ -17,10 +17,12 @@ export class RegisterDialogComponent implements OnInit {
     password: new FormControl(''),
   });
 
+  error = '';
+
   ngOnInit(): void {}
 
   constructor(
-    private loginService: AuthenticationService,
+    private authenticationService: AuthenticationService,
     public dialogRef: MatDialogRef<RegisterDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: RegisterDialogData
   ) {
@@ -38,11 +40,18 @@ export class RegisterDialogComponent implements OnInit {
   }
 
   onRegisterClick(): void {
-    this.dialogRef.close();
+    this.authenticationService.error$.subscribe((x) => {
+      if (x) {
+        this.error = x;
+      } else {
+        this.dialogRef.close();
+        this.error = '';
+      }
+    });
     console.log(
       'registering with email ' + this.registerForm.controls.email.value
     );
-    this.loginService.register(
+    this.authenticationService.register(
       this.registerForm.controls.email.value,
       this.registerForm.controls.password.value
     );
