@@ -47,6 +47,12 @@ func register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// check that the email is valid
+	if !utils.IsValidEmail(registerRequest.Email) {
+		utils.WriteError(w, "Invalid email!", http.StatusBadRequest)
+		return
+	}
+
 	db := utils.GetDb()
 	var user utils.User
 	result := db.First(&user, "email = ?", registerRequest.Email)
