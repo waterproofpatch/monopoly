@@ -40,9 +40,9 @@ export class RegisterDialogComponent implements OnInit {
   }
 
   onRegisterClick(): void {
-    this.authenticationService.error$.subscribe((x) => {
-      if (x) {
-        this.error = x;
+    this.authenticationService.error$.subscribe((error: string) => {
+      if (error.length > 0) {
+        this.error = error;
       } else {
         this.dialogRef.close();
         this.error = '';

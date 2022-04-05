@@ -52,7 +52,6 @@ export class LoginDialogComponent implements OnInit {
       if (error.length > 0) {
         this.error = error;
       } else {
-        console.log('Closing dialog: ' + error);
         this.dialogRef.close();
         this.error = '';
       }

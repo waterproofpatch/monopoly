@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AuthenticationApiService } from '../apis/authentication-api.service';
 import { BaseService } from './base.service';
 import { Router } from '@angular/router';
-import { BehaviorSubject, throwError } from 'rxjs';
+import { Subject, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 import { DialogService } from './dialog.service';
@@ -13,7 +13,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class AuthenticationService extends BaseService {
   TOKEN_KEY = 'token';
-  error$ = new BehaviorSubject<string>('');
+  error$ = new Subject<string>();
 
   constructor(
     private loginApi: AuthenticationApiService,
