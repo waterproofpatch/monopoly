@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AuthenticationApiService } from '../apis/authentication-api.service';
 import { BaseService } from './base.service';
 import { Router } from '@angular/router';
-import { Subject, throwError } from 'rxjs';
+import { BehaviorSubject, Subject, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 import { DialogService } from './dialog.service';
@@ -12,8 +12,15 @@ import { HttpErrorResponse } from '@angular/common/http';
   providedIn: 'root',
 })
 export class AuthenticationService extends BaseService {
+  // the local storage key for tokens
   TOKEN_KEY = 'token';
+
+  // this error string is for modals to display login or registration errors.
   error$ = new Subject<string>();
+
+  // this event is for other routes to know when to re-request content behind
+  // a backend authentication guard.
+  loginEvent$ = new BehaviorSubject<boolean>(false);
 
   constructor(
     private loginApi: AuthenticationApiService,
@@ -21,6 +28,9 @@ export class AuthenticationService extends BaseService {
     private dialogService: DialogService
   ) {
     super();
+    if (this.isAuthenticated) {
+      this.loginEvent$.next(true);
+    }
   }
 
   get token() {
@@ -54,6 +64,7 @@ export class AuthenticationService extends BaseService {
         console.log('Setting token to ' + x.token);
         localStorage.setItem(this.TOKEN_KEY, x.token);
         this.error$.next(''); // send a benign event so observers can close modals
+        this.loginEvent$.next(true);
         this.router.navigateByUrl('/home');
       });
   }
@@ -75,6 +86,7 @@ export class AuthenticationService extends BaseService {
         console.log('Setting token to ' + x.token);
         localStorage.setItem(this.TOKEN_KEY, x.token);
         this.error$.next(''); // send a benign event so observers can close modals
+        this.loginEvent$.next(true);
         this.router.navigateByUrl('/home');
       });
   }

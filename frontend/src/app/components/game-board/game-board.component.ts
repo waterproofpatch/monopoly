@@ -18,8 +18,10 @@ export class GameBoardComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.authenticationService.isAuthenticated) {
-      this.gameService.getGames();
-    }
+    this.authenticationService.loginEvent$.subscribe((x) => {
+      if (x) {
+        this.gameService.getGames();
+      }
+    });
   }
 }
