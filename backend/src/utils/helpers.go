@@ -5,6 +5,7 @@ import (
 	"errors"
 	"log"
 	"net/http"
+	"net/mail"
 	"strings"
 	"time"
 
@@ -36,6 +37,11 @@ func HashPassword(password string) (string, error) {
 	hashedPasswordBytes, err := bcrypt.
 		GenerateFromPassword(passwordBytes, bcrypt.MinCost)
 	return string(hashedPasswordBytes), err
+}
+
+func IsValidEmail(email string) bool {
+	_, err := mail.ParseAddress(email)
+	return err == nil
 }
 
 // Check if two passwords match using Bcrypt's CompareHashAndPassword
