@@ -38,17 +38,23 @@ export class AuthenticationService extends BaseService {
   }
 
   register(email: string, password: string) {
-    this.loginApi.registerHtp(email, password).subscribe(
-      (x) => {
+    this.loginApi
+      .registerHtp(email, password)
+      .pipe(
+        catchError((error: any) => {
+          if (error instanceof HttpErrorResponse) {
+            this.error$.next(error.error.error_message);
+          } else {
+            this.error$.next('Unexpected error');
+          }
+          return throwError(error);
+        })
+      )
+      .subscribe((x) => {
         console.log('Setting token to ' + x.token);
         localStorage.setItem(this.TOKEN_KEY, x.token);
         this.router.navigateByUrl('/');
-      },
-      (err) => {
-        console.log('got an error registering');
-        this.error$.next(err);
-      }
-    );
+      });
   }
 
   login(email: string, password: string) {
@@ -57,7 +63,6 @@ export class AuthenticationService extends BaseService {
       .pipe(
         catchError((error: any) => {
           if (error instanceof HttpErrorResponse) {
-            console.log('httperrorresponse from login');
             this.error$.next(error.error.error_message);
           } else {
             this.error$.next('Unexpected error');
