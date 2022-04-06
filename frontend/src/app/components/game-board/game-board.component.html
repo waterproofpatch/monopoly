@@ -4,12 +4,10 @@
       *ngFor="let game of gameService.games$ | async"
       class="example-card"
     >
-      <mat-card-title
-        >{{ game.name }} - created by {{ game.createdBy }}</mat-card-title
-      >
+      <mat-card-title>{{ game.name }}</mat-card-title>
       <mat-card-subtitle> ID: {{ game.ID }} </mat-card-subtitle>
       <mat-card-content>
-        <p>Created on {{ game.CreatedAt }}</p>
+        <p>Created on {{ game.CreatedAt }} by {{ game.createdBy }}</p>
       </mat-card-content>
       <mat-card-actions>
         <button mat-button (click)="gameService.resumeGame(game.ID)">
