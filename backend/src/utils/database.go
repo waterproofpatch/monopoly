@@ -9,9 +9,9 @@ import (
 
 var gDb *gorm.DB
 
-func NewGame(gameName string) uint {
+func NewGame(gameName string, email string) uint {
 	db := GetDb()
-	db.Create(&Game{Name: gameName})
+	db.Create(&Game{Name: gameName, CreatedBy: email})
 
 	var game Game
 	db.Last(&game)
@@ -43,7 +43,7 @@ func ResetDb() {
 	db.AutoMigrate(&Player{})
 	db.AutoMigrate(&Transaction{})
 
-	NewGame("Default Game")
+	NewGame("Default Game", "Default")
 }
 
 func InitDb(dbUrl string) {

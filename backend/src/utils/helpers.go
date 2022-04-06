@@ -66,14 +66,14 @@ func GetTransactionsForGame(db *gorm.DB, gameId string) []Transaction {
 	return transactions
 }
 
-func GetJwtToken() (string, error) {
+func GenerateJwtToken(email string) (string, error) {
 	claims := JWTData{
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(time.Hour).Unix(),
 		},
 
 		CustomClaims: map[string]string{
-			"userid": "u1",
+			"email": email,
 		},
 	}
 
@@ -114,18 +114,18 @@ func ProcessTransaction(w http.ResponseWriter, transaction Transaction, reverse 
 	db.Save(&toPlayer)
 }
 
-func IsAuthorized(w http.ResponseWriter, r *http.Request) bool {
+func ParseClaims(w http.ResponseWriter, r *http.Request) (bool, *jwt.MapClaims) {
 	authToken := r.Header.Get("Authorization")
 	authArr := strings.Split(authToken, " ")
 
 	if len(authArr) != 2 {
 		log.Println("Authentication header is invalid: " + authToken)
-		return false
+		return false, nil
 	}
 
 	jwtToken := authArr[1]
-
-	_, err := jwt.ParseWithClaims(jwtToken, &JWTData{}, func(token *jwt.Token) (interface{}, error) {
+	claims := &jwt.MapClaims{}
+	_, err := jwt.ParseWithClaims(jwtToken, claims, func(token *jwt.Token) (interface{}, error) {
 		if jwt.SigningMethodHS256 != token.Method {
 			return nil, errors.New("Invalid signing algorithm")
 		}
@@ -134,11 +134,14 @@ func IsAuthorized(w http.ResponseWriter, r *http.Request) bool {
 
 	if err != nil {
 		log.Println(err)
-		return false
+		return false, nil
 	}
+	return true, claims
+}
 
-	// data := claims.Claims.(*JWTData)
+func IsAuthorized(w http.ResponseWriter, r *http.Request) bool {
 
-	// userID := data.CustomClaims["userid"]
-	return true
+	// it's enough to just be able to parse the claims
+	parsed, _ := ParseClaims(w, r)
+	return parsed
 }

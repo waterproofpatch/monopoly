@@ -11,6 +11,7 @@ export interface Player {
 export interface Game {
   ID: number;
   name: string;
+  createdBy: string;
   CreatedAt: string;
 }
 

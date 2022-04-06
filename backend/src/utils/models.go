@@ -24,6 +24,7 @@ type Game struct {
 	Players      []Player
 	Transactions []Transaction
 	Name         string `json:"name"`
+	CreatedBy    string `json:"createdBy"`
 }
 
 type Transaction struct {

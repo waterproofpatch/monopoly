@@ -4,8 +4,10 @@
       *ngFor="let game of gameService.games$ | async"
       class="example-card"
     >
-      <mat-card-title>{{ game.name }}</mat-card-title>
-      <mat-card-subtitle>{{ game.ID }}</mat-card-subtitle>
+      <mat-card-title
+        >{{ game.name }} - created by {{ game.createdBy }}</mat-card-title
+      >
+      <mat-card-subtitle> ID: {{ game.ID }} </mat-card-subtitle>
       <mat-card-content>
         <p>Created on {{ game.CreatedAt }}</p>
       </mat-card-content>

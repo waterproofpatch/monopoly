@@ -66,7 +66,7 @@ func register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	db.Create(&utils.User{Email: registerRequest.Email, Password: hashedPassword})
-	tokenString, err := utils.GetJwtToken()
+	tokenString, err := utils.GenerateJwtToken(registerRequest.Email)
 	if err != nil {
 		utils.WriteError(w, "Faled getting token string!", http.StatusInternalServerError)
 		return
@@ -103,7 +103,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if utils.DoPasswordsMatch(user.Password, loginRequest.Password) {
-		tokenString, err := utils.GetJwtToken()
+		tokenString, err := utils.GenerateJwtToken(user.Email)
 		if err != nil {
 			utils.WriteError(w, "Faled getting token string!", http.StatusInternalServerError)
 			return
@@ -196,10 +196,19 @@ func games(w http.ResponseWriter, r *http.Request) {
 		return
 	case "POST": // start a new game
 		// create a new game given a name
+		parsedClaims, claims := utils.ParseClaims(w, r)
+		if !parsedClaims {
+			utils.WriteError(w, "Unable to parse claims!", http.StatusBadRequest)
+			return
+		}
+
 		var newGameRequest NewGameRequest
 		json.NewDecoder(r.Body).Decode(&newGameRequest)
 
-		newGameId := utils.NewGame(newGameRequest.GameName)
+		log.Printf("Claims: %v", claims)
+		log.Printf("Claims: %s", (*claims)["email"])
+
+		newGameId := utils.NewGame(newGameRequest.GameName, (*claims)["email"].(string))
 
 		var game utils.Game
 		db.First(&game, "id = ?", newGameId)
@@ -249,7 +258,7 @@ func transactions(w http.ResponseWriter, r *http.Request) {
 
 func version(w http.ResponseWriter, r *http.Request) {
 	var version VersionResponse
-	version.Version = "1.0.0"
+	version.Version = "1.1.0"
 	json.NewEncoder(w).Encode(&version)
 }
 
