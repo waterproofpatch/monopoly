@@ -57,8 +57,15 @@ export class DialogService extends BaseService {
       height: '500px',
       data: { message: message },
     });
-    this.dialogRef.afterClosed().pipe(takeUntil(this.destroy$)),
-      finalize(() => (this.dialogRef = undefined));
+    this.dialogRef
+      .afterClosed()
+      .pipe(
+        finalize(() => {
+          console.log('Closing dialog!');
+          this.dialogRef = undefined;
+        })
+      )
+      .subscribe();
     return this.dialogRef;
   }
 
