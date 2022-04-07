@@ -39,6 +39,9 @@ export class DialogService extends BaseService {
   }
 
   displayLoginDialog() {
+    if (this.dialogRef) {
+      return;
+    }
     this.dialogRef = this.dialog.open(LoginDialogComponent, {
       width: '350px',
       height: '500px',

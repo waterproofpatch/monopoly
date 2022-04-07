@@ -116,13 +116,13 @@ func ProcessTransaction(w http.ResponseWriter, transaction Transaction, reverse 
 	db.Save(&toPlayer)
 }
 
-func ParseClaims(w http.ResponseWriter, r *http.Request) (bool, *JWTData) {
+func ParseClaims(w http.ResponseWriter, r *http.Request) (bool, *JWTData, string) {
 	authToken := r.Header.Get("Authorization")
 	authArr := strings.Split(authToken, " ")
 
 	if len(authArr) != 2 {
 		log.Println("Authentication header is invalid: " + authToken)
-		return false, nil
+		return false, nil, "Invalid Authorization bearer"
 	}
 
 	jwtToken := authArr[1]
@@ -134,20 +134,20 @@ func ParseClaims(w http.ResponseWriter, r *http.Request) (bool, *JWTData) {
 	})
 
 	if err != nil {
-		log.Println(err)
-		return false, nil
+		log.Printf("Error %v\n", err)
+		return false, nil, "Login expired"
 	}
 	claims, ok := token.Claims.(*JWTData)
 	if !ok {
 		log.Printf("Failed processing claims")
-		return false, nil
+		return false, nil, "Invalid claims"
 	}
-	return true, claims
+	return true, claims, ""
 }
 
-func IsAuthorized(w http.ResponseWriter, r *http.Request) bool {
+func IsAuthorized(w http.ResponseWriter, r *http.Request) (bool, string) {
 
 	// it's enough to just be able to parse the claims
-	parsed, _ := ParseClaims(w, r)
-	return parsed
+	parsed, _, errorString := ParseClaims(w, r)
+	return parsed, errorString
 }

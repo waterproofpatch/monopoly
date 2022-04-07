@@ -26,3 +26,8 @@ mat-card {
   justify-content: center;
   align-items: center;
 }
+
+.active {
+  background-color: red;
+  border: 1px solid green;
+}
