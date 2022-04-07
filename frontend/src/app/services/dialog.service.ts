@@ -27,6 +27,10 @@ export class DialogService extends BaseService {
     console.log(new Date() + ': ' + JSON.stringify(msg));
   }
 
+  /**
+   * Display the registration modal.
+   * @returns
+   */
   displayRegisterDialog() {
     this.dialogRef = this.dialog.open(RegisterDialogComponent, {
       width: '350px',
@@ -38,20 +42,29 @@ export class DialogService extends BaseService {
     return this.dialogRef;
   }
 
-  displayLoginDialog() {
+  /**
+   * Display the login modal.
+   * @param message optional message to display at the top of the modal.
+   * @returns
+   */
+  displayLoginDialog(message?: string) {
     if (this.dialogRef) {
       return;
     }
     this.dialogRef = this.dialog.open(LoginDialogComponent, {
       width: '350px',
       height: '500px',
-      data: {},
+      data: { message: message },
     });
     this.dialogRef.afterClosed().pipe(takeUntil(this.destroy$)),
       finalize(() => (this.dialogRef = undefined));
     return this.dialogRef;
   }
 
+  /**
+   * Display the new game modal.
+   * @returns
+   */
   displayNewGameDialog() {
     this.dialogRef = this.dialog.open(NewGameDialogComponent, {
       width: '350px',
@@ -62,6 +75,12 @@ export class DialogService extends BaseService {
     return this.dialogRef;
   }
 
+  /**
+   * open the piece dialog where we can change players, pass go, etc.
+   * @param player the player which was selected.
+   * @param players the list of all players for this game.
+   * @returns
+   */
   displayPieceSelectDialog(player: Player, players: Player[]) {
     this.dialogRef = this.dialog.open(PieceSelectDialogComponent, {
       width: '350px',
@@ -74,6 +93,10 @@ export class DialogService extends BaseService {
     return this.dialogRef;
   }
 
+  /**
+   * display an error modal.
+   * @param errorMsg the error message to display.
+   */
   displayErrorDialog(errorMsg: string): void {
     this.dialogRef = this.dialog.open(ErrorDialogComponent, {
       width: '250px',
@@ -84,6 +107,10 @@ export class DialogService extends BaseService {
       finalize(() => (this.dialogRef = undefined));
   }
 
+  /**
+   * display a generic log message as a modal.
+   * @param logMsg the message to display
+   */
   displayLogDialog(logMsg: string): void {
     this.dialogRef = this.dialog.open(LogDialogComponent, {
       width: '250px',
