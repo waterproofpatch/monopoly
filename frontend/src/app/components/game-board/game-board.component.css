@@ -28,6 +28,5 @@ mat-card {
 }
 
 .active {
-  background-color: red;
-  border: 1px solid green;
+  background-color: #1976d2;
 }
