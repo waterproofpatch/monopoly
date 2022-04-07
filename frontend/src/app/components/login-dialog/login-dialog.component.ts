@@ -5,7 +5,9 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { DialogService } from 'src/app/services/dialog.service';
 
-export interface LoginDialogData {}
+export interface LoginDialogData {
+  message: string;
+}
 
 @Component({
   selector: 'app-login-dialog',
