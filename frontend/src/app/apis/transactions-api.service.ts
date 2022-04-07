@@ -23,9 +23,7 @@ export class TransactionsApiService extends BaseService {
   }
 
   deleteTransactionHttp(transaction: Transaction): Observable<Transaction[]> {
-    const url = `${this.getUrlBase() + this.apiUrl}/${transaction.ID}?gameId=${
-      transaction.GameID
-    }`;
+    const url = `${this.getUrlBase() + this.apiUrl}/${transaction.ID}`;
 
     return this.http.delete<Transaction[]>(url, this.httpOptions);
   }

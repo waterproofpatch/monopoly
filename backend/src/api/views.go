@@ -245,6 +245,12 @@ func transactions(w http.ResponseWriter, r *http.Request) {
 		db.First(&transaction, id)
 		utils.ProcessTransaction(w, transaction, true)
 		db.Delete(&utils.Transaction{}, id)
+		if gameId == "" {
+			var transactions []utils.Transaction
+			db.Find(&transactions)
+			json.NewEncoder(w).Encode(transactions)
+			return
+		}
 	case "POST":
 		var transaction utils.Transaction
 		err := json.NewDecoder(r.Body).Decode(&transaction)
