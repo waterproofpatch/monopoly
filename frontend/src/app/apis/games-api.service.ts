@@ -58,7 +58,7 @@ export class GamesApiService extends BaseService {
             .pipe(takeUntil(this.destroy$))
             .subscribe();
           this.transactionsApi
-            .getTransactionsHttp(game.ID)
+            .getTransactionsHttp()
             .pipe(takeUntil(this.destroy$))
             .subscribe();
         })
