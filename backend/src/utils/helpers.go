@@ -126,7 +126,6 @@ func ParseClaims(w http.ResponseWriter, r *http.Request) (bool, *JWTData) {
 	}
 
 	jwtToken := authArr[1]
-	// claims := jwt.MapClaims{}
 	token, err := jwt.ParseWithClaims(jwtToken, &JWTData{}, func(token *jwt.Token) (interface{}, error) {
 		if jwt.SigningMethodHS256 != token.Method {
 			return nil, errors.New("Invalid signing algorithm")
