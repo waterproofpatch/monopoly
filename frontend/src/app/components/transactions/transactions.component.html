@@ -1,5 +1,7 @@
-<div class="row-left">
-	<div *ngFor="let transaction of transactionService.transactions$ | async">
-		<app-transaction [transaction]="transaction"></app-transaction>
-	</div>
+<div *ngIf="gameId">
+  <div class="row-left">
+    <div *ngFor="let transaction of transactionService.transactions$ | async">
+      <app-transaction [transaction]="transaction"></app-transaction>
+    </div>
+  </div>
 </div>

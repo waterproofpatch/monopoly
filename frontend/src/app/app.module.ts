@@ -31,6 +31,7 @@ import { NewGameDialogComponent } from './components/new-game-dialog/new-game-di
 import { LogDialogComponent } from './components/log-dialog/log-dialog.component';
 import { ErrorDialogComponent } from './components/error-dialog/error-dialog.component';
 import { PieceSelectDialogComponent } from './components/piece-select-dialog/piece-select-dialog.component';
+import { GameComponent } from './components/game/game.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -47,6 +48,7 @@ import { PieceSelectDialogComponent } from './components/piece-select-dialog/pie
     LogDialogComponent,
     ErrorDialogComponent,
     PieceSelectDialogComponent,
+    GameComponent,
   ],
   imports: [
     HttpClientModule,
