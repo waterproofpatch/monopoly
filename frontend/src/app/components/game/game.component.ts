@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { GameService } from 'src/app/services/game.service';
 import { TransactionService } from 'src/app/services/transaction.service';
 import { Game } from 'src/app/types';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Component({
@@ -30,6 +30,11 @@ export class GameComponent implements OnInit {
    * @returns Get the umber of transactions for this game
    */
   numTransactions(): Observable<number> {
-    return this.transactionService.transactions$.pipe(map((x) => x.length));
+    if (!this.game) {
+      return of(0);
+    }
+    return this.transactionService.transactions$.pipe(
+      map((x) => x.filter((x) => x.GameID == this.game?.ID).length)
+    );
   }
 }
