@@ -41,7 +41,9 @@ export class AuthInterceptorService implements HttpInterceptor {
               case 401: //login
                 console.log('401 received');
                 if (error.error.error_message.indexOf('expired') >= 0) {
-                  this.dialogService.displayLoginDialog();
+                  this.dialogService.displayLoginDialog(
+                    error.error.error_message
+                  );
                 }
                 break;
               case 403: //forbidden
