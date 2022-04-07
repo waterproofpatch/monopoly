@@ -196,9 +196,9 @@ func games(w http.ResponseWriter, r *http.Request) {
 		return
 	case "POST": // start a new game
 		// create a new game given a name
-		parsedClaims, claims := utils.ParseClaims(w, r)
+		parsedClaims, claims, errString := utils.ParseClaims(w, r)
 		if !parsedClaims {
-			utils.WriteError(w, "Unable to parse claims!", http.StatusBadRequest)
+			utils.WriteError(w, errString, http.StatusBadRequest)
 			return
 		}
 

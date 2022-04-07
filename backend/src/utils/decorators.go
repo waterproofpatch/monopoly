@@ -29,8 +29,9 @@ func Authentication(inner func(http.ResponseWriter, *http.Request), name string)
 		log.Printf(
 			"Start %s - %s %s", r.RemoteAddr, r.Method, r.RequestURI)
 
-		if !IsAuthorized(w, r) {
-			WriteError(w, "Request failed!", http.StatusUnauthorized)
+		isAuth, errString := IsAuthorized(w, r)
+		if !isAuth {
+			WriteError(w, errString, http.StatusUnauthorized)
 			return
 		}
 		inner(w, r)

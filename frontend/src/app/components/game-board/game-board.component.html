@@ -3,6 +3,7 @@
     <mat-card
       *ngFor="let game of gameService.games$ | async"
       class="example-card"
+      [class.active]="game.ID == (gameService.selectedGameId$ | async)"
     >
       <mat-card-title>{{ game.name }}</mat-card-title>
       <mat-card-subtitle> ID: {{ game.ID }} </mat-card-subtitle>
