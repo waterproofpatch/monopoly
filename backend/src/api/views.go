@@ -231,7 +231,6 @@ func transactions(w http.ResponseWriter, r *http.Request) {
 			var transactions []utils.Transaction
 			db.Find(&transactions)
 			json.NewEncoder(w).Encode(transactions)
-			log.Printf("Returning %v transactions\n", transactions)
 			return
 		}
 	case "DELETE":
@@ -256,6 +255,12 @@ func transactions(w http.ResponseWriter, r *http.Request) {
 		// create and then process the transaction
 		utils.ProcessTransaction(w, transaction, false)
 		db.Create(&transaction)
+		if gameId == "" {
+			var transactions []utils.Transaction
+			db.Find(&transactions)
+			json.NewEncoder(w).Encode(transactions)
+			return
+		}
 	}
 	if gameId == "" {
 		utils.WriteError(w, "Missing gameId!", http.StatusBadRequest)

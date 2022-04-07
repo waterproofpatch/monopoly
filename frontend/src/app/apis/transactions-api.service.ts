@@ -35,7 +35,7 @@ export class TransactionsApiService extends BaseService {
     gameId: number
   ): Observable<Transaction[]> {
     return this.http.post<Transaction[]>(
-      this.getUrlBase() + this.apiUrl + '?gameId=' + gameId,
+      this.getUrlBase() + this.apiUrl,
       transaction,
       this.httpOptions
     );
