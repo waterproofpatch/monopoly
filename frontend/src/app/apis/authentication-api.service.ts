@@ -14,7 +14,7 @@ export class AuthenticationApiService extends BaseService {
     super();
   }
 
-  registerHtp(email: string, password: string): Observable<any> {
+  registerHttp(email: string, password: string): Observable<any> {
     const data = {
       email: email,
       password: password,
