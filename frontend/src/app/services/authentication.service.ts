@@ -63,7 +63,7 @@ export class AuthenticationService extends BaseService {
 
   register(email: string, password: string) {
     this.loginApi
-      .registerHtp(email, password)
+      .registerHttp(email, password)
       .pipe(
         catchError((error: any) => {
           if (error instanceof HttpErrorResponse) {
