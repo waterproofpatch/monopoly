@@ -39,7 +39,10 @@
   </mat-menu>
   <span>Monopoly Banker</span>
   <span class="example-spacer"></span>
-  <span>Version {{ gameService.version$ | async }}</span>
+  <span class="version" *ngIf="authenticationService.isAuthenticated"
+    >Welcome {{ authenticationService.email() }}</span
+  >
+  <span class="version">Version {{ gameService.version$ | async }}</span>
   <button
     mat-icon-button
     class="example-icon favorite-icon"
