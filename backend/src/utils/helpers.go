@@ -23,7 +23,8 @@ type JWTData struct {
 	// Standard claims are the standard jwt claims from the IETF standard
 	// https://tools.ietf.org/html/rfc7519
 	jwt.StandardClaims
-	CustomClaims map[string]string `json:"custom,omitempty"`
+	Email string `json:"email"`
+	// CustomClaims map[string]string `json:"email,omitempty"`
 }
 type Error struct {
 	ErrorMessage string `json:"error_message"`
@@ -72,9 +73,10 @@ func GenerateJwtToken(email string) (string, error) {
 			ExpiresAt: time.Now().Add(time.Hour).Unix(),
 		},
 
-		CustomClaims: map[string]string{
-			"email": email,
-		},
+		Email: email,
+		// CustomClaims: map[string]string{
+		// 	"email": email,
+		// },
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
@@ -114,7 +116,7 @@ func ProcessTransaction(w http.ResponseWriter, transaction Transaction, reverse 
 	db.Save(&toPlayer)
 }
 
-func ParseClaims(w http.ResponseWriter, r *http.Request) (bool, *jwt.MapClaims) {
+func ParseClaims(w http.ResponseWriter, r *http.Request) (bool, *JWTData) {
 	authToken := r.Header.Get("Authorization")
 	authArr := strings.Split(authToken, " ")
 
@@ -124,8 +126,8 @@ func ParseClaims(w http.ResponseWriter, r *http.Request) (bool, *jwt.MapClaims) 
 	}
 
 	jwtToken := authArr[1]
-	claims := &jwt.MapClaims{}
-	_, err := jwt.ParseWithClaims(jwtToken, claims, func(token *jwt.Token) (interface{}, error) {
+	// claims := jwt.MapClaims{}
+	token, err := jwt.ParseWithClaims(jwtToken, &JWTData{}, func(token *jwt.Token) (interface{}, error) {
 		if jwt.SigningMethodHS256 != token.Method {
 			return nil, errors.New("Invalid signing algorithm")
 		}
@@ -134,6 +136,11 @@ func ParseClaims(w http.ResponseWriter, r *http.Request) (bool, *jwt.MapClaims) 
 
 	if err != nil {
 		log.Println(err)
+		return false, nil
+	}
+	claims, ok := token.Claims.(*JWTData)
+	if !ok {
+		log.Printf("Failed processing claims")
 		return false, nil
 	}
 	return true, claims
