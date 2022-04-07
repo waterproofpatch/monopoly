@@ -1,5 +1,8 @@
 <div *ngIf="authenticationService.isAuthenticated" class="parent-container">
   <div class="game-header">
+    <p *ngIf="(gameService.games$ | async)?.length == 0">
+      No games. Create a new one!
+    </p>
     <mat-card
       *ngFor="let game of gameService.games$ | async"
       class="example-card"
