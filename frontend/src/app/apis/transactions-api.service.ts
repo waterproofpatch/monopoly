@@ -15,7 +15,7 @@ export class TransactionsApiService extends BaseService {
     super();
   }
 
-  getTransactionsHttp(gameId: number): Observable<Transaction[]> {
+  getTransactionsHttp(): Observable<Transaction[]> {
     return this.http.get<Transaction[]>(
       this.getUrlBase() + this.apiUrl,
       this.httpOptions
@@ -28,10 +28,7 @@ export class TransactionsApiService extends BaseService {
     return this.http.delete<Transaction[]>(url, this.httpOptions);
   }
 
-  addTransactionHttp(
-    transaction: Transaction,
-    gameId: number
-  ): Observable<Transaction[]> {
+  addTransactionHttp(transaction: Transaction): Observable<Transaction[]> {
     return this.http.post<Transaction[]>(
       this.getUrlBase() + this.apiUrl,
       transaction,

@@ -40,14 +40,14 @@ export class TransactionService extends BaseComponent {
 
   addTransaction(transaction: Transaction, gameId: number) {
     this.transactionsApi
-      .addTransactionHttp(transaction, gameId)
+      .addTransactionHttp(transaction)
       .pipe(takeUntil(this.destroy$))
       .subscribe((x) => this.setTransactions(x, gameId));
   }
 
   getTransactionsForGame(gameId: number) {
     this.transactionsApi
-      .getTransactionsHttp(gameId)
+      .getTransactionsHttp()
       .pipe(takeUntil(this.destroy$))
       .subscribe((x) => this.setTransactions(x, gameId));
   }
