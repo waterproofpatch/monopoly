@@ -36,7 +36,6 @@ export class PlayersComponent extends BaseComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['gameId']) {
-      console.log('PLAYERS: GAME CHANGED');
       this.playerService.invalidatePlayersCache();
       this.playerService.getPlayersForGame(changes['gameId'].currentValue);
     }

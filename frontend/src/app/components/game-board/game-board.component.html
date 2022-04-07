@@ -5,24 +5,7 @@
       class="example-card"
       [class.active]="game.ID == (gameService.selectedGameId$ | async)"
     >
-      <mat-card-title>{{ game.name }}</mat-card-title>
-      <mat-card-subtitle> ID: {{ game.ID }} </mat-card-subtitle>
-      <mat-card-content>
-        <p>Created on {{ game.CreatedAt }}</p>
-      </mat-card-content>
-      <mat-card-content>
-        <p>
-          By <i>{{ game.createdBy }}</i>
-        </p>
-      </mat-card-content>
-      <mat-card-actions>
-        <button mat-button (click)="gameService.resumeGame(game.ID)">
-          Resume
-        </button>
-        <button mat-button (click)="gameService.deleteGame(game)">
-          Delete
-        </button>
-      </mat-card-actions>
+      <app-game [game]="game"></app-game>
     </mat-card>
   </div>
   <div>
