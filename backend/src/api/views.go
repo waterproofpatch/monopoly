@@ -206,9 +206,10 @@ func games(w http.ResponseWriter, r *http.Request) {
 		json.NewDecoder(r.Body).Decode(&newGameRequest)
 
 		log.Printf("Claims: %v", claims)
-		log.Printf("Claims: %s", (*claims)["email"])
+		log.Printf("Claims: %s", claims.Email)
+		// log.Printf("Claims: %s", (*claims)["email"])
 
-		newGameId := utils.NewGame(newGameRequest.GameName, (*claims)["email"].(string))
+		newGameId := utils.NewGame(newGameRequest.GameName, claims.Email)
 
 		var game utils.Game
 		db.First(&game, "id = ?", newGameId)
