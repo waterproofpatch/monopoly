@@ -55,9 +55,11 @@ export class AuthenticationService extends BaseService {
     return !!localStorage.getItem(this.TOKEN_KEY);
   }
 
-  logout() {
+  logout(showModal?: boolean) {
     localStorage.removeItem(this.TOKEN_KEY);
-    this.dialogService.displayLogDialog('Logged out successfully.');
+    if (showModal) {
+      this.dialogService.displayLogDialog('Logged out successfully.');
+    }
     this.router.navigateByUrl('/');
   }
 

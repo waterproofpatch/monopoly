@@ -9,6 +9,7 @@ import { DialogService } from './dialog.service';
 export class AuthInterceptorService implements HttpInterceptor {
   constructor(
     private injector: Injector,
+    private authenticationService: AuthenticationService,
     private dialogService: DialogService
   ) {}
 
@@ -41,6 +42,8 @@ export class AuthInterceptorService implements HttpInterceptor {
               case 401: //login
                 console.log('401 received');
                 if (error.error.error_message.indexOf('expired') >= 0) {
+                  // log out of the auth service so the views acting on isAuthenticated look right.
+                  this.authenticationService.logout(false);
                   this.dialogService.displayLoginDialog(
                     error.error.error_message
                   );
