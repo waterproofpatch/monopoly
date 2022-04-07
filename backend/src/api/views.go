@@ -224,13 +224,16 @@ func games(w http.ResponseWriter, r *http.Request) {
 func transactions(w http.ResponseWriter, r *http.Request) {
 	db := utils.GetDb()
 	gameId := r.FormValue("gameId")
-	if gameId == "" {
-		utils.WriteError(w, "Missing gameId!", http.StatusBadRequest)
-		return
-	}
 
 	switch r.Method {
 	case "GET":
+		if gameId == "" {
+			var transactions []utils.Transaction
+			db.Find(&transactions)
+			json.NewEncoder(w).Encode(transactions)
+			log.Printf("Returning %v transactions\n", transactions)
+			return
+		}
 	case "DELETE":
 		vars := mux.Vars(r)
 		id, hasTransactionId := vars["id"]
@@ -253,6 +256,10 @@ func transactions(w http.ResponseWriter, r *http.Request) {
 		// create and then process the transaction
 		utils.ProcessTransaction(w, transaction, false)
 		db.Create(&transaction)
+	}
+	if gameId == "" {
+		utils.WriteError(w, "Missing gameId!", http.StatusBadRequest)
+		return
 	}
 	json.NewEncoder(w).Encode(utils.GetTransactionsForGame(db, gameId))
 }
