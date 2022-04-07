@@ -1,6 +1,11 @@
 <div *ngIf="gameId">
   <div class="row-left">
-    <div *ngFor="let transaction of transactionService.transactions$ | async">
+    <div
+      *ngFor="
+        let transaction of transactionService.getTransactionsForGameId(gameId)
+          | async
+      "
+    >
       <app-transaction [transaction]="transaction"></app-transaction>
     </div>
   </div>

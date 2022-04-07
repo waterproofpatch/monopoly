@@ -49,6 +49,7 @@ export class DialogService extends BaseService {
    */
   displayLoginDialog(message?: string) {
     if (this.dialogRef) {
+      console.log("Not displaying login dialog, it's already open");
       return;
     }
     this.dialogRef = this.dialog.open(LoginDialogComponent, {

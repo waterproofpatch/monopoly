@@ -16,11 +16,4 @@ export class TransactionsComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit(): void {}
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['gameId']) {
-      this.transactionService.getTransactionsForGame(
-        changes['gameId'].currentValue
-      );
-    }
-  }
 }
