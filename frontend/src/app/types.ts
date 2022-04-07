@@ -15,6 +15,10 @@ export interface Game {
   CreatedAt: string;
 }
 
+export interface JWTData {
+  email: string;
+}
+
 export interface Version {
   version: string;
 }

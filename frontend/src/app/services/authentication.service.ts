@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
-import { AuthenticationApiService } from '../apis/authentication-api.service';
-import { BaseService } from './base.service';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Subject, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import jwt_decode from 'jwt-decode';
 
+import { AuthenticationApiService } from '../apis/authentication-api.service';
+import { BaseService } from './base.service';
 import { DialogService } from './dialog.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { JWTData } from '../types';
 
 @Injectable({
   providedIn: 'root',
@@ -30,6 +32,18 @@ export class AuthenticationService extends BaseService {
     super();
     if (this.isAuthenticated) {
       this.loginEvent$.next(true);
+    }
+  }
+
+  email(): string {
+    if (!this.token) {
+      return '';
+    }
+    try {
+      return (jwt_decode(this.token) as JWTData).email;
+    } catch (Error) {
+      console.log('error decoding token');
+      return '';
     }
   }
 
