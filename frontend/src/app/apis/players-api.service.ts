@@ -20,15 +20,15 @@ export class PlayersApiService extends BaseService {
       second: second,
     };
     return this.http.put<Player[]>(
-      this.getUrlBase() + this.apiUrl + '?gameId=' + first.GameID,
+      this.getUrlBase() + this.apiUrl,
       request,
       this.httpOptions
     );
   }
 
-  getPlayersHttp(gameId: number): Observable<Player[]> {
+  getPlayersHttp(): Observable<Player[]> {
     return this.http.get<Player[]>(
-      this.getUrlBase() + this.apiUrl + '?gameId=' + gameId,
+      this.getUrlBase() + this.apiUrl,
       this.httpOptions
     );
   }
@@ -60,9 +60,7 @@ export class PlayersApiService extends BaseService {
 
   /** DELETE: delete the player from the server (by setting their inGame to false!) */
   deletePlayerHttp(player: Player): Observable<Player[]> {
-    const url = `${this.getUrlBase() + this.apiUrl}/${player.ID}?gameId=${
-      player.GameID
-    }`;
+    const url = `${this.getUrlBase() + this.apiUrl}/${player.ID}`;
 
     return this.http.delete<Player[]>(url, this.httpOptions);
   }

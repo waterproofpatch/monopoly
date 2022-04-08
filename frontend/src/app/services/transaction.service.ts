@@ -21,10 +21,10 @@ export class TransactionService extends BaseComponent {
     super();
   }
 
-  private setTransactions(transactions: Transaction[], gameId: number) {
+  private setTransactions(transactions: Transaction[]) {
     console.log('Setting transactions ' + transactions);
     this.transactions$.next(transactions);
-    this.playerService.getPlayersForGame(gameId);
+    this.playerService.getPlayersForGame();
   }
 
   /**
@@ -42,20 +42,20 @@ export class TransactionService extends BaseComponent {
     this.transactionsApi
       .addTransactionHttp(transaction)
       .pipe(takeUntil(this.destroy$))
-      .subscribe((x) => this.setTransactions(x, gameId));
+      .subscribe((x) => this.setTransactions(x));
   }
 
-  getTransactionsForGame(gameId: number) {
+  getTransactionsForGame() {
     this.transactionsApi
       .getTransactionsHttp()
       .pipe(takeUntil(this.destroy$))
-      .subscribe((x) => this.setTransactions(x, gameId));
+      .subscribe((x) => this.setTransactions(x));
   }
 
   deleteTransaction(transaction: Transaction) {
     this.transactionsApi
       .deleteTransactionHttp(transaction)
       .pipe(takeUntil(this.destroy$))
-      .subscribe((x) => this.setTransactions(x, transaction.GameID));
+      .subscribe((x) => this.setTransactions(x));
   }
 }

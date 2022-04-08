@@ -16,6 +16,8 @@ export class PlayerService extends BaseComponent {
 
   constructor(private playersApi: PlayersApiService) {
     super();
+    // subscribing to players changes so we can update the cache in a way that
+    // triggers the animated counter on money changes.
     this.players$.subscribe((x) => {
       if (this.playersCache.length != x.length) {
         this.playersCache.push(...x);
@@ -61,14 +63,26 @@ export class PlayerService extends BaseComponent {
     return null;
   }
 
-  getHumanPlayers(): Player[] {
-    return this.playersCache.filter((x) => x.human && x.inGame);
+  getHumanPlayers(gameId: number): Observable<Player[]> {
+    return this.players$.pipe(
+      map((x: Player[]) =>
+        x.filter((x: Player) => x.GameID == gameId && x.human)
+      )
+    );
   }
-  getNonHumanPlayers(): Player[] {
-    return this.playersCache.filter((x) => !x.human && x.inGame);
+  getNonHumanPlayers(gameId: number): Observable<Player[]> {
+    return this.players$.pipe(
+      map((x: Player[]) =>
+        x.filter((x: Player) => x.GameID == gameId && !x.human)
+      )
+    );
   }
-  getInGamePlayers(): Player[] {
-    return this.playersCache.filter((x) => x.inGame);
+  getInGamePlayers(gameId: number): Observable<Player[]> {
+    return this.players$.pipe(
+      map((x: Player[]) =>
+        x.filter((x: Player) => x.GameID == gameId && x.inGame)
+      )
+    );
   }
 
   getPlayerImgUrl(playerId: number): Observable<string> {
@@ -78,9 +92,9 @@ export class PlayerService extends BaseComponent {
     );
   }
 
-  getPlayersForGame(gameId: number) {
+  getPlayersForGame() {
     this.playersApi
-      .getPlayersHttp(gameId)
+      .getPlayersHttp()
       .pipe(takeUntil(this.destroy$))
       .subscribe((x) => this.players$.next(x));
   }
@@ -97,5 +111,16 @@ export class PlayerService extends BaseComponent {
       .changePlayersHttp(oldPlayer, newPlayer)
       .pipe(takeUntil(this.destroy$))
       .subscribe((x) => this.players$.next(x));
+  }
+
+  /**
+   * get the players for the specific gameId.
+   * @param gameId the gameId to filter on.
+   * @returns players for the @c gameId.
+   */
+  getPlayersForGameId(gameId: number): Observable<Player[]> {
+    return this.players$.pipe(
+      map((x: Player[]) => x.filter((x: Player) => x.GameID == gameId))
+    );
   }
 }

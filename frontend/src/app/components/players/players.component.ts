@@ -2,7 +2,7 @@ import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
 
-import { Player, Transaction } from '../../types';
+import { Game, Player, Transaction } from '../../types';
 import { DialogService } from '../../services/dialog.service';
 import { TransactionService } from '../../services/transaction.service';
 import { BaseComponent } from 'src/app/components/base/base.component';
@@ -15,7 +15,7 @@ import { GameService } from '../../services/game.service';
   styleUrls: ['./players.component.css'],
 })
 export class PlayersComponent extends BaseComponent implements OnInit {
-  @Input() gameId?: number | null; // from game-board
+  @Input() game?: Game | null; // from game-board
 
   transactionForm = new FormGroup({
     fromPlayerName: new FormControl(''),
@@ -33,13 +33,6 @@ export class PlayersComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit(): void {}
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['gameId']) {
-      this.playerService.invalidatePlayersCache();
-      this.playerService.getPlayersForGame(changes['gameId'].currentValue);
-    }
-  }
 
   makePayment(): void {
     if (

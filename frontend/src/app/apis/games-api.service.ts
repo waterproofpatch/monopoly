@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap, takeUntil } from 'rxjs/operators';
 
-import { DialogService } from '../services/dialog.service';
 import { BaseService } from '../services/base.service';
 import { Game, Version } from '../types';
 import { TransactionsApiService } from './transactions-api.service';
@@ -17,7 +16,6 @@ export class GamesApiService extends BaseService {
 
   constructor(
     private http: HttpClient,
-    private dialogService: DialogService,
     private playersApi: PlayersApiService,
     private transactionsApi: TransactionsApiService
   ) {
@@ -54,7 +52,7 @@ export class GamesApiService extends BaseService {
       .pipe(
         tap((game) => {
           this.playersApi
-            .getPlayersHttp(game.ID)
+            .getPlayersHttp()
             .pipe(takeUntil(this.destroy$))
             .subscribe();
           this.transactionsApi

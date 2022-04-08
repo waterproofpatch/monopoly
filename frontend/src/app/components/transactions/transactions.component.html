@@ -1,8 +1,8 @@
-<div *ngIf="gameId">
+<div *ngIf="game">
   <div class="row-left">
     <div
       *ngFor="
-        let transaction of transactionService.getTransactionsForGameId(gameId)
+        let transaction of transactionService.getTransactionsForGameId(game.ID)
           | async
       "
     >

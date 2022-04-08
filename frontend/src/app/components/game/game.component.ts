@@ -23,7 +23,7 @@ export class GameComponent implements OnInit {
     if (!this.game) {
       return;
     }
-    this.transactionService.getTransactionsForGame(this.game?.ID);
+    this.transactionService.getTransactionsForGame();
   }
 
   /**
