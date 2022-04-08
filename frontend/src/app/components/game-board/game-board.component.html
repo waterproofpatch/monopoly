@@ -6,15 +6,15 @@
     <mat-card
       *ngFor="let game of gameService.games$ | async"
       class="example-card"
-      [class.active]="game.ID == (gameService.selectedGameId$ | async)"
+      [class.active]="game.ID == (gameService.getSelectedGame() | async)?.ID"
     >
       <app-game [game]="game"></app-game>
     </mat-card>
   </div>
   <div>
-    <app-players [gameId]="gameService.selectedGameId$ | async"></app-players>
+    <app-players [game]="gameService.getSelectedGame() | async"></app-players>
     <app-transactions
-      [gameId]="gameService.selectedGameId$ | async"
+      [game]="gameService.getSelectedGame() | async"
     ></app-transactions>
   </div>
 </div>

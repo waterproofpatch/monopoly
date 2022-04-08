@@ -130,6 +130,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 func players(w http.ResponseWriter, r *http.Request) {
 	db := utils.GetDb()
 	vars := mux.Vars(r)
+	gameId := r.FormValue("gameId")
 	playerId, hasPlayerId := vars["id"]
 
 	switch r.Method {
@@ -140,12 +141,25 @@ func players(w http.ResponseWriter, r *http.Request) {
 			json.NewEncoder(w).Encode(player)
 			return
 		}
+
+		if gameId == "" {
+			var players []utils.Player
+			db.Find(&players)
+			json.NewEncoder(w).Encode(players)
+			return
+		}
 	case "DELETE":
 		if !hasPlayerId {
 			utils.WriteError(w, "Missing playerId", http.StatusBadRequest)
 			return
 		}
 		db.Model(&utils.Player{}).Where("id=?", playerId).Update("InGame", false)
+		if gameId == "" {
+			var players []utils.Player
+			db.Find(&players)
+			json.NewEncoder(w).Encode(players)
+			return
+		}
 	case "PUT":
 		var req ChangePlayerRequest
 		err := json.NewDecoder(r.Body).Decode(&req)
@@ -157,9 +171,14 @@ func players(w http.ResponseWriter, r *http.Request) {
 		firstImg := req.First.Img
 		db.Model(&req.First).Updates(utils.Player{Name: req.Second.Name, Img: req.Second.Img})
 		db.Model(&req.Second).Updates(utils.Player{Name: firstName, Img: firstImg})
+		if gameId == "" {
+			var players []utils.Player
+			db.Find(&players)
+			json.NewEncoder(w).Encode(players)
+			return
+		}
 	}
 
-	gameId := r.FormValue("gameId")
 	if gameId == "" {
 		utils.WriteError(w, "Missing gameId!", http.StatusBadRequest)
 		return

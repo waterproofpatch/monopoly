@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { Game } from '../types';
 import { BaseComponent } from '../components/base/base.component';
@@ -10,7 +11,7 @@ import { GamesApiService } from '../apis/games-api.service';
 })
 export class GameService extends BaseComponent {
   games$ = new BehaviorSubject<Game[]>([]);
-  selectedGameId$ = new BehaviorSubject<number>(0);
+  selectedGameId: number = 0;
   version$ = new BehaviorSubject<string>('Unknown...');
 
   constructor(private gamesApi: GamesApiService) {
@@ -24,15 +25,14 @@ export class GameService extends BaseComponent {
   }
 
   deleteGame(game: Game) {
-    this.gamesApi.deleteGameHttp(game).subscribe((x) => {
-      this.selectedGameId$.next(0);
+    this.gamesApi.deleteGameHttp(game).subscribe((x: Game[]) => {
       this.games$.next(x);
     });
   }
 
   newGame(gameName: string) {
     this.gamesApi.newGameHttp(gameName).subscribe((x) => {
-      this.selectedGameId$.next(x.ID);
+      this.selectedGameId = x.ID;
       this.getGames();
     });
   }
@@ -43,6 +43,12 @@ export class GameService extends BaseComponent {
 
   resumeGame(gameId: number) {
     console.log('Selected gameId is ' + gameId);
-    this.selectedGameId$.next(gameId);
+    this.selectedGameId = gameId;
+  }
+
+  getSelectedGame(): Observable<Game> {
+    return this.games$.pipe(
+      map((x: Game[]) => x.filter((x: Game) => x.ID == this.selectedGameId)[0])
+    );
   }
 }
