@@ -5,7 +5,7 @@
         <mat-label>From</mat-label>
         <mat-select formControlName="fromPlayerName">
           <mat-option
-            *ngFor="let p of playerService.getInGamePlayers(game.ID) | async"
+            *ngFor="let p of playerService.getInGamePlayers(game.ID)"
             value="{{ p.name }}"
             >{{ p.name }}</mat-option
           >
@@ -19,7 +19,7 @@
         <mat-label>To</mat-label>
         <mat-select formControlName="toPlayerName">
           <mat-option
-            *ngFor="let p of playerService.getInGamePlayers(game.ID) | async"
+            *ngFor="let p of playerService.getInGamePlayers(game.ID)"
             value="{{ p.name }}"
             >{{ p.name }}</mat-option
           >
@@ -30,9 +30,7 @@
   </div>
   <mat-divider></mat-divider>
   <div class="row-center">
-    <div
-      *ngFor="let player of playerService.getNonHumanPlayers(game.ID) | async"
-    >
+    <div *ngFor="let player of playerService.getNonHumanPlayers(game.ID)">
       <div class="player-row">
         <div *ngIf="player" class="card-container">
           <div
@@ -56,7 +54,7 @@
   </div>
   <mat-divider></mat-divider>
   <div class="row-center">
-    <div *ngFor="let player of playerService.getHumanPlayers(game.ID) | async">
+    <div *ngFor="let player of playerService.getHumanPlayers(game.ID)">
       <div class="player-row">
         <div *ngIf="player" class="card-container">
           <div
