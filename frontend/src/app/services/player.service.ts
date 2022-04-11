@@ -63,25 +63,21 @@ export class PlayerService extends BaseComponent {
     return null;
   }
 
-  getHumanPlayers(gameId: number): Observable<Player[]> {
-    return this.players$.pipe(
-      map((x: Player[]) =>
-        x.filter((x: Player) => x.GameID == gameId && x.human)
-      )
+  getHumanPlayers(gameId: number): Player[] {
+    return this.playersCache.filter(
+      (x: Player) => x.GameID == gameId && x.human
     );
   }
-  getNonHumanPlayers(gameId: number): Observable<Player[]> {
-    return this.players$.pipe(
-      map((x: Player[]) =>
-        x.filter((x: Player) => x.GameID == gameId && !x.human)
-      )
+
+  getNonHumanPlayers(gameId: number): Player[] {
+    return this.playersCache.filter(
+      (x: Player) => x.GameID == gameId && !x.human
     );
   }
-  getInGamePlayers(gameId: number): Observable<Player[]> {
-    return this.players$.pipe(
-      map((x: Player[]) =>
-        x.filter((x: Player) => x.GameID == gameId && x.inGame)
-      )
+
+  getInGamePlayers(gameId: number): Player[] {
+    return this.playersCache.filter(
+      (x: Player) => x.GameID == gameId && x.inGame
     );
   }
 
