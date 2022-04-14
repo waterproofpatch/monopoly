@@ -47,7 +47,7 @@ export class PlayersComponent
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['game']) {
-      console.log('game change');
+      console.log('game changes for players component');
       this.playerService.invalidatePlayersCache();
       this.playerService.getPlayersForGame();
     }
