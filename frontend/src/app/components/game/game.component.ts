@@ -37,7 +37,7 @@ export class GameComponent implements OnInit {
     return this.transactionService.transactions$.pipe(
       map(
         (x: Transaction[]) =>
-          x.filter((x: Transaction) => x.GameID == this.game?.ID).length
+          x.filter((x: Transaction) => x.gameId == this.game?.ID).length
       )
     );
   }
