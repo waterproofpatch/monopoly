@@ -17,7 +17,7 @@ func NewGame(gameName string, email string) uint {
 	db.Last(&game)
 
 	// Create
-	log.Printf("Creating players for game %s\n", game.Name)
+	log.Printf("Creating players for game %s id %v\n", game.Name, game.ID)
 	db.Create(&Player{GameID: game.ID, Name: "Ship", Money: 1500, InGame: true, Human: true, Img: "ship"})
 	db.Create(&Player{GameID: game.ID, Name: "Dog", Money: 1500, InGame: true, Human: true, Img: "dog"})
 	db.Create(&Player{GameID: game.ID, Name: "Penguin", Money: 1500, InGame: true, Human: true, Img: "penguin"})
