@@ -36,9 +36,9 @@ export class PieceSelectDialogComponent implements OnInit {
       fromPlayerId: bank[0].ID,
       amount: 200,
       timestamp: new Date().toISOString(),
-      GameID: this.data.player.GameID,
+      gameId: this.data.player.gameId,
     };
-    this.transactionService.addTransaction(t, this.data.player.GameID);
+    this.transactionService.addTransaction(t, this.data.player.gameId);
     this.dialogRef.close();
   }
 
@@ -59,9 +59,9 @@ export class PieceSelectDialogComponent implements OnInit {
       fromPlayerId: freeParking[0].ID,
       amount: freeParking[0].money,
       timestamp: new Date().toISOString(),
-      GameID: this.data.player.GameID,
+      gameId: this.data.player.gameId,
     };
-    this.transactionService.addTransaction(t, this.data.player.GameID);
+    this.transactionService.addTransaction(t, this.data.player.gameId);
   }
 
   remove(): void {

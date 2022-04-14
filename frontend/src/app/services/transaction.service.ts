@@ -34,7 +34,7 @@ export class TransactionService extends BaseComponent {
    */
   getTransactionsForGameId(gameId: number): Observable<Transaction[]> {
     return this.transactions$.pipe(
-      map((x: Transaction[]) => x.filter((x) => x.GameID == gameId))
+      map((x: Transaction[]) => x.filter((x) => x.gameId == gameId))
     );
   }
 

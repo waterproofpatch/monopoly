@@ -62,9 +62,9 @@ export class PlayersComponent extends BaseComponent implements OnInit {
       fromPlayerId: fromPlayer.ID,
       toPlayerId: toPlayer.ID,
       amount: this.transactionForm.controls.amount.value,
-      GameID: fromPlayer.GameID,
+      gameId: fromPlayer.gameId,
     };
-    this.transactionService.addTransaction(t, fromPlayer.GameID);
+    this.transactionService.addTransaction(t, fromPlayer.gameId);
   }
 
   openPieceSelectDialog(player: Player): void {
