@@ -130,7 +130,6 @@ func login(w http.ResponseWriter, r *http.Request) {
 func players(w http.ResponseWriter, r *http.Request) {
 	db := utils.GetDb()
 	vars := mux.Vars(r)
-	gameId := r.FormValue("gameId")
 	playerId, hasPlayerId := vars["id"]
 
 	switch r.Method {
@@ -141,25 +140,12 @@ func players(w http.ResponseWriter, r *http.Request) {
 			json.NewEncoder(w).Encode(player)
 			return
 		}
-
-		if gameId == "" {
-			var players []utils.Player
-			db.Find(&players)
-			json.NewEncoder(w).Encode(players)
-			return
-		}
 	case "DELETE":
 		if !hasPlayerId {
 			utils.WriteError(w, "Missing playerId", http.StatusBadRequest)
 			return
 		}
 		db.Model(&utils.Player{}).Where("id=?", playerId).Update("InGame", false)
-		if gameId == "" {
-			var players []utils.Player
-			db.Find(&players)
-			json.NewEncoder(w).Encode(players)
-			return
-		}
 	case "PUT":
 		var req ChangePlayerRequest
 		err := json.NewDecoder(r.Body).Decode(&req)
@@ -171,23 +157,11 @@ func players(w http.ResponseWriter, r *http.Request) {
 		firstImg := req.First.Img
 		db.Model(&req.First).Updates(utils.Player{Name: req.Second.Name, Img: req.Second.Img})
 		db.Model(&req.Second).Updates(utils.Player{Name: firstName, Img: firstImg})
-		if gameId == "" {
-			var players []utils.Player
-			db.Find(&players)
-			json.NewEncoder(w).Encode(players)
-			return
-		}
-	}
-
-	if gameId == "" {
-		utils.WriteError(w, "Missing gameId!", http.StatusBadRequest)
-		return
 	}
 	var players []utils.Player
-	var game utils.Game
-	db.Find(&game, "ID = ?", gameId)
-	db.Model(&game).Order("ID").Association("Players").Find(&players)
+	db.Find(&players)
 	json.NewEncoder(w).Encode(players)
+	return
 }
 
 func games(w http.ResponseWriter, r *http.Request) {
@@ -223,10 +197,6 @@ func games(w http.ResponseWriter, r *http.Request) {
 
 		var newGameRequest NewGameRequest
 		json.NewDecoder(r.Body).Decode(&newGameRequest)
-
-		log.Printf("Claims: %v", claims)
-		log.Printf("Claims: %s", claims.Email)
-		// log.Printf("Claims: %s", (*claims)["email"])
 
 		newGameId := utils.NewGame(newGameRequest.GameName, claims.Email)
 
@@ -285,7 +255,6 @@ func InitViews(router *mux.Router) {
 	router.HandleFunc("/api/games", utils.Authentication(games, "games")).Methods("GET", "POST", "OPTIONS")
 	router.HandleFunc("/api/games/{id:[0-9]+}", utils.Authentication(games, "games")).Methods("DELETE", "GET", "POST", "OPTIONS")
 
-	router.HandleFunc("/api/players", utils.Authentication(players, "players")).Methods("GET", "PUT", "OPTIONS").Queries("gameId", "[0-9]*")
 	router.HandleFunc("/api/players", utils.Authentication(players, "players")).Methods("GET", "PUT", "OPTIONS")
 	router.HandleFunc("/api/players/{id:[0-9]+}", utils.Authentication(players, "players")).Methods("DELETE", "OPTIONS", "GET")
 
