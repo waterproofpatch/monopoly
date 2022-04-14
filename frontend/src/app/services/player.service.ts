@@ -6,7 +6,6 @@ import * as _ from 'lodash';
 import { BaseComponent } from '../components/base/base.component';
 import { PlayersApiService } from '../apis/players-api.service';
 import { Player, Game } from '../types';
-import { GameService } from './game.service';
 
 @Injectable({
   providedIn: 'root',
@@ -15,19 +14,10 @@ export class PlayerService extends BaseComponent {
   players$ = new BehaviorSubject<Player[]>([]);
   playersCache: Player[] = [];
 
-  constructor(
-    private playersApi: PlayersApiService,
-    private gameService: GameService
-  ) {
+  constructor(private playersApi: PlayersApiService) {
     super();
     // subscribing to players changes so we can update the cache in a way that
     // triggers the animated counter on money changes.
-    this.gameService.getSelectedGame().subscribe((x: Game) => {
-      console.log('Game changed, getting players for it.');
-      this.invalidatePlayersCache();
-      this.getPlayersForGame();
-    });
-
     this.players$.subscribe((x) => {
       if (this.playersCache.length == 0) {
         this.playersCache.push(...x);
