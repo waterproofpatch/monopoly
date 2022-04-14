@@ -1,4 +1,10 @@
-import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
 
@@ -14,7 +20,10 @@ import { GameService } from '../../services/game.service';
   templateUrl: './players.component.html',
   styleUrls: ['./players.component.css'],
 })
-export class PlayersComponent extends BaseComponent implements OnInit {
+export class PlayersComponent
+  extends BaseComponent
+  implements OnInit, OnChanges
+{
   @Input() game?: Game | null; // from game-board
 
   transactionForm = new FormGroup({
@@ -32,7 +41,17 @@ export class PlayersComponent extends BaseComponent implements OnInit {
     super();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log('Players is init!');
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['game']) {
+      console.log('game change');
+      this.playerService.invalidatePlayersCache();
+      this.playerService.getPlayersForGame();
+    }
+  }
 
   makePayment(): void {
     if (
