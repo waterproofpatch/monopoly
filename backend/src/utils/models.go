@@ -16,7 +16,7 @@ type Player struct {
 	Img    string `json:"img"`
 	Human  bool   `json:"human"`
 	InGame bool   `json:"inGame"`
-	GameID uint
+	GameID uint   `json:"gameId"`
 }
 
 type Game struct {
@@ -32,5 +32,5 @@ type Transaction struct {
 	FromPlayerId uint `json:"fromPlayerId"`
 	ToPlayerId   uint `json:"toPlayerId"`
 	Amount       int  `json:"amount"`
-	GameID       uint
+	GameID       uint `json:"gameId"`
 }
