@@ -5,7 +5,8 @@ import * as _ from 'lodash';
 
 import { BaseComponent } from '../components/base/base.component';
 import { PlayersApiService } from '../apis/players-api.service';
-import { Player } from '../types';
+import { Player, Game } from '../types';
+import { GameService } from './game.service';
 
 @Injectable({
   providedIn: 'root',
@@ -14,12 +15,21 @@ export class PlayerService extends BaseComponent {
   players$ = new BehaviorSubject<Player[]>([]);
   playersCache: Player[] = [];
 
-  constructor(private playersApi: PlayersApiService) {
+  constructor(
+    private playersApi: PlayersApiService,
+    private gameService: GameService
+  ) {
     super();
     // subscribing to players changes so we can update the cache in a way that
     // triggers the animated counter on money changes.
+    this.gameService.getSelectedGame().subscribe((x: Game) => {
+      console.log('Game changed, getting players for it.');
+      this.invalidatePlayersCache();
+      this.getPlayersForGame();
+    });
+
     this.players$.subscribe((x) => {
-      if (this.playersCache.length != x.length) {
+      if (this.playersCache.length == 0) {
         this.playersCache.push(...x);
         return;
       }
@@ -65,19 +75,19 @@ export class PlayerService extends BaseComponent {
 
   getHumanPlayers(gameId: number): Player[] {
     return this.playersCache.filter(
-      (x: Player) => x.GameID == gameId && x.human
+      (x: Player) => x.gameId == gameId && x.human
     );
   }
 
   getNonHumanPlayers(gameId: number): Player[] {
     return this.playersCache.filter(
-      (x: Player) => x.GameID == gameId && !x.human
+      (x: Player) => x.gameId == gameId && !x.human
     );
   }
 
   getInGamePlayers(gameId: number): Player[] {
     return this.playersCache.filter(
-      (x: Player) => x.GameID == gameId && x.inGame
+      (x: Player) => x.gameId == gameId && x.inGame
     );
   }
 
@@ -116,7 +126,7 @@ export class PlayerService extends BaseComponent {
    */
   getPlayersForGameId(gameId: number): Observable<Player[]> {
     return this.players$.pipe(
-      map((x: Player[]) => x.filter((x: Player) => x.GameID == gameId))
+      map((x: Player[]) => x.filter((x: Player) => x.gameId == gameId))
     );
   }
 }
