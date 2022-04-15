@@ -6,7 +6,6 @@ import { map } from 'rxjs/operators';
 import { Transaction } from '../types';
 import { TransactionsApiService } from '../apis/transactions-api.service';
 import { BaseComponent } from '../components/base/base.component';
-import { PlayerService } from './player.service';
 
 @Injectable({
   providedIn: 'root',
@@ -14,10 +13,7 @@ import { PlayerService } from './player.service';
 export class TransactionService extends BaseComponent {
   transactions$ = new BehaviorSubject<Transaction[]>([]);
 
-  constructor(
-    private transactionsApi: TransactionsApiService,
-    private playerService: PlayerService
-  ) {
+  constructor(private transactionsApi: TransactionsApiService) {
     super();
   }
 
