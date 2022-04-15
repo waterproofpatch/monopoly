@@ -42,7 +42,10 @@ export class PlayersComponent
   }
 
   ngOnInit(): void {
-    console.log('Players is init!');
+    // monitor for any transactions updates
+    this.transactionService.transactions$.subscribe((x) => {
+      this.playerService.getPlayersForGame();
+    });
   }
 
   ngOnChanges(changes: SimpleChanges) {

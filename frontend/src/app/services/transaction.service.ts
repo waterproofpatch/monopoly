@@ -24,7 +24,6 @@ export class TransactionService extends BaseComponent {
   private setTransactions(transactions: Transaction[]) {
     console.log('Setting transactions ' + transactions);
     this.transactions$.next(transactions);
-    this.playerService.getPlayersForGame();
   }
 
   /**
