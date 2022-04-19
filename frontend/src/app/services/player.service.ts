@@ -54,9 +54,10 @@ export class PlayerService extends BaseComponent {
     return this.playersCache;
   }
 
-  findPlayerByName(name: string): Player | null {
+  findPlayerByName(name: string, gameId: number): Player | null {
     for (let p of this.playersCache) {
-      if (p.name == name) {
+      if (p.name == name && p.gameId == gameId) {
+        console.log('player by name game id is ' + p.gameId);
         return p;
       }
     }
