@@ -57,6 +57,10 @@ export class PlayersComponent
   }
 
   makePayment(): void {
+    if (!this.game) {
+      this.dialogService.displayErrorDialog('Game not set!');
+      return;
+    }
     if (
       this.transactionForm.controls.fromPlayerName.value ==
       this.transactionForm.controls.toPlayerName.value
@@ -66,10 +70,12 @@ export class PlayersComponent
     }
 
     let toPlayer: Player | null = this.playerService.findPlayerByName(
-      this.transactionForm.controls.toPlayerName.value
+      this.transactionForm.controls.toPlayerName.value,
+      this.game.ID
     );
     let fromPlayer: Player | null = this.playerService.findPlayerByName(
-      this.transactionForm.controls.fromPlayerName.value
+      this.transactionForm.controls.fromPlayerName.value,
+      this.game?.ID
     );
     if (!toPlayer || !fromPlayer) {
       this.dialogService.displayErrorDialog(
