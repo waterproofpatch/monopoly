@@ -40,7 +40,7 @@ export class TransactionService extends BaseComponent {
       .subscribe((x) => this.setTransactions(x));
   }
 
-  getTransactionsForGame() {
+  updateTransactions() {
     this.transactionsApi
       .getTransactionsHttp()
       .pipe(takeUntil(this.destroy$))

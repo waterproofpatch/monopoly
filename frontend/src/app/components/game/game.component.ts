@@ -24,7 +24,7 @@ export class GameComponent implements OnInit {
       return;
     }
     // so we can get the number of transactions per game metadata
-    this.transactionService.getTransactionsForGame();
+    this.transactionService.updateTransactions();
   }
 
   /**
