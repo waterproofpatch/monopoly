@@ -30,7 +30,7 @@ export class TransactionsComponent
   ngOnChanges(changes: SimpleChanges) {
     if (changes['game']) {
       console.log('game changes for transcations component');
-      this.transactionService.getTransactionsForGame();
+      this.transactionService.updateTransactions();
     }
   }
 }
