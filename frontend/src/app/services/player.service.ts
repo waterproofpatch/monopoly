@@ -66,13 +66,13 @@ export class PlayerService extends BaseComponent {
 
   getHumanPlayers(gameId: number): Player[] {
     return this.playersCache.filter(
-      (x: Player) => x.gameId == gameId && x.human
+      (x: Player) => x.gameId == gameId && x.human && x.inGame
     );
   }
 
   getNonHumanPlayers(gameId: number): Player[] {
     return this.playersCache.filter(
-      (x: Player) => x.gameId == gameId && !x.human
+      (x: Player) => x.gameId == gameId && !x.human && x.inGame
     );
   }
 
