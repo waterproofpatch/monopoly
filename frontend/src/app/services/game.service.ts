@@ -26,6 +26,9 @@ export class GameService extends BaseComponent {
   }
 
   deleteGame(game: Game) {
+    if (this.selectedGame?.ID == game.ID) {
+      this.selectedGame = undefined;
+    }
     this.gamesApi.deleteGameHttp(game).subscribe((x: Game[]) => {
       this.games$.next(x);
     });
