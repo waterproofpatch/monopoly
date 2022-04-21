@@ -66,6 +66,7 @@ export class PieceSelectDialogComponent implements OnInit {
 
   remove(): void {
     this.dialogRef.close();
+    console.log('Deleting player ' + this.data.player.ID);
     this.playerService.deletePlayer(this.data.player);
   }
 
