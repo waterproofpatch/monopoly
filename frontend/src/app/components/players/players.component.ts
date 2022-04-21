@@ -51,7 +51,10 @@ export class PlayersComponent
 
   openPieceSelectDialog(player: Player): void {
     this.dialogService
-      .displayPieceSelectDialog(player, this.playerService.getPlayersCache())
+      .displayPieceSelectDialog(
+        player,
+        this.playerService.getPlayersCache(player.gameId)
+      )
       .afterClosed()
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {});
