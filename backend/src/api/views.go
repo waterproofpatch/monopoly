@@ -225,7 +225,10 @@ func transactions(w http.ResponseWriter, r *http.Request) {
 		// find, reverse, and then delete the transaction
 		var transaction utils.Transaction
 		db.First(&transaction, id)
-		utils.ProcessTransaction(w, transaction, true)
+		err := utils.ProcessTransaction(w, transaction, true)
+		if err != nil {
+			return
+		}
 		db.Delete(&utils.Transaction{}, id)
 	case "POST":
 		var transaction utils.Transaction
@@ -235,7 +238,10 @@ func transactions(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		// create and then process the transaction
-		utils.ProcessTransaction(w, transaction, false)
+		err = utils.ProcessTransaction(w, transaction, false)
+		if err != nil {
+			return
+		}
 		db.Create(&transaction)
 	}
 

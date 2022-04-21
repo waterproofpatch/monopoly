@@ -87,7 +87,7 @@ func GenerateJwtToken(email string) (string, error) {
 	return tokenString, nil
 }
 
-func ProcessTransaction(w http.ResponseWriter, transaction Transaction, reverse bool) {
+func ProcessTransaction(w http.ResponseWriter, transaction Transaction, reverse bool) error {
 	db := GetDb()
 
 	var fromPlayer Player
@@ -104,7 +104,7 @@ func ProcessTransaction(w http.ResponseWriter, transaction Transaction, reverse 
 		// bank has unlimited money...
 		if fromPlayer.Name != "Bank" && fromPlayer.Money < uint(transaction.Amount) {
 			WriteError(w, "Not enougn money!", http.StatusBadRequest)
-			return
+			return errors.New("not enough money")
 		}
 
 		// update cash
@@ -114,6 +114,7 @@ func ProcessTransaction(w http.ResponseWriter, transaction Transaction, reverse 
 
 	db.Save(&fromPlayer)
 	db.Save(&toPlayer)
+	return nil
 }
 
 func ParseClaims(w http.ResponseWriter, r *http.Request) (bool, *JWTData, string) {
