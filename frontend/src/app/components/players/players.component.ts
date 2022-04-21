@@ -37,7 +37,7 @@ export class PlayersComponent
   ngOnInit(): void {
     // monitor for any transactions updates
     this.transactionService.transactions$.subscribe((x) => {
-      this.playerService.getPlayersForGame();
+      this.playerService.updatePlayers();
     });
   }
 
@@ -45,7 +45,7 @@ export class PlayersComponent
     if (changes['game']) {
       console.log('game changes for players component');
       this.playerService.invalidatePlayersCache();
-      this.playerService.getPlayersForGame();
+      this.playerService.updatePlayers();
     }
   }
 

@@ -89,7 +89,7 @@ export class PlayerService extends BaseComponent {
     );
   }
 
-  getPlayersForGame() {
+  updatePlayers() {
     this.playersApi
       .getPlayersHttp()
       .pipe(takeUntil(this.destroy$))
@@ -108,16 +108,5 @@ export class PlayerService extends BaseComponent {
       .changePlayersHttp(oldPlayer, newPlayer)
       .pipe(takeUntil(this.destroy$))
       .subscribe((x) => this.players$.next(x));
-  }
-
-  /**
-   * get the players for the specific gameId.
-   * @param gameId the gameId to filter on.
-   * @returns players for the @c gameId.
-   */
-  getPlayersForGameId(gameId: number): Observable<Player[]> {
-    return this.players$.pipe(
-      map((x: Player[]) => x.filter((x: Player) => x.gameId == gameId))
-    );
   }
 }
