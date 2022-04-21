@@ -1,35 +1,5 @@
 <div *ngIf="game">
   <div class="row-center">
-    <form [formGroup]="transactionForm" (ngSubmit)="makePayment()">
-      <mat-form-field appearance="fill">
-        <mat-label>From</mat-label>
-        <mat-select formControlName="fromPlayerName">
-          <mat-option
-            *ngFor="let p of playerService.getInGamePlayers(game.ID)"
-            value="{{ p.name }}"
-            >{{ p.name }}</mat-option
-          >
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>Amount</mat-label>
-        <input matInput formControlName="amount" type="number" />
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>To</mat-label>
-        <mat-select formControlName="toPlayerName">
-          <mat-option
-            *ngFor="let p of playerService.getInGamePlayers(game.ID)"
-            value="{{ p.name }}"
-            >{{ p.name }}</mat-option
-          >
-        </mat-select>
-      </mat-form-field>
-      <button mat-raised-button color="primary">Pay</button>
-    </form>
-  </div>
-  <mat-divider></mat-divider>
-  <div class="row-center">
     <div *ngFor="let player of playerService.getNonHumanPlayers(game.ID)">
       <div class="player-row">
         <div *ngIf="player" class="card-container">

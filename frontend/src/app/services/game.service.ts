@@ -11,7 +11,7 @@ import { GamesApiService } from '../apis/games-api.service';
 })
 export class GameService extends BaseComponent {
   games$ = new BehaviorSubject<Game[]>([]);
-  selectedGameId: number = 0;
+  selectedGame?: Game = undefined;
   version$ = new BehaviorSubject<string>('Unknown...');
 
   constructor(private gamesApi: GamesApiService) {
@@ -32,7 +32,7 @@ export class GameService extends BaseComponent {
 
   newGame(gameName: string) {
     this.gamesApi.newGameHttp(gameName).subscribe((x) => {
-      this.selectedGameId = x.ID;
+      this.selectedGame = x;
       this.getGames();
     });
   }
@@ -41,14 +41,16 @@ export class GameService extends BaseComponent {
     this.gamesApi.getGamesHttp().subscribe((x) => this.games$.next(x));
   }
 
-  resumeGame(gameId: number) {
-    console.log('Selected gameId is ' + gameId);
-    this.selectedGameId = gameId;
+  resumeGame(game: Game) {
+    console.log('Selected gameId is ' + game.ID);
+    this.selectedGame = game;
   }
 
   getSelectedGame(): Observable<Game> {
     return this.games$.pipe(
-      map((x: Game[]) => x.filter((x: Game) => x.ID == this.selectedGameId)[0])
+      map(
+        (x: Game[]) => x.filter((x: Game) => x.ID == this.selectedGame?.ID)[0]
+      )
     );
   }
 }
