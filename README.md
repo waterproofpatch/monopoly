@@ -24,6 +24,7 @@ To start the frontend in development mode:
 
 ```bash
 cd frontend
+npm install
 make run-devel
 ```
 
