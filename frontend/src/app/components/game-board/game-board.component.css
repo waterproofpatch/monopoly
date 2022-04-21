@@ -4,6 +4,9 @@ button {
 mat-card {
   margin: 10px;
 }
+mat-form-field {
+  padding: 10px;
+}
 
 .parent-container {
   padding-top: 60px;

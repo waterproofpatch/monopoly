@@ -5,10 +5,9 @@ import {
   OnInit,
   SimpleChanges,
 } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
 
-import { Game, Player, Transaction } from '../../types';
+import { Game, Player } from '../../types';
 import { DialogService } from '../../services/dialog.service';
 import { TransactionService } from '../../services/transaction.service';
 import { BaseComponent } from 'src/app/components/base/base.component';
@@ -25,12 +24,6 @@ export class PlayersComponent
   implements OnInit, OnChanges
 {
   @Input() game?: Game | null; // from game-board
-
-  transactionForm = new FormGroup({
-    fromPlayerName: new FormControl(''),
-    toPlayerName: new FormControl(''),
-    amount: new FormControl(''),
-  });
 
   constructor(
     private dialogService: DialogService,
@@ -54,45 +47,6 @@ export class PlayersComponent
       this.playerService.invalidatePlayersCache();
       this.playerService.getPlayersForGame();
     }
-  }
-
-  makePayment(): void {
-    if (!this.game) {
-      this.dialogService.displayErrorDialog('Game not set!');
-      return;
-    }
-    if (
-      this.transactionForm.controls.fromPlayerName.value ==
-      this.transactionForm.controls.toPlayerName.value
-    ) {
-      this.dialogService.displayErrorDialog('Cannot pay yourself!');
-      return;
-    }
-
-    let toPlayer: Player | null = this.playerService.findPlayerByName(
-      this.transactionForm.controls.toPlayerName.value,
-      this.game.ID
-    );
-    let fromPlayer: Player | null = this.playerService.findPlayerByName(
-      this.transactionForm.controls.fromPlayerName.value,
-      this.game?.ID
-    );
-    if (!toPlayer || !fromPlayer) {
-      this.dialogService.displayErrorDialog(
-        'Unable to find to and from player!'
-      );
-      return;
-    }
-
-    let t: Transaction = {
-      ID: 0, // filled in by backend
-      timestamp: new Date().toISOString(),
-      fromPlayerId: fromPlayer.ID,
-      toPlayerId: toPlayer.ID,
-      amount: this.transactionForm.controls.amount.value,
-      gameId: fromPlayer.gameId,
-    };
-    this.transactionService.addTransaction(t, fromPlayer.gameId);
   }
 
   openPieceSelectDialog(player: Player): void {
