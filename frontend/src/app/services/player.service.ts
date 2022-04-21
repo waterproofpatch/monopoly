@@ -50,8 +50,8 @@ export class PlayerService extends BaseComponent {
     this.playersCache = [];
   }
 
-  getPlayersCache(): Player[] {
-    return this.playersCache;
+  getPlayersCache(gameId: number): Player[] {
+    return this.playersCache.filter((x) => x.gameId == gameId);
   }
 
   findPlayerByName(name: string, gameId: number): Player | null {
