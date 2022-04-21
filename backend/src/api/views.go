@@ -247,7 +247,7 @@ func transactions(w http.ResponseWriter, r *http.Request) {
 
 func version(w http.ResponseWriter, r *http.Request) {
 	var version VersionResponse
-	version.Version = "1.1.0"
+	version.Version = "1.2.0"
 	json.NewEncoder(w).Encode(&version)
 }
 
