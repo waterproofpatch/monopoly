@@ -12,6 +12,7 @@ import { GamesApiService } from '../apis/games-api.service';
 export class GameService extends BaseComponent {
   games$ = new BehaviorSubject<Game[]>([]);
   selectedGame?: Game = undefined;
+
   version$ = new BehaviorSubject<string>('Unknown...');
 
   constructor(private gamesApi: GamesApiService) {
