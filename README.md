@@ -27,6 +27,8 @@ cd frontend
 make run-devel
 ```
 
+Your browser should automatically open to <http://localhost:4200>.
+
 To start the backend in development mode:
 
 ```bash
@@ -34,12 +36,14 @@ cd backend
 docker-compose up --build
 ```
 
-
 ## Deployment
 
 This repo is set up to deploy to heroku. 
 
-You'll have to make changes to point to your heroku instance in the `backend/heroku-deploy.sh` and `frontend/heroku-deploy.sh` scripts.
+You'll have to make changes to point to your heroku instance in:
+
+* `backend/heroku-deploy.sh`
+* `frontend/heroku-deploy.sh`
 
 ```bash
 cd frontend && make deploy
