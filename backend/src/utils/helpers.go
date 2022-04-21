@@ -103,7 +103,7 @@ func ProcessTransaction(w http.ResponseWriter, transaction Transaction, reverse 
 	} else {
 		// bank has unlimited money...
 		if fromPlayer.Name != "Bank" && fromPlayer.Money < uint(transaction.Amount) {
-			WriteError(w, "Not enougn money!", http.StatusBadRequest)
+			WriteError(w, "Not enough money!", http.StatusBadRequest)
 			return errors.New("not enough money")
 		}
 
